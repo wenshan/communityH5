@@ -1,0 +1,71 @@
+@import "../../../styles/theme";
+@import "../../../styles/mixin";
+
+.tabbar-wrap {
+  height: 100px;
+  position: fixed;
+  bottom: 0; /* 距离底部为0像素 */
+  left: 0; /* 左侧与视口边界对齐 */
+  width: 100%; /* 宽度等于视口宽度 */
+  z-index: 9999;
+}
+
+.page-topic {
+  line-height: 50px;
+  font-size: 24px;
+  padding: 20px;
+  h1 {
+    font-weight: 500;
+    font-size: 32px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+  }
+}
+.topic-action {
+  padding: 20px;
+  .title {
+    font-size: 32px;
+    line-height: 50px;
+  }
+  .tx {
+    color: #000;
+    font-size: 32px;
+  }
+  .submit {
+    padding: 20px;
+  }
+}
+.certification {
+
+}
+.signature {
+  .signature-img {
+    max-width: 300px;
+    border: 1px solid #f4f4f4;
+    background-color: #fff;
+  }
+}
+.popup {
+  .from {
+    padding: 60px 20px 20px 20px;
+    background-color: #e6e6e6;
+    .item {
+      padding: 10px;
+      font-size: 32px;
+      .label {
+        font-size: 32px;
+        line-height: 32px;
+        padding-bottom: 10px;
+        color: #697b8c;
+      }
+    }
+    .button {
+      text-align: center;
+      padding-top: 40px;
+    }
+  }
+  .input {
+    background-color: #fff;
+    padding: 10;
+  }
+}

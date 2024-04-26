@@ -1,0 +1,24 @@
+@import '../../styles/mixin';
+.tabbar-wrap {
+  height: 100px;
+  position: fixed;
+  bottom: 0; /* 距离底部为0像素 */
+  left: 0; /* 左侧与视口边界对齐 */
+  width: 100%; /* 宽度等于视口宽度 */
+  z-index: 9999;
+}
+
+.myfooter {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  .am-tab-bar-bar .am-tab-bar-tab-title {
+    margin: 0;
+    transform: scale(0.8);
+  }
+  .am-tab-bar-bar .am-tab-bar-tab-icon .tab-badge :last-child {
+    margin-top: 20px;
+    left: 50px;
+  }
+}

@@ -1,0 +1,74 @@
+@import '../../styles/theme.less';
+@import '../../styles/variables.less';
+
+.steps {
+  canvas {
+    position: absolute;
+  }
+  .step {
+    display: flex;
+
+    .chart {
+      width: 15%;
+
+      .out-circle {
+        position: relative;
+        left: 50%;
+        top: 20px;
+        transform: translate(-50%);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        background: @fill-body;
+        .circle {
+          position: relative;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          width: 15px;
+          height: 15px;
+          background: #AAA;
+        }
+      }
+    }
+
+    .info {
+      width: 85%;
+      font-size: @middle-font-size;
+      padding-top: 20px;
+      padding-bottom: 30px;
+      margin-right: 20px;
+      color: #AAA;
+
+      .text {
+        font-size: @middle-font-size;
+        margin-bottom: 15px;
+      }
+      .date {
+        font-size: @small-font-size;
+      }
+    }
+  }
+
+  .step:first-of-type {
+    .chart {
+      .out-circle {
+        background-color: @main-color-transparent;
+
+        .circle {
+          background: @brand-primary;
+        }
+      }
+    }
+    .info {
+      color: @color-text-base;
+    }
+  }
+
+  .empty {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+  }
+}
