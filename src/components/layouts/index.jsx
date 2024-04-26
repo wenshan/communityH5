@@ -3,13 +3,7 @@ import Footer from '../Footer';
 
 import './index.less';
 
-interface AppProps {
-  value?: string;
-}
-
-export default function (props: any) {
-  console.log('--------');
-  console.log(props);
+export default function (props) {
   if (props.location.pathname === '/login') {
     return <div>{props.children}</div>;
   }
