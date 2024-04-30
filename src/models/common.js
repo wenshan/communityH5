@@ -38,7 +38,6 @@ export default {
     query: '',
     code: '', // 微信code
     state: '',
-    isAuthorized: false, // 是否已经授权
     unionidModalStatus: false, // 关注公众号modal的状态
     userinfo: {
       access_token: '',
@@ -51,7 +50,7 @@ export default {
       gender: ''
     },
     wxConfig: {
-      appid: 'wx6492bfdf7f904532',
+      appid: 'wx7284b74cc03f0299',
       redirect_uri: '',
       response_type: 'code',
       scope: 'snsapi_userinfo', // 授权类型，深度授权   snsapi_base
@@ -59,10 +58,10 @@ export default {
       fix: '#wechat_redirect',
       forcePopup: 'false',
       lang: 'zh_CN',
-      secret: '13e3a3cf3c65ac0f6ef13ac77cdb3996',
+      secret: '6bbc5ba71886f4a4abdcad3fdc95fa7d',
       grant_type: 'authorization_code'
     }, // 微信公共配置
-    pathname: '/'
+    activeKey: '/'
   },
 
   subscriptions: {
@@ -72,8 +71,7 @@ export default {
         dispatch({
           type: 'update',
           payload: {
-            pathname,
-            isAuthorized: false
+            activeKey: pathname
           }
         });
         if (query.fromType) {
@@ -135,16 +133,15 @@ export default {
         const openAuthUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap#wechat_redirect`;
         // 手动授权
         if (isOperateType) {
-          Modal.alert('失败', '微信 token 已过期,请重新授权获取token', [
-            {
-              text: '确认',
-              onPress: () => {
-                setTimeout(() => {
-                  window.location.href = openAuthUrl;
-                }, 500);
-              }
+          Modal.alert({
+            content: '微信 token 已过期，请重新授权获取 token',
+            title: '失败',
+            onConfirm: () => {
+              setTimeout(() => {
+                window.location.href = openAuthUrl;
+              }, 500);
             }
-          ]);
+          });
         } else {
           setTimeout(() => {
             window.location.href = openAuthUrl;
@@ -157,7 +154,8 @@ export default {
         }
       }
     },
-
+    // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap
+    // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap&uin=MjA0MTMzOTc1&key=bd5ed1236ec0478576b9340d9290f124a786013d28070ae058d85ba17f5c396f94eece3cec4a19be190bdb557ae0cc5b&pass_ticket=676qaW89M4CBjPeRtUhJ5Mg38Zml3rF/h8Blg60UuY2FzVIPVKRg12+mDqWDz2SncT69P7Dsl9GD39FyS6LWUgqDgwsNda6peOw31LhtYzo=
     // 获取到 code，换取token openid
     // https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
     *getWeixinToken({ payload }, { call, put, select }) {
@@ -199,52 +197,12 @@ export default {
           }
           yield put({ type: 'update', payload: { userinfo, unionidModalStatus } });
           CommonStore.session('userinfo', userinfo);
-          if (userinfo.md5) {
-            CommonStore.session('md5', userinfo.md5);
-          } else {
-            Toast.info('授权失败, md5用户标识创建失败', 5);
-          }
         } else {
           yield put({ type: 'getWeixinOauth2', payload: { isOperateType: true } });
           // Toast.info('获取用户信息失败');
         }
       } else {
         yield put({ type: 'getWeixinOauth2', payload: { isOperateType: true } });
-      }
-    },
-    // 获取用户
-    *getUserUnionID({ payload }, { call, put, select }) {
-      let unionidModalStatus = true;
-      const currentUserinfo = yield select((state) => state.common.userinfo);
-      const commonAccessToken = Cookies.get('access_token');
-      const access_token = commonAccessToken || currentUserinfo.access_token;
-      if (currentUserinfo && currentUserinfo.openid) {
-        const { openid } = currentUserinfo;
-        // 需要验证 access_token
-        const result = yield call(getUserUnionID, { access_token, openid });
-        if (result && result.status == 200 && result.data && result.data.openid) {
-          const userinfo = Object.assign({}, currentUserinfo, result.data);
-          // 未授权 取到用户信息
-          if (result.data.unionid) {
-            unionidModalStatus = false;
-          }
-          yield put({ type: 'update', payload: { userinfo, unionidModalStatus } });
-          CommonStore.session('userinfo', userinfo);
-        } else {
-          yield put({ type: 'update', payload: { unionidModalStatus: true } });
-        }
-      } else {
-        yield put({ type: 'update', payload: { unionidModalStatus: true } });
-        Modal.alert('失败', '获取用户 UnionID 失败，刷新页面重试', [
-          {
-            text: '确认',
-            onPress: () => {
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
-            }
-          }
-        ]);
       }
     }
   },

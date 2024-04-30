@@ -88,6 +88,7 @@ class Intention extends Component {
         <div className="intention-page">
           <div className="page-topic">
             <h1>翠苑三区( C区1-14/19-28幢)原拆原建业主意向征集和倡议书</h1>
+            <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/banner/banner_intention.png" />
             <p>各位小区业主(C区1-14/19-28幢):</p>
             <p>根据2024年4月，由浙江省住建厅、发改委、自然资源厅联合发布的《关于稳步推进城镇老旧小区自主更新试点工作的指导意见》文件精神，
               杭州多个老旧小区在做原拆原建有机更新调研。业主同意率高的小区可以申报杭州市政府，由政府牵头结合业主意见建议编制具体的拆建方案。

@@ -21,6 +21,30 @@ export function getRoutes() {
         "path": "/intention.html",
         "component": require('@/pages/topic/intention/index.jsx').default,
         "exact": true
+      },
+      {
+        "name": "用户中心",
+        "path": "/user.html",
+        "component": require('@/pages/user').default,
+        "exact": true
+      },
+      {
+        "name": "关于翠苑社区",
+        "path": "/about.html",
+        "component": require('@/pages/about').default,
+        "exact": true
+      },
+      {
+        "name": "常见问题",
+        "path": "/help.html",
+        "component": require('@/pages/help').default,
+        "exact": true
+      },
+      {
+        "name": "闲置易物",
+        "path": "/mall.html",
+        "component": require('@/pages/mall').default,
+        "exact": true
       }
     ]
   }

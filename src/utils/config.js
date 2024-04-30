@@ -19,7 +19,7 @@ const apiUrl = () => {
 /* eslint-enable no-undef */
 
 module.exports = {
-  TITLE: '畅游AI大世界',
+  TITLE: '翠苑三区',
   API_URL: apiUrl(),
   BASE_URL: 'http://localhost:8000/',
   IMG_URL: 'http://localhost:8000',

@@ -14,7 +14,7 @@ export const getWebToken2 = (params) =>
 // getUserUnionID
 export const getUserUnionID = (params) =>
   Request({
-    url: '/api/getUserUnionID',
+    url: '/api/community/getUserUnionID',
     method: 'POST',
     data: params,
     config: {
@@ -24,7 +24,7 @@ export const getUserUnionID = (params) =>
   });
 export const getWebToken = (params) =>
   Request({
-    url: '/api/getWebToken',
+    url: '/api/community/getWebToken',
     method: 'POST',
     data: params,
     config: {
@@ -35,14 +35,14 @@ export const getWebToken = (params) =>
 
 export const getWebUserinfo = (params) =>
   Request({
-    url: '/api/getWebUserinfo',
+    url: '/api/community/getWebUserinfo',
     method: 'POST',
     data: params
   });
 
 export const getRefreshToken = (params) =>
   Request({
-    url: '/api/getRefreshToken',
+    url: '/api/community/getRefreshToken',
     method: 'POST',
     data: params
   });

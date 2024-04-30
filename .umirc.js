@@ -26,15 +26,14 @@ export default defineConfig({
           name: '原拆原建意向收集',
           path: '/intention.html',
           component: '@/pages/topic/intention/index.jsx'
-        }
-        /*
+        },
         {
           name: '用户中心',
           path: '/user.html',
           component: '@/pages/user'
         },
         {
-          name: '关于公司',
+          name: '关于翠苑社区',
           path: '/about.html',
           component: '@/pages/about'
         },
@@ -42,8 +41,12 @@ export default defineConfig({
           name: '常见问题',
           path: '/help.html',
           component: '@/pages/help'
+        },
+        {
+          name: '闲置易物',
+          path: '/mall.html',
+          component: '@/pages/mall'
         }
-        */
       ]
     }
   ],

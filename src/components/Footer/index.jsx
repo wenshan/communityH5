@@ -1,20 +1,58 @@
 import React, { Component } from 'react';
 import { TabBar } from 'antd-mobile';
 import { connect } from 'umi';
-import { routerRedux } from 'dva/router';
+import { history } from 'umi';
 import Cookies from 'js-cookie';
 
 import './index.less';
 
 class LayoutFooter extends Component {
-  toggleTab(path) {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeKey: '/index',
+    };
+    this.tabsTable = [
+      {
+        key: '/index.html',
+        title: '首页',
+        icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-home-ac.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-home.png" />,
+      },
+      {
+        key: '/mall.html',
+        title: '易物(建设中..)',
+        icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-gift-ac.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-gift.png" />,
+      },
+      {
+        key: '/topic.html',
+        title: '话题',
+        icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-topic-ac.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-topic.png" />,
+      },
+      {
+        key: '/user.html',
+        title: '我的',
+        icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-user.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-user.png" />,
+      },
+    ]
+  }
+
+  setActiveKey = (key) => {
     const access_token = Cookies.get('access_token');
     const { openid } = this.props.userinfo;
+    this.setState({
+      activeKey: key,
+    });
+    this.props.dispatch({
+      type: 'common/update',
+      payload: {
+        activeKey: key,
+      }
+    })
     if (access_token && openid) {
-      this.props.dispatch(routerRedux.push(path));
+      history.push(key);
     } else {
-      if (path == '/index.html') {
-        this.props.dispatch(routerRedux.push('/index.html'));
+      if (key == '/index.html') {
+        history.push('/index.html');
       } else {
         this.props.dispatch({
           type: 'common/getUserInfo'
@@ -25,117 +63,11 @@ class LayoutFooter extends Component {
 
   render() {
     return (
-      <div className='myfooter'>
-        <TabBar unselectedTintColor='#333' tintColor='#333' barTintColor='white'>
-          <TabBar.Item
-            title='首页'
-            key='首页'
-            icon={
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  background: `url('@/images/tab/home.png') center center /  30px 30px no-repeat`
-                }}
-              />
-            }
-            selectedIcon={
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  background: `url('@/images/tab/home-active.png') center center /  30px 30px no-repeat`
-                }}
-              />
-            }
-            selected={this.props.pathname === '/index.html' || this.props.pathname === '/'}
-            onPress={() => {
-              this.toggleTab('/index.html');
-            }}
-            data-seed='logId'
-          />
-          <TabBar.Item
-            title='易物(建设中..)'
-            key='易物'
-            icon={
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  background: `url('@/images/tab/message.png') center center /  30px 30px no-repeat`
-                }}
-              />
-            }
-            selectedIcon={
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  background: `url('@/images/tab/message-active.png') center center /  30px 30px no-repeat`
-                }}
-              />
-            }
-            selected={this.props.pathname === '/orderList.html'}
-            badge={this.props.cartAmount}
-            onPress={() => {
-              this.toggleTab('/orderList.html');
-            }}
-            data-seed='logId'
-          />
-          <TabBar.Item
-            title='话题'
-            key='话题'
-            icon={
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  background: `url('@/images/tab/cloud.png') center center /  30px 30px no-repeat`
-                }}
-              />
-            }
-            selectedIcon={
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  background: `url('@/images/tab/cloud-active.png') center center /  30px 30px no-repeat`
-                }}
-              />
-            }
-            selected={this.props.pathname === '/cloud.html'}
-            onPress={() => {
-              this.toggleTab('/cloud.html');
-            }}
-            data-seed='logId'
-          />
-          <TabBar.Item
-            title='我的'
-            key='我的'
-            icon={
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  background: `url('@/images/tab/user.png') center center /  30px 30px no-repeat`
-                }}
-              />
-            }
-            selectedIcon={
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  background: `url('@/images/tab/user-active.png') center center /  30px 30px no-repeat`
-                }}
-              />
-            }
-            selected={this.props.pathname === '/user.html'}
-            onPress={() => {
-              this.toggleTab('/user.html');
-            }}
-            data-seed='logId'
-          />
+      <div className='footer'>
+        <TabBar activeKey={this.props.activeKey} onChange={this.setActiveKey}>
+          {this.tabsTable.map(item => (
+            <TabBar.Item key={item.key} icon={item.icon} title={item.title} />
+          ))}
         </TabBar>
       </div>
     );
@@ -144,7 +76,7 @@ class LayoutFooter extends Component {
 
 export default connect(
   (state) => ({
-    pathname: state.common.pathname,
+    activeKey: state.common.activeKey,
     userinfo: state.common.userinfo
   }),
 )(LayoutFooter);

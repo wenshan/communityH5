@@ -23,7 +23,7 @@ class Help extends Component {
     /*
     wx.ready(function () {
       wx.updateAppMessageShareData({
-        title: '畅游AI大世界-声音克隆来了~', // 分享标题
+        title: '西湖翠苑社区', // 分享标题
         desc: '复刻专属的声音，让我们创造更有个性。', // 分享描述
         link: 'https://www.dreamstep.top/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: 'https://img.dreamstep.top/ai/banner_03_01.png', // 分享图标
