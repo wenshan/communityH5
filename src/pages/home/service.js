@@ -1,9 +1,8 @@
-import Request from '@/utils/request';
+import request from '@/utils/request';
 
 // http://wiki.tools.msparis.com/pages/viewpage.action?pageId=1015930
 export const configs = (params) =>
-  Request({
-    url: '/common/configs',
+  request('/common/configs', {
     method: 'GET',
     data: params,
     config: {
@@ -12,8 +11,7 @@ export const configs = (params) =>
   });
 
 export const queryBanner = (params = {}) =>
-  Request({
-    url: '/api/web/banner/query',
+  request('/api/web/banner/query', {
     method: 'POST',
     data: params,
     config: {
@@ -23,8 +21,7 @@ export const queryBanner = (params = {}) =>
 
 // wiki: http://wiki.tools.msparis.com/pages/viewpage.action?pageId=1016417
 export const list = (params) =>
-  Request({
-    url: '/product/filter',
+  request('/product/filter', {
     method: 'GET',
     data: params,
     config: {

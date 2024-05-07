@@ -57,14 +57,6 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  home: state.home,
-  swiperBanner: state.home.swiperBanner,
-});
-const mapDispatchToProps = dispatch => ({
-  dispatch,
-});
-
 export default connect(
   (state) => ({
     home: state.home,

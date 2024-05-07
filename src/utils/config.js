@@ -4,11 +4,11 @@ const API_PRO = 'https://www.dreamstep.top/';
 // const API_DEV = 'https://www.dreamstep.top/';
 // const API_PRO = 'https://www.dreamstep.top/';
 
-const DEV_ENV = process.env.DEV_ENV;
+const NODE_ENV = process.env.NODE_ENV;
 
 const apiUrl = () => {
   let url;
-  if (DEV_ENV === 'dev') {
+  if (NODE_ENV === 'development') {
     url = API_DEV;
   } else {
     url = API_PRO;

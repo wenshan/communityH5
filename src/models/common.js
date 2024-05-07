@@ -2,14 +2,22 @@
 import QueryString from 'query-string';
 import Store from 'store2';
 import Cookies from 'js-cookie';
+import * as FormData from 'form-data';
 import { routerRedux } from 'dva/router';
 import { Toast, Modal } from 'antd-mobile';
 import Tool from '@/utils/tool';
-import { getWebToken, getUserUnionID } from '@/utils/commonService';
-import { getUserInfo } from '@/pages/user/service';
+import {
+  getWebToken,
+  getUserUnionID,
+  uploadBase64Image,
+  userCertification,
+  queryRoomAreas,
+  submitContract
+} from '@/utils/commonService';
+import { getUserInfo, getCommunityUserInfo } from '@/pages/user/service';
 
 const CommonStore = Store.namespace('common');
-
+const formdata = new FormData();
 // 测试数据 userinfo
 // eslint-disable-next-line import/first
 import userinfo from '@/utils/userInforDate';
@@ -25,8 +33,8 @@ const initUserInfo = {
   gender: ''
 };
 
-const DEV_ENV = process.env.DEV_ENV;
-console.log('DEV_ENV:', DEV_ENV);
+const NODE_ENV = process.env.NODE_ENV;
+console.log('NODE_ENV:', NODE_ENV);
 
 export default {
   namespace: 'common',
@@ -47,7 +55,10 @@ export default {
       openid: '',
       userid: '',
       unionid: '',
-      gender: ''
+      gender: '',
+      name: '',
+      idcard: '',
+      is_certification: 0
     },
     wxConfig: {
       appid: 'wx7284b74cc03f0299',
@@ -61,7 +72,23 @@ export default {
       secret: '6bbc5ba71886f4a4abdcad3fdc95fa7d',
       grant_type: 'authorization_code'
     }, // 微信公共配置
-    activeKey: '/'
+    activeKey: '/',
+    communityUser: {
+      id: '',
+      userid: '',
+      roomid: '',
+      name: '',
+      idcard: '',
+      is_certification: 0,
+      contractId: '',
+      contractPath: '',
+      signatureFile: '',
+      is_checkSignature: 0,
+      areas: null,
+      build: 0,
+      unit: 0,
+      room: 0
+    }
   },
 
   subscriptions: {
@@ -84,14 +111,14 @@ export default {
         }
 
         // 设定一个测试用户
-        if (DEV_ENV == 'dev') {
+        if (NODE_ENV == 'development' && false) {
           dispatch({
             type: 'update',
             payload: {
               userinfo
             }
           });
-          Cookies.set('access_token', userinfo.access_token, { expires: 1 });
+          // Cookies.set('access_token', userinfo.access_token, { expires: 1 });
         }
 
         // 存在CODE 更新用户数据
@@ -99,6 +126,7 @@ export default {
           // 比较下新旧code码
           const code = CommonStore.session('code');
           if (code !== query.code) {
+            // if (true) {
             dispatch({
               type: 'update',
               payload: {
@@ -109,6 +137,8 @@ export default {
             CommonStore.session('code', query.code);
             // 获取token
             dispatch({ type: 'getWeixinToken', payload: { state: query.state, code: query.code } });
+          } else {
+            dispatch({ type: 'getWeixinOauth2', payload: { isOperateType: false } });
           }
         }
       });
@@ -122,12 +152,13 @@ export default {
       // 清理缓存
       CommonStore.session('userinfo', initUserInfo);
       CommonStore.session('access_token', '');
-      Cookies.set('access_token', '');
+      // Cookies.set('access_token', '');
       // isOperateType 手动授权 自动授权
       let isOperateType = payload.isOperateType || false; // 自动授权
       const wxConfig = yield select((state) => state.common.wxConfig);
       const { origin, pathname } = window.location;
-      const url_path = `${origin}/index.html`;
+      //const url_path = `${origin}/index.html`;
+      const url_path = 'https://www.dreamstep.top/index.html';
       const redirect_uri = encodeURIComponent(url_path);
       if (wxConfig) {
         const openAuthUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap#wechat_redirect`;
@@ -154,28 +185,25 @@ export default {
         }
       }
     },
-    // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap
-    // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap&uin=MjA0MTMzOTc1&key=bd5ed1236ec0478576b9340d9290f124a786013d28070ae058d85ba17f5c396f94eece3cec4a19be190bdb557ae0cc5b&pass_ticket=676qaW89M4CBjPeRtUhJ5Mg38Zml3rF/h8Blg60UuY2FzVIPVKRg12+mDqWDz2SncT69P7Dsl9GD39FyS6LWUgqDgwsNda6peOw31LhtYzo=
+    // https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index
+    // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=https%3A%2F%2Fwww.dreamstep.top%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap
+    // https://api.weixin.qq.com/sns/userinfo?access_token=80_SSLqnIHKo-Z3hrp-0QigEMWg8jSAG8RjaUha6qcs_Fwx6y0ADhNeYxd-s7xR-Y9_tvsAvGOi930UoibPIuej5vqO1un-nrSYwnXHy5481mk&openid=o_Vnq6RT2B-FJv6G6iKia7PwonTA&lang=zh_CN
     // 获取到 code，换取token openid
     // https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
     *getWeixinToken({ payload }, { call, put, select }) {
       const code = yield select((state) => state.common.code);
       const currentUserinfo = yield select((state) => state.common.userinfo);
       const { platform } = yield select((state) => state.common);
-      const result = yield call(getWebToken, { code, platform });
+      const { wxConfig } = yield select((state) => state.common);
+      const { secret, appid, grant_type } = wxConfig;
+      const result = yield call(getWebToken, { code, platform, secret, appid, grant_type });
       if (result && result.status == 200 && result.data && result.data.access_token) {
         const userinfo = Object.assign({}, currentUserinfo, result.data);
         // 更新缓存用户授权后信息
         CommonStore.session('userinfo', userinfo);
         CommonStore.session('access_token', result.data.access_token);
 
-        if (result.data.md5) {
-          CommonStore.session('md5', result.data.md5);
-        } else {
-          Toast.info('授权失败, md5用户标识创建失败', 5);
-        }
-
-        Cookies.set('access_token', result.data.access_token, { expires: 1 });
+        // Cookies.set('access_token', result.data.access_token, { expires: 1 });
         yield put({ type: 'update', payload: { userinfo } });
       } else {
         // 用户授权失败 手动授权
@@ -184,11 +212,11 @@ export default {
     },
     // 获取用户信息
     *getUserInfo({ payload }, { call, put, select }) {
-      const access_token = Cookies.get('access_token');
       const currentUserinfo = yield select((state) => state.common.userinfo);
+      const access_token = Cookies.get('access_token');
       if (access_token) {
-        const result = yield call(getUserInfo);
-        if (result && result.status == 200 && result.data && result.data.openid) {
+        const result = yield call(getUserInfo, {});
+        if (result && result.status == 200 && result.data) {
           const userinfo = Object.assign({}, currentUserinfo, result.data);
           // 判断用户是否拥有
           let unionidModalStatus = false;
@@ -199,10 +227,65 @@ export default {
           CommonStore.session('userinfo', userinfo);
         } else {
           yield put({ type: 'getWeixinOauth2', payload: { isOperateType: true } });
-          // Toast.info('获取用户信息失败');
+          // Toast.show('获取用户信息失败');
         }
       } else {
         yield put({ type: 'getWeixinOauth2', payload: { isOperateType: true } });
+      }
+    },
+    // 获取社区用户信息
+    *getCommunityUserInfo({ payload: data }, { call, put, select }) {
+      const currentCommunityUser = yield select((state) => state.common.communityUser);
+      const access_token = Cookies.get('access_token');
+      if (access_token) {
+        const result = yield call(getCommunityUserInfo, {});
+        if (result && result.status == 200 && result.data) {
+          const communityUser = Object.assign({}, currentCommunityUser, result.data);
+          yield put({ type: 'update', payload: { communityUser } });
+        }
+      }
+    },
+    // 实名认证
+    *userCertification({ payload: data }, { call, put, select }) {
+      const currentUserinfo = yield select((state) => state.common.userinfo);
+      const currentCommunityUser = yield select((state) => state.common.communityUser);
+      const { communityUser } = data;
+      const { name, idcard } = communityUser;
+      const resultUserInfo = yield call(userCertification, { name, idcard });
+      if (resultUserInfo && resultUserInfo.status == '200' && resultUserInfo.data) {
+        const newCurrentUserinfo = Object.assign({}, currentUserinfo, resultUserInfo.data);
+        const { name, idcard, is_certification } = newCurrentUserinfo;
+        const newCurrentCommunityUser = Object.assign({}, currentCommunityUser, { name, idcard, is_certification });
+        yield put({ type: 'update', payload: { userinfo: newCurrentUserinfo } });
+        yield put({ type: 'update', payload: { communityUser: newCurrentCommunityUser } });
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '认证失败，请刷新重试'
+        });
+      }
+    },
+    // 保存 签名信息
+    *saveSignature({ payload: data }, { call, put, select }) {
+      const { signatureFile } = data;
+      const currentUserinfo = yield select((state) => state.common.userinfo);
+      const communityUser = yield select((state) => state.common.communityUser);
+      const result = yield call(uploadBase64Image, { signatureFile });
+      if (result && result.status == 200 && result.data) {
+        const newCommunityUser = Object.assign({}, communityUser, result.data);
+        yield put({ type: 'update', payload: { communityUser: newCommunityUser } });
+      }
+    },
+    // 提交 PDF
+    *submitContractPDF({ payload: data }, { call, put, select }) {
+      const { areas, build, unit, room, signatureFile, id } = yield select((state) => state.common.communityUser);
+      const { is_certification, name, idcard } = yield select((state) => state.common.userinfo);
+      debugger;
+      if (is_certification && areas && build && unit && room && signatureFile) {
+        const result = yield call(submitContract, { id, areas, build, unit, room, name, idcard, is_certification });
+        console.log('result:', result);
+        if (result) {
+        }
       }
     }
   },

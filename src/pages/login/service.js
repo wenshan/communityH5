@@ -1,34 +1,30 @@
-import { Request } from '@/utils/index';
+import request from '@/utils/request';
 // 老用户登录
 export async function login(params) {
-  return Request({
-    url: '/user/login',
+  return request('/user/login', {
     method: 'POST',
-    data: params,
+    data: params
   });
 }
 // 获取手机验证码
 export async function getSms(params) {
-  return Request({
-    url: '/common/sms',
+  return request('/common/sms', {
     method: 'GET',
-    data: params,
+    data: params
   });
 }
 // 获取语音验证码
 export async function getSmsVoice(params) {
-  return Request({
-    url: '/common/voice',
+  return request('/common/voice', {
     method: 'GET',
-    data: params,
+    data: params
   });
 }
 // 发券
 export async function getReceive(params) {
-  return Request({
-    url: '/coupon/receive-v2',
+  return request('/coupon/receive-v2', {
     method: 'POST',
-    data: params,
+    data: params
   });
 }
 
@@ -40,59 +36,46 @@ export async function getReceive(params) {
  *
  */
 export async function bindMobile(params) {
-  return Request({
-    url: '/user/mobile',
+  return request('/user/mobile', {
     method: 'POST',
-    data: params,
+    data: params
   });
 }
-
-
-export async function checkmobile(params) {
-  return Request({
-    url: '/common/mobile',
-    data: params,
-  });
-}
-
 // cbs login 三方用户登录
 // http://wiki.tools.msparis.com/pages/viewpage.action?pageId=2689211
 export async function authLogin(params) {
-  return Request({
-    url: '/api/user/oauth/login',
+  return request('/api/user/oauth/login', {
     data: params,
     method: 'POST',
     config: {
       type: 'CSB',
-      isAccess: true,
-    },
+      isAccess: true
+    }
   });
 }
 
 // cbs 三方用户绑定
 // http://wiki.tools.msparis.com/pages/viewpage.action?pageId=2689213
 export async function thirdPartyBind(params) {
-  return Request({
-    url: '/api/user/oauth/bind',
+  return request('/api/user/oauth/bind', {
     data: params,
     method: 'POST',
     config: {
       type: 'CSB',
-      isAccess: true,
-    },
+      isAccess: true
+    }
   });
 }
 
 // cbs 三方用户解绑
 // http://wiki.tools.msparis.com/pages/viewpage.action?pageId=2689216
 export async function unbindThirdParty(params) {
-  return Request({
-    url: '/api/user/oauth/unbind',
+  return request('/api/user/oauth/unbind', {
     data: params,
     method: 'POST',
     config: {
       type: 'CSB',
-      isAccess: true,
-    },
+      isAccess: true
+    }
   });
 }

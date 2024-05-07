@@ -24,7 +24,7 @@ class LayoutFooter extends Component {
         icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-gift-ac.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-gift.png" />,
       },
       {
-        key: '/topic.html',
+        key: '/intention.html',
         title: '话题',
         icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-topic-ac.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-topic.png" />,
       },
@@ -47,7 +47,7 @@ class LayoutFooter extends Component {
       payload: {
         activeKey: key,
       }
-    })
+    });
     if (access_token && openid) {
       history.push(key);
     } else {

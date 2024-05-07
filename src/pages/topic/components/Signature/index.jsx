@@ -20,7 +20,7 @@ export default class SignaturePad extends React.Component {
         return (this.minWidth + this.maxWidth) / 2;
       };
     this.penColor = this.props.penColor || "black";
-    this.backgroundColor = this.props.backgroundColor || "rgba(0,0,0,0)";
+    this.backgroundColor = this.props.backgroundColor || "#ffffff";
     this.onEnd = this.props.onEnd;
     this.onBegin = this.props.onBegin;
   }

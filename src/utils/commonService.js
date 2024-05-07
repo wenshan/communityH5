@@ -1,20 +1,17 @@
 /* eslint-disable */
-import axios from 'axios';
-import Request from '@/utils/request';
+import request from '@/utils/request';
 import wechatApi from '@/utils/wechatApi';
 
 // 获取token
 export const getWebToken2 = (params) =>
-  Request({
-    url: wechatApi.WEBTOKENGET,
+  request(wechatApi.WEBTOKENGET, {
     method: 'GET',
     data: params
   });
 
 // getUserUnionID
 export const getUserUnionID = (params) =>
-  Request({
-    url: '/api/community/getUserUnionID',
+  request('/api/community/getUserUnionID', {
     method: 'POST',
     data: params,
     config: {
@@ -23,8 +20,7 @@ export const getUserUnionID = (params) =>
     }
   });
 export const getWebToken = (params) =>
-  Request({
-    url: '/api/community/getWebToken',
+  request('/api/community/getWebToken', {
     method: 'POST',
     data: params,
     config: {
@@ -34,15 +30,53 @@ export const getWebToken = (params) =>
   });
 
 export const getWebUserinfo = (params) =>
-  Request({
-    url: '/api/community/getWebUserinfo',
+  request('/api/community/getWebUserinfo', {
     method: 'POST',
     data: params
   });
 
 export const getRefreshToken = (params) =>
-  Request({
-    url: '/api/community/getRefreshToken',
+  request('/api/community/getRefreshToken', {
+    method: 'POST',
+    data: params
+  });
+// 保存 签名图片
+export const uploadBase64Image = (params) =>
+  request('/api/community/uploadBase64Image', {
+    method: 'POST',
+    data: params
+  });
+// 提交同意
+export const submitContract = (params) =>
+  request('/api/community/submitContract', {
+    method: 'POST',
+    data: params
+  });
+
+// 实名认证
+export const userCertification = (params) =>
+  request('/api/community/userCertification', {
+    method: 'POST',
+    data: params
+  });
+export const queryRoomAreas = (params) =>
+  request('/api/community/queryRoomAreas', {
+    method: 'POST',
+    data: params
+  });
+export const queryRoomBuild = (params) =>
+  request('/api/community/queryRoomBuild', {
+    method: 'POST',
+    data: params
+  });
+export const queryRoomUnit = (params) =>
+  request('/api/community/queryRoomUnit', {
+    method: 'POST',
+    data: params
+  });
+
+export const queryRoomNum = (params) =>
+  request('/api/community/queryRoomNum', {
     method: 'POST',
     data: params
   });
