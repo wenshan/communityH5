@@ -49,7 +49,6 @@ class Intention extends Component {
   }
   handelCertificationButtonSubmit = () => {
     const { communityUser } = this.props;
-    debugger;
     if (communityUser && communityUser.name && communityUser.idcard) {
       this.setState({
         isShowCertification: false,

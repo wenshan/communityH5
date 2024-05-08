@@ -263,13 +263,11 @@ export default {
     },
     // 实名认证
     *userCertification({ payload: data }, { call, put, select }) {
-      debugger;
       const currentUserinfo = yield select((state) => state.common.userinfo);
       const currentCommunityUser = yield select((state) => state.common.communityUser);
       const { communityUser } = data;
       const { name, idcard } = communityUser;
       if (name && idcard) {
-        debugger;
         const resultUserInfo = yield call(userCertification, { name, idcard });
         if (resultUserInfo && resultUserInfo.status == '200' && resultUserInfo.data) {
           const newCurrentUserinfo = Object.assign({}, currentUserinfo, resultUserInfo.data);
@@ -375,7 +373,6 @@ export default {
     },
     *delUser({ payload: data }, { call, put, select }) {
       const { id } = data;
-      debugger;
       if (id) {
         const result = yield call(delUser, { id });
         if (result && result.status == 200 && result.data) {
