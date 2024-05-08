@@ -1,6 +1,6 @@
 import React from 'react';
-import { Modal } from 'antd-mobile';
-import { connect } from 'dva';
+import { Modal, Popup } from 'antd-mobile';
+import { connect } from 'umi';
 import './index.less';
 
 function closest(el, selector) {
@@ -77,20 +77,14 @@ class WxQRcode extends React.Component {
     const isShowStatus = access_token && openid ? unionidModalStatus : false;
     return (
       <div className='wx-qrcode'>
-        <Modal
+        <Popup
+          className='popup-qrcode'
           visible={isShowStatus}
           transparent
           maskClosable={true}
+          showCloseButton={true}
           onClose={this.onClose}
           title='扫码关注公众号'
-          footer={[
-            {
-              text: 'Ok',
-              onPress: () => {
-                this.onClose();
-              }
-            }
-          ]}
           wrapProps={{ onTouchStart: this.onWrapTouchStart }}
           afterClose={this.handAfterClose}
         >
@@ -106,20 +100,13 @@ class WxQRcode extends React.Component {
               <p>2. 关注公众号才能订阅翠苑相关信息</p>
             </div>
           </div>
-        </Modal>
+        </Popup>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    userinfo: state.common.userinfo,
-    unionidModalStatus: state.common.unionidModalStatus
-  };
-};
-const mapDispatchToProps = (dispatch) => ({
-  dispatch
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(WxQRcode);
+export default connect((state) => ({
+  userinfo: state.common.userinfo,
+  unionidModalStatus: state.common.unionidModalStatus
+}))(WxQRcode);

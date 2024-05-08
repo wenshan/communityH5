@@ -33,7 +33,7 @@ class WishList extends Component {
 
   render() {
     const { name } = this.props.userinfo;
-    const { areas, build, unit, room, signatureFile, id, contractPath} = this.props.communityUser;
+    const { areas, build, unit, room, signatureFile, id, contractPath, createdAt} = this.props.communityUser;
     return (
       <div className="page">
         <div className="wish-list">
@@ -41,16 +41,20 @@ class WishList extends Component {
             <h2>我申请的意愿</h2>
           </div>
           <div className='content'>
+
             <div className='info'>
+            {is_submitConfirmation ? (<>
               <h3>翠苑三区C区原拆原建意愿申请</h3>
               <div className='room'>房号: <span>{areas}-{build}幢-{unit}单元-{room}室</span></div>
               <div className='certification'>实名: {name}</div>
               <div className='signature'>电子签: 已认证 </div>
-              <div className='pdf'>意愿申请文件: <a href={contractPath} target='_blank'>点击查看</a></div>
+              <div className='pdf'>意愿申请文件: {contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</div>
+              <div className='date'>日期: {createdAt}</div>
+              <div className='footer-box'>
+                <span onClick={()=>{this.delUser(id)}}>删除重新申请意愿</span>
+              </div>
+              </>) : (<span className='no-data'>无数据</span>)}
             </div>
-          </div>
-          <div className='footer-box'>
-            <span onClick={()=>{this.delUser(id)}}>删除重新申请意愿</span>
           </div>
         </div>
       </div>

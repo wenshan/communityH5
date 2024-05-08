@@ -12,6 +12,12 @@ export function getRoutes() {
     "routes": [
       {
         "name": "首页",
+        "path": "/",
+        "component": require('@/pages/home/index.jsx').default,
+        "exact": true
+      },
+      {
+        "name": "首页",
         "path": "/index.html",
         "component": require('@/pages/home/index.jsx').default,
         "exact": true

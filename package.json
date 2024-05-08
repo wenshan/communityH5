@@ -33,7 +33,9 @@
     "react-virtualized": "^9.22.5",
     "store2": "^2.14.3",
     "swiper": "^11.1.1",
-    "umi": "^3.5.20"
+    "umi": "^3.5.20",
+    "vconsole": "^3.15.1",
+    "weixin-js-sdk": "^1.6.5"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",

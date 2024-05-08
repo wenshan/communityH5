@@ -218,7 +218,8 @@ export default {
         Cookies.set('access_token', result.data.access_token, { expires: 1, path: '/' });
 
         // Cookies.set('access_token', result.data.access_token, { expires: 1 });
-        yield put({ type: 'update', payload: { userinfo } });
+        // yield put({ type: 'update', payload: { userinfo } });
+        yield put({ type: 'getUserInfo', payload: {} });
       } else {
         // 用户授权失败 手动授权
         yield put({ type: 'getWeixinOauth2', payload: { isOperateType: true } });

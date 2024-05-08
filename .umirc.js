@@ -19,6 +19,11 @@ export default defineConfig({
       routes: [
         {
           name: '首页',
+          path: '/',
+          component: '@/pages/home/index.jsx'
+        },
+        {
+          name: '首页',
           path: '/index.html',
           component: '@/pages/home/index.jsx'
         },
