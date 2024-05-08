@@ -96,11 +96,14 @@ class WxQRcode extends React.Component {
         >
           <div className='modal-content'>
             <div className='img-box'>
-              <img src='https://img.dreamstep.top/ai/qrcode_for_gh_1bd6c4f747f0_430.jpg' onClick={this.handSubmit} />
+              <img
+                src='https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/qrcode_for_gh_41d638333ec8_430.jpg'
+                onClick={this.handSubmit}
+              />
             </div>
             <div className='info'>
-              <p>1. 长安图片扫码，关注《智能复现》公众号</p>
-              <p>2. 关注公众号后才能使用消息客服等功能</p>
+              <p>1. 长安图片扫码，关注《西子翠苑》公众号</p>
+              <p>2. 关注公众号才能订阅翠苑相关信息</p>
             </div>
           </div>
         </Modal>

@@ -69,3 +69,10 @@ export const getUserList = (params) =>
     method: 'POST',
     data: params
   });
+
+// delUser
+export const delUser = (params) =>
+  request('/api/community/delUser', {
+    method: 'POST',
+    data: params
+  });

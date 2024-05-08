@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'umi';
+import { connect, history } from 'umi';
 import { TabBar, Badge, Space, Grid, List, Toast } from 'antd-mobile';
-import { routerRedux } from 'dva/router';
+import {
+  UnorderedListOutline,
+  PayCircleOutline,
+  SetOutline,
+} from 'antd-mobile-icons'
 import WxQRcode from '@/components/WxQRcode';
 import Footer from '@/components/Footer';
 
@@ -18,7 +22,7 @@ class User extends Component {
   }
   gotoPage = (val) => {
     if (val){
-      this.props.dispatch(routerRedux.push(val));
+      history.push(val);
     }
   }
   shareToPage = () => {
@@ -73,9 +77,42 @@ class User extends Component {
             <div className="arrow"><img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/img/arrow_right.png" /></div>
           </div>
           <Space size="lg"></Space>
-          <div className="tool-wrap"></div>
+          <div className="tool-wrap">
+            <div className="content">
+              <Grid columns={2} gap={12}>
+                <Grid.Item>
+                  <div className="item">
+                    <span className="img"><img src="http://p.cdn.izhaoli.cn/gc/wx/help2.png?2024" /></span>
+                    <span>帮助中心</span>
+                  </div>
+                </Grid.Item>
+                <Grid.Item>
+                  <div className="item" onClick={this.modalWxQRcodeStatus}>
+                    <span className="img"><img src="http://p.cdn.izhaoli.cn/gc/wx/i4.png?2024" /></span>
+                    <span>关注公众号</span>
+                  </div>
+                </Grid.Item>
+              </Grid>
+            </div>
+          </div>
           <Space size="lg"></Space>
+          <List header='基础'>
+            <List.Item prefix={<UnorderedListOutline />} onClick={() => {this.gotoPage('/index.html')}}>
+            我的信息
+            </List.Item>
+            <List.Item prefix={<PayCircleOutline />} onClick={() => {this.gotoPage('/wish.html')}}>
+            我的意愿
+            </List.Item>
+          </List>
           <Space size="lg"></Space>
+          <List header='其他'>
+            <List.Item prefix={<UnorderedListOutline />} onClick={() => { }}>
+              分享给我的好友
+            </List.Item>
+            <List.Item prefix={<UnorderedListOutline />} onClick={() => {}}>
+              关于《西子翠苑》
+            </List.Item>
+          </List>
           <Space size="lg"></Space>
         </div>
         <WxQRcode></WxQRcode>

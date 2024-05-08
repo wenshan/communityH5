@@ -29,6 +29,12 @@ export function getRoutes() {
         "exact": true
       },
       {
+        "name": "我的意愿",
+        "path": "/wish.html",
+        "component": require('@/pages/wish/index.jsx').default,
+        "exact": true
+      },
+      {
         "name": "用户中心",
         "path": "/user.html",
         "component": require('@/pages/user').default,

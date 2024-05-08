@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Chart } from 'react-google-charts';
 import ReactECharts from 'echarts-for-react';
 import './index.less';
 

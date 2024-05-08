@@ -33,6 +33,11 @@ export default defineConfig({
           component: '@/pages/topic/intentionList/index.jsx'
         },
         {
+          name: '我的意愿',
+          path: '/wish.html',
+          component: '@/pages/wish/index.jsx'
+        },
+        {
           name: '用户中心',
           path: '/user.html',
           component: '@/pages/user'

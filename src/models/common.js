@@ -13,7 +13,8 @@ import {
   userCertification,
   submitContract,
   uploadRoomNum,
-  getUserList
+  getUserList,
+  delUser
 } from '@/utils/commonService';
 import { getUserInfo, getCommunityUserInfo } from '@/pages/user/service';
 
@@ -255,6 +256,8 @@ export default {
         if (result && result.status == 200 && result.data && result.data.id) {
           const communityUser = Object.assign({}, currentCommunityUser, result.data);
           yield put({ type: 'update', payload: { communityUser, communityUserSubmitLoading: false } });
+        } else {
+          yield put({ type: 'update', payload: { communityUser, communityUserSubmitLoading: false } });
         }
       }
     },
@@ -352,6 +355,25 @@ export default {
           Toast.show({
             icon: 'success',
             content: '查询成功！'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '检测参数'
+          });
+        }
+      }
+    },
+    *delUser({ payload: data }, { call, put, select }) {
+      const { id } = data;
+      debugger;
+      if (id) {
+        const result = yield call(delUser, { id });
+        if (result && result.status == 200 && result.data) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
+          Toast.show({
+            icon: 'success',
+            content: '删除成功！'
           });
         } else {
           Toast.show({
