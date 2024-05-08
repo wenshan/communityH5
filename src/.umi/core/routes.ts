@@ -23,6 +23,12 @@ export function getRoutes() {
         "exact": true
       },
       {
+        "name": "原拆原建意向列表",
+        "path": "/intentionList.html",
+        "component": require('@/pages/topic/intentionList/index.jsx').default,
+        "exact": true
+      },
+      {
         "name": "用户中心",
         "path": "/user.html",
         "component": require('@/pages/user').default,

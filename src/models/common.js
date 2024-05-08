@@ -11,8 +11,9 @@ import {
   getUserUnionID,
   uploadBase64Image,
   userCertification,
-  queryRoomAreas,
-  submitContract
+  submitContract,
+  uploadRoomNum,
+  getUserList
 } from '@/utils/commonService';
 import { getUserInfo, getCommunityUserInfo } from '@/pages/user/service';
 
@@ -84,11 +85,22 @@ export default {
       contractPath: '',
       signatureFile: '',
       is_checkSignature: 0,
-      areas: null,
+      is_submitConfirmation: 0,
+      areas: '翠苑三区',
       build: 0,
       unit: 0,
       room: 0
-    }
+    },
+    communityUserFilter: {
+      areas: '翠苑三区',
+      build: 1,
+      unit: 1
+    },
+    communityUserList: {
+      count: 0,
+      rows: []
+    },
+    communityUserSubmitLoading: false
   },
 
   subscriptions: {
@@ -202,6 +214,7 @@ export default {
         // 更新缓存用户授权后信息
         CommonStore.session('userinfo', userinfo);
         CommonStore.session('access_token', result.data.access_token);
+        Cookies.set('access_token', result.data.access_token, { expires: 1, path: '/' });
 
         // Cookies.set('access_token', result.data.access_token, { expires: 1 });
         yield put({ type: 'update', payload: { userinfo } });
@@ -239,9 +252,9 @@ export default {
       const access_token = Cookies.get('access_token');
       if (access_token) {
         const result = yield call(getCommunityUserInfo, {});
-        if (result && result.status == 200 && result.data) {
+        if (result && result.status == 200 && result.data && result.data.id) {
           const communityUser = Object.assign({}, currentCommunityUser, result.data);
-          yield put({ type: 'update', payload: { communityUser } });
+          yield put({ type: 'update', payload: { communityUser, communityUserSubmitLoading: false } });
         }
       }
     },
@@ -256,8 +269,10 @@ export default {
         const newCurrentUserinfo = Object.assign({}, currentUserinfo, resultUserInfo.data);
         const { name, idcard, is_certification } = newCurrentUserinfo;
         const newCurrentCommunityUser = Object.assign({}, currentCommunityUser, { name, idcard, is_certification });
-        yield put({ type: 'update', payload: { userinfo: newCurrentUserinfo } });
-        yield put({ type: 'update', payload: { communityUser: newCurrentCommunityUser } });
+        yield put({
+          type: 'update',
+          payload: { userinfo: newCurrentUserinfo, communityUser: newCurrentCommunityUser }
+        });
       } else {
         Toast.show({
           icon: 'fail',
@@ -270,21 +285,79 @@ export default {
       const { signatureFile } = data;
       const currentUserinfo = yield select((state) => state.common.userinfo);
       const communityUser = yield select((state) => state.common.communityUser);
-      const result = yield call(uploadBase64Image, { signatureFile });
-      if (result && result.status == 200 && result.data) {
-        const newCommunityUser = Object.assign({}, communityUser, result.data);
-        yield put({ type: 'update', payload: { communityUser: newCommunityUser } });
+      const { name, idcard, is_certification, is_checkSignature } = currentUserinfo;
+      if (name && idcard && is_certification && signatureFile) {
+        const result = yield call(uploadBase64Image, {
+          signatureFile,
+          name,
+          idcard,
+          is_certification,
+          is_checkSignature
+        });
+        if (result && result.status == 200 && result.data) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
+        }
       }
     },
     // 提交 PDF
     *submitContractPDF({ payload: data }, { call, put, select }) {
       const { areas, build, unit, room, signatureFile, id } = yield select((state) => state.common.communityUser);
       const { is_certification, name, idcard } = yield select((state) => state.common.userinfo);
-      debugger;
-      if (is_certification && areas && build && unit && room && signatureFile) {
+      if (is_certification && areas && build && unit && room && signatureFile && id) {
+        yield put({ type: 'update', payload: { communityUserSubmitLoading: true } });
         const result = yield call(submitContract, { id, areas, build, unit, room, name, idcard, is_certification });
-        console.log('result:', result);
-        if (result) {
+        if (result && result.status == 200) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
+          yield put({ type: 'update', payload: { communityUserSubmitLoading: false } });
+          Toast.show({
+            icon: 'success',
+            content: '意愿提交成功！'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '检测参数'
+          });
+        }
+      }
+    },
+    // 更新房号
+    *uploadRoomNum({ payload: data }, { call, put, select }) {
+      const communityUser = yield select((state) => state.common.communityUser);
+      // const { areas, build, unit, room } = communityUser;
+      const { areas, build, unit, room } = data;
+      if (areas && build && unit && room) {
+        const result = yield call(uploadRoomNum, { areas, build, unit, room });
+        if (result && result.status == 200) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
+          Toast.show({
+            icon: 'success',
+            content: '房号提交成功！'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '检测参数'
+          });
+        }
+      }
+    },
+    // 查询房号
+    *getUserList({ payload: data }, { call, put, select }) {
+      const { areas, build, unit } = data;
+      if (areas && build && unit) {
+        const result = yield call(getUserList, { areas, build, unit });
+        if (result && result.status == 200 && result.data) {
+          yield put({ type: 'update', payload: { communityUserList: result.data } });
+          Toast.show({
+            icon: 'success',
+            content: '查询成功！'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '检测参数'
+          });
         }
       }
     }

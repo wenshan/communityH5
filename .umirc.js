@@ -28,6 +28,11 @@ export default defineConfig({
           component: '@/pages/topic/intention/index.jsx'
         },
         {
+          name: '原拆原建意向列表',
+          path: '/intentionList.html',
+          component: '@/pages/topic/intentionList/index.jsx'
+        },
+        {
           name: '用户中心',
           path: '/user.html',
           component: '@/pages/user'

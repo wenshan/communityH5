@@ -116,8 +116,8 @@ class Intention extends Component {
   }
   handelCascaderStatusOnConfirm = (value) => {
     console.log('value:', value);
-    const { communityUser } = this.state;
-    if (value && value[0] && value[1]) {
+    const { communityUser } = this.props;
+    if (value && value[0] && value[1] && value[2] && value[3]) {
       const areas = value[0];
       const build = value[1];
       const unit = value[2];
@@ -126,6 +126,15 @@ class Intention extends Component {
       this.props.dispatch({
         type: 'common/update',
         payload: { communityUser: newCommunityUser }
+      });
+      this.props.dispatch({
+        type: 'common/uploadRoomNum',
+        payload: { areas, build, unit, room }
+      });
+    } else {
+      Toast.show({
+        icon: 'fail',
+        content: '请选择完整的房号',
       });
     }
   }
@@ -150,7 +159,9 @@ class Intention extends Component {
     const { isShowCertification, isShowSignature, isShowCascader, cascaderOptions } = this.state;
     const { communityUser, userinfo } = this.props;
     const { is_certification } = userinfo;
-    const { name, idcard, signatureFile, areas, build, unit, room} = communityUser;
+    const { name, idcard, signatureFile, areas, build, unit, room, is_submitConfirmation} = communityUser;
+    console.log(is_submitConfirmation);
+    console.log(is_certification);
     return (
       <div className="page">
         <div className="intention-page">
@@ -171,9 +182,9 @@ class Intention extends Component {
           </div>
           <div className="topic-action">
           <div className="room">
-            <div className="title">选择房号</div>
+            <div className="title">选择房号 {(areas && build && unit && room)? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
             <div className="content">
-              <Button color='primary' fill='outline' size='small' onClick={this.handelCascaderStatus}>选择</Button>
+              { is_submitConfirmation ? '' : (<Button color='primary' fill='outline' size='small' onClick={this.handelCascaderStatus}>选择</Button>)}
               <div>
                 <span>{areas}-{build}幢-{unit}单元-{room}室</span>
               </div>
@@ -228,9 +239,9 @@ class Intention extends Component {
             </div>
           </div>
           <div className="signature">
-            <div className="title">电子签名</div>
+            <div className="title">电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
             <div className="content">
-            <Button color='primary' fill='outline' size='small' onClick={this.handelSignatureButton}>请电子签名</Button>
+            {is_submitConfirmation ? '' : (<Button color='primary' fill='outline' size='small' onClick={this.handelSignatureButton}>请电子签名</Button>)}
             <div className='signature-img'>
                 <img src={signatureFile} />
             </div>
@@ -251,7 +262,10 @@ class Intention extends Component {
             </div>
           </div>
           <div className="submit">
-            <Button block color='primary' size='large' onClick={this.handelSubmitContractPDF}>确认同意提交意向申请</Button>
+            <Button loading={this.props.communityUserSubmitLoading} disabled={is_submitConfirmation} block color='primary' size='large' onClick={this.handelSubmitContractPDF}>确认同意提交意向申请</Button>
+          </div>
+          <div className="check-info">
+              <span>点击查看已提交的申请</span>
           </div>
         </div>
         </div>
@@ -265,5 +279,6 @@ export default connect(
     swiperBanner: state.home.swiperBanner,
     communityUser: state.common.communityUser,
     userinfo:  state.common.userinfo,
+    communityUserSubmitLoading: state.common.communityUserSubmitLoading,
   }),
 )(Intention);

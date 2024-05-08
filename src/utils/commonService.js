@@ -59,24 +59,13 @@ export const userCertification = (params) =>
     method: 'POST',
     data: params
   });
-export const queryRoomAreas = (params) =>
-  request('/api/community/queryRoomAreas', {
+export const uploadRoomNum = (params) =>
+  request('/api/community/uploadRoomNum', {
     method: 'POST',
     data: params
   });
-export const queryRoomBuild = (params) =>
-  request('/api/community/queryRoomBuild', {
-    method: 'POST',
-    data: params
-  });
-export const queryRoomUnit = (params) =>
-  request('/api/community/queryRoomUnit', {
-    method: 'POST',
-    data: params
-  });
-
-export const queryRoomNum = (params) =>
-  request('/api/community/queryRoomNum', {
+export const getUserList = (params) =>
+  request('/api/community/getUserList', {
     method: 'POST',
     data: params
   });
