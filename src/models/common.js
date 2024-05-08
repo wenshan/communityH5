@@ -257,29 +257,38 @@ export default {
           const communityUser = Object.assign({}, currentCommunityUser, result.data);
           yield put({ type: 'update', payload: { communityUser, communityUserSubmitLoading: false } });
         } else {
-          yield put({ type: 'update', payload: { communityUser, communityUserSubmitLoading: false } });
+          yield put({ type: 'update', payload: { communityUserSubmitLoading: false } });
         }
       }
     },
     // 实名认证
     *userCertification({ payload: data }, { call, put, select }) {
+      debugger;
       const currentUserinfo = yield select((state) => state.common.userinfo);
       const currentCommunityUser = yield select((state) => state.common.communityUser);
       const { communityUser } = data;
       const { name, idcard } = communityUser;
-      const resultUserInfo = yield call(userCertification, { name, idcard });
-      if (resultUserInfo && resultUserInfo.status == '200' && resultUserInfo.data) {
-        const newCurrentUserinfo = Object.assign({}, currentUserinfo, resultUserInfo.data);
-        const { name, idcard, is_certification } = newCurrentUserinfo;
-        const newCurrentCommunityUser = Object.assign({}, currentCommunityUser, { name, idcard, is_certification });
-        yield put({
-          type: 'update',
-          payload: { userinfo: newCurrentUserinfo, communityUser: newCurrentCommunityUser }
-        });
+      if (name && idcard) {
+        debugger;
+        const resultUserInfo = yield call(userCertification, { name, idcard });
+        if (resultUserInfo && resultUserInfo.status == '200' && resultUserInfo.data) {
+          const newCurrentUserinfo = Object.assign({}, currentUserinfo, resultUserInfo.data);
+          const { name, idcard, is_certification } = newCurrentUserinfo;
+          const newCurrentCommunityUser = Object.assign({}, currentCommunityUser, { name, idcard, is_certification });
+          yield put({
+            type: 'update',
+            payload: { userinfo: newCurrentUserinfo, communityUser: newCurrentCommunityUser }
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '认证失败，请刷新重试'
+          });
+        }
       } else {
         Toast.show({
           icon: 'fail',
-          content: '认证失败，请刷新重试'
+          content: '检测参数'
         });
       }
     },

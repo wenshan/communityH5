@@ -33,12 +33,12 @@ class WishList extends Component {
 
   render() {
     const { name } = this.props.userinfo;
-    const { areas, build, unit, room, signatureFile, id} = this.props.communityUser;
+    const { areas, build, unit, room, signatureFile, id, contractPath} = this.props.communityUser;
     return (
       <div className="page">
         <div className="wish-list">
           <div className='header'>
-            <h2>我的申请的意愿</h2>
+            <h2>我申请的意愿</h2>
           </div>
           <div className='content'>
             <div className='info'>
@@ -46,7 +46,7 @@ class WishList extends Component {
               <div className='room'>房号: <span>{areas}-{build}幢-{unit}单元-{room}室</span></div>
               <div className='certification'>实名: {name}</div>
               <div className='signature'>电子签: 已认证 </div>
-              <div className='pdf'>意愿申请文件: 点击查看</div>
+              <div className='pdf'>意愿申请文件: <a href={contractPath} target='_blank'>点击查看</a></div>
             </div>
           </div>
           <div className='footer-box'>

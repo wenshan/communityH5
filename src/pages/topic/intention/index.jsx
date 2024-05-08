@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'umi';
+import { connect, Link } from 'umi';
 import { TabBar, Badge, Space, Input, Button, Popup, Cascader, Toast } from 'antd-mobile';
 import { CheckCircleOutline, CloseCircleOutline} from 'antd-mobile-icons'
 import Signature from '../components/Signature';
@@ -49,13 +49,10 @@ class Intention extends Component {
   }
   handelCertificationButtonSubmit = () => {
     const { communityUser } = this.props;
+    debugger;
     if (communityUser && communityUser.name && communityUser.idcard) {
       this.setState({
         isShowCertification: false,
-      });
-      this.props.dispatch({
-        type: 'common/update',
-        payload: { communityUser }
       });
       this.props.dispatch({
         type: 'common/userCertification',
@@ -265,7 +262,7 @@ class Intention extends Component {
             <Button loading={this.props.communityUserSubmitLoading} disabled={is_submitConfirmation} block color='primary' size='large' onClick={this.handelSubmitContractPDF}>确认同意提交意向申请</Button>
           </div>
           <div className="check-info">
-              <span>点击查看已提交的申请</span>
+              <Link to="/wish.html">点击查看已提交的申请</Link>
           </div>
         </div>
         </div>
