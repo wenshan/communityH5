@@ -76,3 +76,9 @@ export const delUser = (params) =>
     method: 'POST',
     data: params
   });
+
+export const getShareConfig = (params) =>
+  request('/api/community/getShareConfig', {
+    method: 'POST',
+    data: params
+  });

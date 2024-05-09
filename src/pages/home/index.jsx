@@ -41,14 +41,23 @@ class Home extends Component {
         unionidModalStatus: false
       }
     });
+    this.props.dispatch({
+      type: 'common/getUserList',
+      payload: { areas: '翠苑三区', build: null, unit: null }
+    });
   }
   // https://echarts.apache.org/zh/option.html#title
   render() {
+    const { communityUserCount  } = this.props
     return (
       <div className="page">
         <div className="home-page">
           <div className="swiper-wrap">
             <BannerSwiper history={history} swiperBanner={this.props.swiperBanner} callback={this.swpierClick}></BannerSwiper>
+          </div>
+          <Space></Space>
+          <div className='warning-box'>
+            <h1>此公众号H项目正在测试阶段，数据随时清理，功能完善中，5月10号（周日）后正式对外使用</h1>
           </div>
           <Space></Space>
           <div className='intention-view'>
@@ -57,8 +66,8 @@ class Home extends Component {
             </div>
             <div className='content'>
               <div className='topic'>
-                <div className='rate'>{(90/951).toFixed(4)*100} %</div>
-                <div className='des'>共计: 951户 当前申请: 90户</div>
+                <div className='rate'>{(communityUserCount/951).toFixed(4)*100} %</div>
+                <div className='des'>共计: 951户 当前申请: {communityUserCount}户</div>
               </div>
               <div className='chart'>
                 <ChartColumn></ChartColumn>
@@ -80,5 +89,6 @@ export default connect(
   (state) => ({
     home: state.home,
     swiperBanner: state.home.swiperBanner,
+    communityUserCount: state.common.communityUserCount,
   }),
 )(Home);

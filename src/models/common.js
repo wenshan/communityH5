@@ -2,8 +2,6 @@
 import QueryString from 'query-string';
 import Store from 'store2';
 import Cookies from 'js-cookie';
-import * as FormData from 'form-data';
-import { routerRedux } from 'dva/router';
 import { Toast, Modal } from 'antd-mobile';
 import Tool from '@/utils/tool';
 import {
@@ -14,12 +12,12 @@ import {
   submitContract,
   uploadRoomNum,
   getUserList,
-  delUser
+  delUser,
+  getShareConfig
 } from '@/utils/commonService';
 import { getUserInfo, getCommunityUserInfo } from '@/pages/user/service';
 
 const CommonStore = Store.namespace('common');
-const formdata = new FormData();
 // 测试数据 userinfo
 // eslint-disable-next-line import/first
 import userinfo from '@/utils/userInforDate';
@@ -94,14 +92,15 @@ export default {
     },
     communityUserFilter: {
       areas: '翠苑三区',
-      build: 1,
-      unit: 1
+      build: null,
+      unit: null
     },
     communityUserList: {
       count: 0,
       rows: []
     },
-    communityUserSubmitLoading: false
+    communityUserSubmitLoading: false,
+    communityUserCount: 0 // 当前申请人数
   },
 
   subscriptions: {
@@ -356,10 +355,13 @@ export default {
     // 查询房号
     *getUserList({ payload: data }, { call, put, select }) {
       const { areas, build, unit } = data;
-      if (areas && build && unit) {
+      if (areas) {
         const result = yield call(getUserList, { areas, build, unit });
         if (result && result.status == 200 && result.data) {
           yield put({ type: 'update', payload: { communityUserList: result.data } });
+          if (build == null && unit == null) {
+            yield put({ type: 'update', payload: { communityUserCount: result.data.count } });
+          }
           Toast.show({
             icon: 'success',
             content: '查询成功！'
@@ -372,6 +374,7 @@ export default {
         }
       }
     },
+    // 删除社区用户
     *delUser({ payload: data }, { call, put, select }) {
       const { id } = data;
       if (id) {
@@ -388,6 +391,14 @@ export default {
             content: '检测参数'
           });
         }
+      }
+    },
+    // 获取微信分享参数
+    *getShareConfig({ payload: data }, { call, put, select }) {
+      const access_token = Cookies.get('access_token');
+      const { url } = data;
+      if (access_token && url) {
+        const result = yield call(getShareConfig, { url });
       }
     }
   },

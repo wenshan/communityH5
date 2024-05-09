@@ -3,10 +3,9 @@ import { connect, Link } from 'umi';
 import { TabBar, Badge, Space, Input, Button, Popup, Cascader, Toast } from 'antd-mobile';
 import { CheckCircleOutline, CloseCircleOutline} from 'antd-mobile-icons'
 import Signature from '../components/Signature';
-import Footer from '@/components/Footer';
 import cascaderOptions from '@/utils/roomData';
+import WxShare from '@/utils/wxShare';
 
-import 'rmc-dialog/assets/index.css';
 import './index.less';
 
 class Intention extends Component {
@@ -141,6 +140,13 @@ class Intention extends Component {
   }
 
   componentDidMount() {
+    WxShare.reset({
+      friend_title: '翠苑三区( C区1-14/19-28幢)原拆原建业主意向征集和倡议书',
+      friend_content: '为统一征集意见，翠苑三区C区1-14/19-28幢已建立微信群，请各位业主加入微信群填写意见，共商共助，携手共建美好家园。',
+      imgUrl: 'https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/banner/banner_intention.png',
+      link: 'https://www.dreamstep.top/intention.html'
+    });
+    console.log('WxShare', WxShare);
     this.props.dispatch({
       type: 'common/getUserInfo'
     });
@@ -154,10 +160,9 @@ class Intention extends Component {
   render() {
     const { isShowCertification, isShowSignature, isShowCascader, cascaderOptions } = this.state;
     const { communityUser, userinfo } = this.props;
-    const { is_certification } = userinfo;
-    const { name, idcard, signatureFile, areas, build, unit, room, is_submitConfirmation} = communityUser;
-    console.log(is_submitConfirmation);
-    console.log(is_certification);
+    const { is_certification, name, idcard } = userinfo;
+    const { signatureFile, areas, build, unit, room, is_submitConfirmation} = communityUser;
+
     return (
       <div className="page">
         <div className="intention-page">

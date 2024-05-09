@@ -1,22 +1,23 @@
 import wx from 'weixin-js-sdk';
-import config from './config';
-import wxRes from './wxRequest';
+import { getShareConfig } from './commonService';
 
 const WxShare = {
   params: {
-    baseurl: config.BASE_URL,
-    img_url: 'https://static-rs.msparis.com/m-site/images/app_logo.png',
-    page_url: 'http://ms.msparis.com/index.html',
-    timeline_url: config.BASE_URL,
+    baseurl: 'https://www.dreamstep.top/',
+    img_url: 'https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/img/logo2.png',
+    page_url: 'https://www.dreamstep.top/index.html',
+    timeline_url: 'https://www.dreamstep.top/',
     friend_title: '西子翠苑',
-    friend_content: '西子翠苑',
+    friend_content: '西子翠苑-为翠苑社区公益服务',
     timeline_content: '西子翠苑'
   },
   reset(params) {
     const initParams = params || {};
-    wxRes.getConfig().then((res) => {
-      let resdata = res.data;
-      this.init(resdata, initParams);
+    getShareConfig().then((res) => {
+      if (res.status == 200 && res.data) {
+        let data = res.data;
+        this.init(data, initParams);
+      }
     });
   },
   init(data, params) {
@@ -25,7 +26,7 @@ const WxShare = {
       page_url: initParams.page_url || document.location.href
     });
     wx.config({
-      debug: false,
+      debug: true,
       appId: 'wx7284b74cc03f0299',
       timestamp: data.timestamp,
       nonceStr: data.nonceStr,
@@ -73,6 +74,7 @@ const WxShare = {
   },
   BindShare() {
     wx.ready(() => {
+      console.log('分享已经开启成功！');
       wx.updateAppMessageShareData({
         title: this.params.friend_title,
         desc: this.params.friend_content,

@@ -73,7 +73,7 @@ class intentionList extends Component {
   componentDidMount() {
     this.props.dispatch({
       type: 'common/getUserList',
-      payload: { areas: '翠苑三区', build: 1, unit: 1 }
+      payload: { areas: '翠苑三区', build: null, unit: null }
     });
   }
 
@@ -88,7 +88,7 @@ class intentionList extends Component {
             <h2>翠苑三区C区意愿申请列表</h2>
             <div className='filter'>
               <Button color='primary' fill='outline' size='small' onClick={this.handelCascaderStatus}>选择</Button>
-              <span>{areas}-{build}幢-{unit}单元</span>
+              {areas && build && unit && (<span>{areas}-{build}幢-{unit}单元</span>)}
               <Cascader
                 options={cascaderOptionsFilter}
                 visible={isShowCascader}
