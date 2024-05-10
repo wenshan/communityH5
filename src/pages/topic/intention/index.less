@@ -2,6 +2,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 800px;
+  margin: 20px;
   .check-info {
     text-align: right;
     padding-right: 30px;
@@ -9,39 +10,52 @@
 }
 .page-topic {
   line-height: 50px;
-  font-size: 28px;
+  font-size: 30px;
   color: #000;
   padding: 20px;
+  background-color: #fff;
   h1 {
     font-weight: 500;
     font-size: 32px;
     padding-bottom: 20px;
     padding-top: 20px;
   }
+  .red {
+    color: red;
+  }
+  p {
+    padding-bottom: 10px;
+  }
 }
 .topic-action {
   padding: 20px 20px 50px 20px;
   font-size: 28px;
+  background-color: #fff;
   .title {
-    font-size: 32px;
+    font-size: 30px;
     line-height: 50px;
+    height: 50px;
+    clear: both;
+    .operate {
+      height: 50px;
+      float: right;
+    }
   }
   .tx {
     color: #000;
-    font-size: 32px;
+    font-size: 28px;
   }
   .submit {
     padding: 20px;
   }
-  .room {
-    font-size: 32px;
-    height: 200px;
-  }
+}
+.room {
+  font-size: 30px;
+  height: 150px;
 }
 .certification {
-  height: 200px;
+  height: 150px;
 }
-
 .signature {
   height: 280px;
   .signature-img {
@@ -49,6 +63,9 @@
     border: 1px solid #f4f4f4;
     background-color: #fff;
   }
+}
+.contact-info {
+  height: 150px;
 }
 .popup {
   .from {
@@ -62,6 +79,30 @@
         line-height: 32px;
         padding-bottom: 10px;
         color: #697b8c;
+      }
+    }
+    .input-sms {
+      padding: 10;
+      clear: both;
+      width: 490px;
+      .adm-input-clear {
+        display: inline-block;
+        vertical-align: middle;
+        overflow: hidden;
+      }
+      .adm-input {
+        display: inline-block;
+        width: 250px;
+        vertical-align: middle;
+        input {
+          width: 180px;
+          background-color: #fff;
+          vertical-align: middle;
+        }
+      }
+      .sms-send {
+        vertical-align: middle;
+        display: inline-block;
       }
     }
     .button {

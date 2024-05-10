@@ -306,6 +306,18 @@ export default [
         ]
       },
       {
+        label: '14幢',
+        value: '14',
+        key: 'build',
+        children: [
+          {
+            label: '1单元',
+            value: '1',
+            key: 'unit'
+          }
+        ]
+      },
+      {
         label: '19幢',
         value: '19',
         key: 'build',
@@ -461,18 +473,6 @@ export default [
       {
         label: '28幢',
         value: '28',
-        key: 'build',
-        children: [
-          {
-            label: '1单元',
-            value: '1',
-            key: 'unit'
-          }
-        ]
-      },
-      {
-        label: '14幢',
-        value: '14',
         key: 'build',
         children: [
           {

@@ -2,18 +2,19 @@
 import QueryString from 'query-string';
 import Store from 'store2';
 import Cookies from 'js-cookie';
-import { Toast, Modal } from 'antd-mobile';
+import { Toast, Modal, Dialog } from 'antd-mobile';
 import Tool from '@/utils/tool';
 import {
   getWebToken,
-  getUserUnionID,
-  uploadBase64Image,
+  saveSignature,
   userCertification,
   submitContract,
   uploadRoomNum,
   getUserList,
   delUser,
-  getShareConfig
+  getShareConfig,
+  sendSms,
+  mobileCertification
 } from '@/utils/commonService';
 import { getUserInfo, getCommunityUserInfo } from '@/pages/user/service';
 
@@ -21,6 +22,23 @@ const CommonStore = Store.namespace('common');
 // 测试数据 userinfo
 // eslint-disable-next-line import/first
 import userinfo from '@/utils/userInforDate';
+const initCommunityUser = {
+  id: '',
+  userid: '',
+  roomid: '',
+  name: '',
+  idcard: '',
+  is_certification: 0,
+  contractId: '',
+  contractPath: '',
+  signatureFile: '',
+  is_checkSignature: 0,
+  is_submitConfirmation: 0,
+  areas: '翠苑三区',
+  build: 0,
+  unit: 0,
+  room: 0
+};
 
 const initUserInfo = {
   access_token: '',
@@ -88,7 +106,9 @@ export default {
       areas: '翠苑三区',
       build: 0,
       unit: 0,
-      room: 0
+      room: 0,
+      smsCode: '',
+      mobile: ''
     },
     communityUserFilter: {
       areas: '翠苑三区',
@@ -138,7 +158,6 @@ export default {
           // 比较下新旧code码
           const code = CommonStore.session('code');
           if (code !== query.code) {
-            // if (true) {
             dispatch({
               type: 'update',
               payload: {
@@ -176,9 +195,10 @@ export default {
         const openAuthUrl = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxConfig.appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap#wechat_redirect`;
         // 手动授权
         if (isOperateType) {
-          Modal.alert({
-            content: '微信 token 已过期，请重新授权获取 token',
-            title: '失败',
+          Dialog.alert({
+            content: '登录信息已过期，请授权微信登录!',
+            title: '授权登录',
+            confirmText: '确认',
             onConfirm: () => {
               setTimeout(() => {
                 window.location.href = openAuthUrl;
@@ -198,7 +218,7 @@ export default {
       }
     },
     // https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index
-    // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=https%3A%2F%2Fwww.dreamstep.top%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true&state=wxwap
+    // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=https%3A%2F%2Fwww.dreamstep.top%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true
     // https://api.weixin.qq.com/sns/userinfo?access_token=80_SSLqnIHKo-Z3hrp-0QigEMWg8jSAG8RjaUha6qcs_Fwx6y0ADhNeYxd-s7xR-Y9_tvsAvGOi930UoibPIuej5vqO1un-nrSYwnXHy5481mk&openid=o_Vnq6RT2B-FJv6G6iKia7PwonTA&lang=zh_CN
     // 获取到 code，换取token openid
     // https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
@@ -257,7 +277,10 @@ export default {
           const communityUser = Object.assign({}, currentCommunityUser, result.data);
           yield put({ type: 'update', payload: { communityUser, communityUserSubmitLoading: false } });
         } else {
-          yield put({ type: 'update', payload: { communityUserSubmitLoading: false } });
+          yield put({
+            type: 'update',
+            payload: { communityUser: initCommunityUser, communityUserSubmitLoading: false }
+          });
         }
       }
     },
@@ -265,8 +288,7 @@ export default {
     *userCertification({ payload: data }, { call, put, select }) {
       const currentUserinfo = yield select((state) => state.common.userinfo);
       const currentCommunityUser = yield select((state) => state.common.communityUser);
-      const { communityUser } = data;
-      const { name, idcard } = communityUser;
+      const { name, idcard } = data;
       if (name && idcard) {
         const resultUserInfo = yield call(userCertification, { name, idcard });
         if (resultUserInfo && resultUserInfo.status == '200' && resultUserInfo.data) {
@@ -277,6 +299,7 @@ export default {
             type: 'update',
             payload: { userinfo: newCurrentUserinfo, communityUser: newCurrentCommunityUser }
           });
+          yield put({ type: 'getUserInfo', payload: {} });
         } else {
           Toast.show({
             icon: 'fail',
@@ -297,7 +320,7 @@ export default {
       const communityUser = yield select((state) => state.common.communityUser);
       const { name, idcard, is_certification, is_checkSignature } = currentUserinfo;
       if (name && idcard && is_certification && signatureFile) {
-        const result = yield call(uploadBase64Image, {
+        const result = yield call(saveSignature, {
           signatureFile,
           name,
           idcard,
@@ -312,10 +335,21 @@ export default {
     // 提交 PDF
     *submitContractPDF({ payload: data }, { call, put, select }) {
       const { areas, build, unit, room, signatureFile, id } = yield select((state) => state.common.communityUser);
-      const { is_certification, name, idcard } = yield select((state) => state.common.userinfo);
-      if (is_certification && areas && build && unit && room && signatureFile && id) {
+      const { is_certification, name, idcard, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
+      if (is_certification && areas && build && unit && room && signatureFile && id && mobile && is_checkMobile) {
         yield put({ type: 'update', payload: { communityUserSubmitLoading: true } });
-        const result = yield call(submitContract, { id, areas, build, unit, room, name, idcard, is_certification });
+        const result = yield call(submitContract, {
+          id,
+          areas,
+          build,
+          unit,
+          room,
+          name,
+          idcard,
+          is_certification,
+          is_checkMobile,
+          mobile
+        });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
           yield put({ type: 'update', payload: { communityUserSubmitLoading: false } });
@@ -362,10 +396,6 @@ export default {
           if (build == null && unit == null) {
             yield put({ type: 'update', payload: { communityUserCount: result.data.count } });
           }
-          Toast.show({
-            icon: 'success',
-            content: '查询成功！'
-          });
         } else {
           Toast.show({
             icon: 'fail',
@@ -388,17 +418,65 @@ export default {
         } else {
           Toast.show({
             icon: 'fail',
-            content: '检测参数'
+            content: '删除失败，检测参数'
           });
         }
       }
     },
-    // 获取微信分享参数
-    *getShareConfig({ payload: data }, { call, put, select }) {
-      const access_token = Cookies.get('access_token');
-      const { url } = data;
-      if (access_token && url) {
-        const result = yield call(getShareConfig, { url });
+    // 发送验证码
+    *communitySendSms({ payload: data }, { call, put, select }) {
+      const { mobile } = data;
+      if (mobile) {
+        const result = yield call(sendSms, { mobile });
+        if (result && result.status == 200) {
+          Toast.show({
+            icon: 'success',
+            content: '验证码发送成功'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '验证码发送失败'
+          });
+        }
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '请先输入手机号码'
+        });
+      }
+    },
+    // 验证手机号码
+    *mobileCertification({ payload: data }, { call, put, select }) {
+      const currentUserinfo = yield select((state) => state.common.userinfo);
+      const currentCommunityUser = yield select((state) => state.common.communityUser);
+      const { mobile, smsCode } = data;
+      if (mobile && smsCode) {
+        const resultUserInfo = yield call(mobileCertification, { mobile, smsCode });
+        if (resultUserInfo && resultUserInfo.status == 200 && resultUserInfo.data) {
+          const newCurrentUserinfo = Object.assign({}, currentUserinfo, resultUserInfo.data);
+          const { mobile, is_checkMobile } = newCurrentUserinfo;
+          const newCurrentCommunityUser = Object.assign({}, currentCommunityUser, { mobile, is_checkMobile });
+          yield put({
+            type: 'update',
+            payload: { userinfo: newCurrentUserinfo, communityUser: newCurrentCommunityUser }
+          });
+          yield put({ type: 'getUserInfo', payload: {} });
+          Toast.show({
+            icon: 'success',
+            content: '验证码发送成功'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '验证失败'
+          });
+        }
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '请输入手机号和验证码'
+        });
       }
     }
   },

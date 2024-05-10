@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect, Link } from 'umi';
 import { TabBar, Badge, Space, Grid } from 'antd-mobile';
+import { RightOutline} from 'antd-mobile-icons'
 import { routerRedux } from 'dva/router';
 import BannerSwiper from './components/BannerSwiper';
 import ChartColumn from './components/ChartColumn';
+import WxShare from '@/utils/wxShare';
 
 
 import './index.less';
@@ -35,6 +37,10 @@ class Home extends Component {
     });
   }
   componentDidMount() {
+    /** 分享 -- start */
+    const initShare = new WxShare();
+    initShare.reset();
+    /** 分享 -- end */
     this.props.dispatch({
       type: 'common/update',
       payload: {
@@ -62,7 +68,10 @@ class Home extends Component {
           <Space></Space>
           <div className='intention-view'>
             <div className="header">
-              <h2>翠苑三区C区原建原拆意向数据</h2>
+              <Link to="/intention.html">
+                <h2>翠苑三区C区原建原拆意向数据</h2>
+                <span className='link'>点击去申请<RightOutline /></span>
+              </Link>
             </div>
             <div className='content'>
               <div className='topic'>
@@ -74,7 +83,7 @@ class Home extends Component {
               </div>
             </div>
             <div className='footer-box'>
-              <span><Link to="/intentionList.html">查看数据明细</Link></span>
+              <span><Link to="/intentionList.html">查看数据明细<RightOutline /></Link></span>
             </div>
           </div>
           <Space></Space>

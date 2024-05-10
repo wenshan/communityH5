@@ -3480,6 +3480,25 @@ export default [
         ]
       },
       {
+        label: '14幢',
+        value: '14',
+        key: 'build',
+        children: [
+          {
+            label: '1单元',
+            value: '1',
+            key: 'unit',
+            children: [
+              {
+                label: '101室',
+                value: '101',
+                key: 'room'
+              }
+            ]
+          }
+        ]
+      },
+      {
         label: '19幢',
         value: '19',
         key: 'build',
@@ -5361,25 +5380,6 @@ export default [
               {
                 label: '604室',
                 value: '604',
-                key: 'room'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        label: '14幢',
-        value: '14',
-        key: 'build',
-        children: [
-          {
-            label: '1单元',
-            value: '1',
-            key: 'unit',
-            children: [
-              {
-                label: '101室',
-                value: '101',
                 key: 'room'
               }
             ]

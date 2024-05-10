@@ -1,15 +1,14 @@
 const Tool = {
-
   /**
    * 判断对象是否为空
    * @param obj
    * @return {boolean}
    */
 
-  isEmptyObject(obj){
+  isEmptyObject(obj) {
     let key;
     for (key in obj) {
-      if (obj[key]){
+      if (obj[key]) {
         return false;
       }
     }
@@ -108,7 +107,6 @@ const Tool = {
   * 格式价格
   */
   formatPrice(price, type = 2) {
-
     if (typeof price !== 'number' || Number.isNaN(price)) {
       return '￥0.00';
     }
@@ -159,7 +157,7 @@ const Tool = {
     const pairs = search.replace('?', '').split('&');
     const obj = {};
     for (let i = 0; i < pairs.length; i++) {
-      const [key, value] = pairs[i].split('=');
+      const [ key, value ] = pairs[i].split('=');
       if (!obj[key]) {
         obj[key] = value;
       }
@@ -190,13 +188,16 @@ const Tool = {
     return substr;
   },
   // 判断是否是isIphoneX
-  isIphoneX(){
-    if (window.screen){
+  isIphoneX() {
+    if (window.screen) {
       return /iphone/gi.test(navigator.userAgent) && (screen.height == 812 && screen.width == 375);
     } else {
       return false;
     }
-  },
+  }
 };
 
 export default Tool;
+
+// https://img.dreamstep.top/community/2/11649999_1715169189192.pdf
+// https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=https%3A%2F%2Fwww.dreamstep.top%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true

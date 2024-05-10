@@ -1,80 +1,52 @@
 import wx from 'weixin-js-sdk';
 import { getShareConfig } from './commonService';
 
-const WxShare = {
-  params: {
-    baseurl: 'https://www.dreamstep.top/',
-    img_url: 'https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/img/logo2.png',
-    page_url: 'https://www.dreamstep.top/index.html',
-    timeline_url: 'https://www.dreamstep.top/',
-    friend_title: '西子翠苑',
-    friend_content: '西子翠苑-为翠苑社区公益服务',
-    timeline_content: '西子翠苑'
-  },
+class WxShare {
+  constructor() {
+    this.params = {
+      baseurl: 'https://www.dreamstep.top/',
+      img_url: 'https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/img/logo2.png',
+      page_url: 'https://www.dreamstep.top/index.html',
+      timeline_url: 'https://www.dreamstep.top/index.html',
+      friend_title: '西子翠苑-翠苑社区公益服务',
+      friend_content: '共商共助，携手共建美好翠苑家园',
+      timeline_content: '西子翠苑'
+    };
+  }
   reset(params) {
-    const initParams = params || {};
-    getShareConfig().then((res) => {
+    this.params = Object.assign({}, this.params, params);
+    getShareConfig({ url: this.params.page_url }).then((res) => {
       if (res.status == 200 && res.data) {
-        let data = res.data;
-        this.init(data, initParams);
+        this.params = Object.assign({}, this.params, res.data);
+        this.init(this.params);
       }
     });
-  },
-  init(data, params) {
-    let initParams = params || {};
-    this.params = Object.assign({}, this.params, initParams, {
-      page_url: initParams.page_url || document.location.href
-    });
+  }
+  init(params) {
+    this.params = Object.assign({}, params, { page_url: params.page_url || document.location.href });
     wx.config({
-      debug: true,
+      debug: false,
       appId: 'wx7284b74cc03f0299',
-      timestamp: data.timestamp,
-      nonceStr: data.nonceStr,
-      signature: data.signature,
+      timestamp: this.params.timestamp,
+      nonceStr: this.params.nonceStr,
+      signature: this.params.signature,
       jsApiList: [
         'openEnterpriseChat',
         'openEnterpriseContact',
         'checkJsApi',
-        'onMenuShareTimeline',
-        'onMenuShareAppMessage',
-        'onMenuShareQQ',
         'onMenuShareWeibo',
         'hideMenuItems',
         'showMenuItems',
         'hideAllNonBaseMenuItem',
         'showAllNonBaseMenuItem',
-        'translateVoice',
-        'startRecord',
-        'stopRecord',
-        'onRecordEnd',
-        'playVoice',
-        'pauseVoice',
-        'stopVoice',
-        'uploadVoice',
-        'downloadVoice',
-        'chooseImage',
-        'previewImage',
-        'uploadImage',
-        'downloadImage',
-        'getNetworkType',
-        'openLocation',
-        'getLocation',
-        'hideOptionMenu',
-        'showOptionMenu',
-        'closeWindow',
-        'scanQRCode',
-        'chooseWXPay',
-        'openProductSpecificView',
-        'addCard',
-        'chooseCard',
-        'openCard'
+        'updateAppMessageShareData',
+        'updateTimelineShareData'
       ]
     });
     this.BindShare();
-  },
+  }
   BindShare() {
     wx.ready(() => {
-      console.log('分享已经开启成功！');
       wx.updateAppMessageShareData({
         title: this.params.friend_title,
         desc: this.params.friend_content,
@@ -100,6 +72,6 @@ const WxShare = {
       });
     });
   }
-};
+}
 
 export default WxShare;

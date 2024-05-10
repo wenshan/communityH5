@@ -50,6 +50,10 @@ class User extends Component {
   }
 
   componentDidMount() {
+    /** 分享 -- start */
+    const initShare = new WxShare();
+    initShare.reset();
+    /** 分享 -- end */
     // 授权登录
     this.props.dispatch({
       type: 'user/getUserInfo',

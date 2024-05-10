@@ -14,8 +14,11 @@ class WishList extends Component {
   }
   delUser=(id)=>{
     const _self = this;
-    Dialog.alert({
+    Dialog.confirm({
       content: '确认删除',
+      title: '确认',
+      cancelText: '取消',
+      confirmText: '确认',
       onConfirm: () => {
         _self.props.dispatch({
           type: 'common/delUser',
@@ -33,7 +36,7 @@ class WishList extends Component {
 
   render() {
     const { name } = this.props.userinfo;
-    const { areas, build, unit, room, signatureFile, id, contractPath, createdAt} = this.props.communityUser;
+    const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt} = this.props.communityUser;
     return (
       <div className="page">
         <div className="wish-list">

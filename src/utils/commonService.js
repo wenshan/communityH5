@@ -41,8 +41,8 @@ export const getRefreshToken = (params) =>
     data: params
   });
 // 保存 签名图片
-export const uploadBase64Image = (params) =>
-  request('/api/community/uploadBase64Image', {
+export const saveSignature = (params) =>
+  request('/api/community/saveSignature', {
     method: 'POST',
     data: params
   });
@@ -79,6 +79,16 @@ export const delUser = (params) =>
 
 export const getShareConfig = (params) =>
   request('/api/community/getShareConfig', {
+    method: 'POST',
+    data: params
+  });
+export const sendSms = (params) =>
+  request('/api/user/sendSms', {
+    method: 'POST',
+    data: params
+  });
+export const mobileCertification = (params) =>
+  request('/api/community/mobileCertification', {
     method: 'POST',
     data: params
   });

@@ -53,14 +53,14 @@ class intentionList extends Component {
   }
   rowRenderer = () => {
     const html = [];
-    const { count, rows } = this.props.communityUserList;
+    const { rows } = this.props.communityUserList;
     rows && rows.length && rows.map( (item,idx) => {
       html.push(
         <>
           <List.Item
           key={item.userid}
           prefix={<span>{item.areas}-{item.build}幢-{item.unit}单元-{item.room}室</span>}
-          description={<span>已申请</span>}
+          description={<span>{`${item.name.substring(0,1)}${item.name.length > 2? '** ':'* '}`} 已申请</span>}
           >
           时间: {item.createdAt}
           </List.Item>
@@ -71,6 +71,10 @@ class intentionList extends Component {
   }
 
   componentDidMount() {
+    /** 分享 -- start */
+    const initShare = new WxShare();
+    initShare.reset();
+    /** 分享 -- end */
     this.props.dispatch({
       type: 'common/getUserList',
       payload: { areas: '翠苑三区', build: null, unit: null }

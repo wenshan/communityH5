@@ -36,7 +36,10 @@ class Help extends Component {
   }
 
   componentDidMount() {
-
+    /** 分享 -- start */
+    const initShare = new WxShare();
+    initShare.reset();
+    /** 分享 -- end */
   }
 
   render() {
