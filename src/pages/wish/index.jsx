@@ -35,8 +35,8 @@ class WishList extends Component {
   }
 
   render() {
-    const { name } = this.props.userinfo;
-    const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt} = this.props.communityUser;
+    const { name, mobile } = this.props.userinfo;
+    const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt, is_owner, feedback, is_submitContractUnwilling} = this.props.communityUser;
     return (
       <div className="page">
         <div className="wish-list">
@@ -46,15 +46,19 @@ class WishList extends Component {
           <div className='content'>
 
             <div className='info'>
-            {is_submitConfirmation ? (<>
+            {is_submitConfirmation || is_submitContractUnwilling ? (<>
               <h3>翠苑三区C区原拆原建意愿申请</h3>
-              <div className='room'>房号: <span>{areas}-{build}幢-{unit}单元-{room}室</span></div>
-              <div className='certification'>实名: {name}</div>
-              <div className='signature'>电子签: 已认证 </div>
-              <div className='pdf'>意愿申请文件: {contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</div>
-              <div className='date'>日期: {createdAt}</div>
+              <div className='status box'>申请状态: <span>{is_submitConfirmation?'同意原拆原建意愿的申请':'不同意原拆原建意愿申请'}</span></div>
+              <div className='room box'>房号: <span>{areas}-{build}幢-{unit}单元-{room}室</span></div>
+              <div className='owner box'>是否拥有产权: <span>{is_owner? '是': '否/未知'}</span></div>
+              <div className='certification box'>实名: <span></span>{name}</div>
+              <div className='mobile box'>联系手机: <span>{mobile}</span></div>
+              {is_submitConfirmation?(<div className='signature box'>电子签: <span>审核中...  </span></div>):''}
+              <div className='feedback box'>建议&妙想: <span>{feedback? (<p>{feedback}</p>) : '无' }</span></div>
+              {is_submitConfirmation?(<div className='pdf box'>意愿申请文件: <span>{contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</span></div>):''}
+              <div className='date box'>日期: <span>{createdAt}</span></div>
               <div className='footer-box'>
-                <span onClick={()=>{this.delUser(id)}}>删除重新申请意愿</span>
+                <span onClick={()=>{this.delUser(id)}}>删除重新意愿申请</span>
               </div>
               </>) : (<span className='no-data'>无数据</span>)}
             </div>

@@ -178,10 +178,6 @@ class Intention extends Component {
         isShowCascader: false
       });
       this.props.dispatch({
-        type: 'common/update',
-        payload: { communityUser: newCommunityUser }
-      });
-      this.props.dispatch({
         type: 'common/uploadRoomNum',
         payload: { areas, build, unit, room }
       });
@@ -192,17 +188,10 @@ class Intention extends Component {
       });
     }
   }
-  handelSubmitContractPDF =() => {
-    this.props.dispatch({
-      type: 'common/submitContractPDF'
-    });
-  }
   handelOwnerStatus =(val)=> {
-    const { communityUser } = this.props;
-    const newCommunityUser = Object.assign({}, communityUser, { is_owner: val});
     this.props.dispatch({
-      type: 'common/update',
-      payload: { communityUser: newCommunityUser }
+      type: 'common/saveOwnerStatus',
+      payload: { is_owner: val }
     });
   }
 
@@ -226,6 +215,86 @@ class Intention extends Component {
       });
     }
   }
+  // 同意意愿
+  handelSubmitContractPDF =() => {
+    const { is_certification, name, idcard, mobile, is_checkMobile } = this.props.userinfo;
+    const {  signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, is_owner, feedback, is_submitContractUnwilling } = this.props.communityUser;
+    if (!(areas && build && unit && room)){
+      Toast.show({
+        icon: 'fail',
+        content: '请输入房间号',
+      });
+      return false;
+    }
+    if (!is_certification){
+      Toast.show({
+        icon: 'fail',
+        content: '请进行实名认证',
+      });
+      return false;
+    }
+    if (!is_checkMobile){
+      Toast.show({
+        icon: 'fail',
+        content: '请进行手机验证',
+      });
+      return false;
+    }
+    if (!signatureFile){
+      Toast.show({
+        icon: 'fail',
+        content: '电子签名不能为空',
+      });
+      return false;
+    }
+    if(!is_submitContractUnwilling) {
+      this.props.dispatch({
+        type: 'common/submitContractPDF'
+      });
+    } else {
+      Toast.show({
+        icon: 'fail',
+        content: '已经提交不同意意愿申请',
+      });
+    }
+
+  }
+  // 不同意愿意
+  handelSubmitUnwilling =()=>{
+    const { is_certification, name, idcard, mobile, is_checkMobile } = this.props.userinfo;
+    const {  areas, build, unit, room, is_submitConfirmation, smsCode, is_owner, feedback, is_submitContractUnwilling } = this.props.communityUser;
+    if (!(areas && build && unit && room)){
+      Toast.show({
+        icon: 'fail',
+        content: '请输入房间号',
+      });
+      return false;
+    }
+    if (!is_certification){
+      Toast.show({
+        icon: 'fail',
+        content: '请进行实名认证',
+      });
+      return false;
+    }
+    if (!is_checkMobile){
+      Toast.show({
+        icon: 'fail',
+        content: '请进行手机验证',
+      });
+      return false;
+    }
+    if (!is_submitConfirmation){
+      this.props.dispatch({
+        type: 'common/submitContractUnwilling'
+      });
+    } else {
+      Toast.show({
+        icon: 'fail',
+        content: '已经提交了同意意愿申请',
+      });
+    }
+  }
 
   componentDidMount() {
     /** 分享 -- start */
@@ -245,12 +314,13 @@ class Intention extends Component {
     });
   }
 
-
   render() {
     const { isShowCertification, isShowSignature, isShowCascader,isShowMobile, isShowFeedback, cascaderOptions } = this.state;
     const { communityUser, userinfo } = this.props;
     const { is_certification, name, idcard, mobile, is_checkMobile } = userinfo;
-    const { signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, is_owner, feedback} = communityUser;
+    const { signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, is_owner, feedback, is_submitContractUnwilling} = communityUser;
+    const submitButtonDisabledStatusAgree = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
+    const submitButtonDisabledStatusUnwilling = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
     return (
       <div className="page">
         <div className="intention-page">
@@ -274,7 +344,7 @@ class Intention extends Component {
             <div className="room box-warp">
               <div className="title"><span className='required'>*</span>选择房号 {(areas && build && unit && room)? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{is_submitConfirmation ? '' : (<Button color='primary' fill='outline' size='small' onClick={this.handelCascaderShowButton}>选择</Button>)}</div></div>
               <div className="content">
-                {(areas && build && unit && room) && (<div><span>{areas}-{build}幢-{unit}单元-{room}室</span></div>)}
+                {!!(areas && build && unit && room) && (<div><span>{areas}-{build}幢-{unit}单元-{room}室</span></div>)}
                 <Cascader
                   options={cascaderOptions}
                   visible={isShowCascader}
@@ -364,7 +434,7 @@ class Intention extends Component {
               </div>
             </div>
             <div className="signature box-warp">
-              <div className="title"><span className='required'>*</span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{is_submitConfirmation? '':(<Button color='primary' fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
+              <div className="title"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{is_submitConfirmation? '':(<Button color='primary' fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
               <div className="content">
                 {signatureFile && (<div className='signature-img'><img src={signatureFile} /></div>)}
                 <Popup className="popup" visible={isShowSignature} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
@@ -386,7 +456,9 @@ class Intention extends Component {
             <div className="owner box-warp">
               <div className='title'><span className='required'></span>确认产权人信息</div>
               <div className='content'>
-                <Checkbox checked={is_owner} disabled={is_submitConfirmation} onChange={this.handelOwnerStatus}>是否是产权所有人</Checkbox>
+                <Space>
+                  <Checkbox checked={!!is_owner} disabled={is_submitConfirmation} onChange={this.handelOwnerStatus}>是否是产权所有人</Checkbox>
+                </Space>
               </div>
             </div>
             <div className="feedback box-warp">
@@ -417,8 +489,18 @@ class Intention extends Component {
                 </Popup>
               </div>
             </div>
+          </div>
+          <div className="topic-agree">
             <div className="submit">
-              <Button loading={this.props.communityUserSubmitLoading} disabled={is_submitConfirmation} block color='primary' size='large' onClick={this.handelSubmitContractPDF}>{is_submitConfirmation? (<>意向申请已提交</>): (<>确认同意提交意向申请</>)}</Button>
+              <Button loading={this.props.communityUserSubmitLoading} disabled={submitButtonDisabledStatusAgree} block color='success' size='large' onClick={this.handelSubmitContractPDF}>{is_submitConfirmation? (<>同意意愿申请已提交</>): (<>确认同意提交意愿申请</>)}</Button>
+            </div>
+            <div className="check-info">
+                <Link to="/wish.html">点击查看已提交的申请 <RightOutline /></Link>
+            </div>
+          </div>
+          <div className='topic-unwilling'>
+            <div className="submit">
+              <Button loading={this.props.communityUserSubmitUnwillingLoading} disabled={submitButtonDisabledStatusUnwilling} block color='warning' size='large' onClick={this.handelSubmitUnwilling}>{is_submitContractUnwilling? (<>不同意意愿申请已提交</>): (<>不同意意愿申请</>)}</Button>
             </div>
             <div className="check-info">
                 <Link to="/wish.html">点击查看已提交的申请 <RightOutline /></Link>
@@ -432,7 +514,7 @@ class Intention extends Component {
               </div>
             </div>
           </div>
-          <div class="topic-statement">
+          <div className="topic-statement">
             <div className='title'>声明</div>
             <div className='content'>
               <div className='text'>
@@ -477,5 +559,6 @@ export default connect(
     communityUser: state.common.communityUser,
     userinfo:  state.common.userinfo,
     communityUserSubmitLoading: state.common.communityUserSubmitLoading,
+    communityUserSubmitUnwillingLoading: state.common.communityUserSubmitUnwillingLoading,
   }),
 )(Intention);

@@ -46,12 +46,6 @@ export const saveSignature = (params) =>
     method: 'POST',
     data: params
   });
-// 提交同意
-export const submitContract = (params) =>
-  request('/api/community/submitContract', {
-    method: 'POST',
-    data: params
-  });
 
 // 实名认证
 export const userCertification = (params) =>
@@ -92,8 +86,20 @@ export const mobileCertification = (params) =>
     method: 'POST',
     data: params
   });
-export const saveFeedback = (params) =>
-  request('/api/community/saveFeedback', {
+export const superUpdateCommunityUser = (params) =>
+  request('/api/community/superUpdateCommunityUser', {
+    method: 'POST',
+    data: params
+  });
+// 提交同意
+export const submitContractAgree = (params) =>
+  request('/api/community/submitContractAgree', {
+    method: 'POST',
+    data: params
+  });
+// 提交不同意
+export const submitContractUnwilling = (params) =>
+  request('/api/community/submitContractUnwilling', {
     method: 'POST',
     data: params
   });

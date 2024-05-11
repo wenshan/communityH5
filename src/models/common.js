@@ -8,14 +8,15 @@ import {
   getWebToken,
   saveSignature,
   userCertification,
-  submitContract,
+  submitContractAgree,
+  submitContractUnwilling,
   uploadRoomNum,
   getUserList,
   delUser,
   getShareConfig,
   sendSms,
   mobileCertification,
-  saveFeedback
+  superUpdateCommunityUser
 } from '@/utils/commonService';
 import { getUserInfo, getCommunityUserInfo } from '@/pages/user/service';
 
@@ -35,6 +36,7 @@ const initCommunityUser = {
   signatureFile: '',
   is_checkSignature: 0,
   is_submitConfirmation: 0,
+  is_submitContractUnwilling: 0,
   areas: '翠苑三区',
   build: 0,
   unit: 0,
@@ -104,13 +106,15 @@ export default {
       signatureFile: '',
       is_checkSignature: 0,
       is_submitConfirmation: 0,
+      is_submitContractUnwilling: 0,
       areas: '翠苑三区',
       build: null,
       unit: null,
       room: null,
       smsCode: '',
       mobile: '',
-      is_owner: false
+      is_owner: false,
+      feedback: ''
     },
     communityUserFilter: {
       areas: '翠苑三区',
@@ -122,6 +126,7 @@ export default {
       rows: []
     },
     communityUserSubmitLoading: false,
+    communityUserSubmitUnwillingLoading: false,
     communityUserCount: 0 // 当前申请人数
   },
 
@@ -334,39 +339,6 @@ export default {
         }
       }
     },
-    // 提交 PDF
-    *submitContractPDF({ payload: data }, { call, put, select }) {
-      const { areas, build, unit, room, signatureFile, id } = yield select((state) => state.common.communityUser);
-      const { is_certification, name, idcard, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
-      if (is_certification && areas && build && unit && room && signatureFile && id && mobile && is_checkMobile) {
-        yield put({ type: 'update', payload: { communityUserSubmitLoading: true } });
-        const result = yield call(submitContract, {
-          id,
-          areas,
-          build,
-          unit,
-          room,
-          name,
-          idcard,
-          is_certification,
-          is_checkMobile,
-          mobile
-        });
-        if (result && result.status == 200) {
-          yield put({ type: 'getCommunityUserInfo', payload: {} });
-          yield put({ type: 'update', payload: { communityUserSubmitLoading: false } });
-          Toast.show({
-            icon: 'success',
-            content: '意愿提交成功！'
-          });
-        } else {
-          Toast.show({
-            icon: 'fail',
-            content: '检测参数'
-          });
-        }
-      }
-    },
     // 更新房号
     *uploadRoomNum({ payload: data }, { call, put, select }) {
       const communityUser = yield select((state) => state.common.communityUser);
@@ -484,14 +456,128 @@ export default {
     // 反馈
     *saveFeedback({ payload: data }, { call, put, select }) {
       const { feedback } = data;
-      if (feedback) {
-        const result = yield call(saveFeedback, { feedback });
+      const { id, is_certification, areas, build, unit, room } = yield select((state) => state.common.communityUser);
+      if (feedback && id && is_certification && areas && build && unit && room) {
+        const result = yield call(superUpdateCommunityUser, { feedback, id });
+        if (result && result.status == 200) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
+          Toast.show({
+            icon: 'success',
+            content: '反馈已经提交'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '服务问题请重试'
+          });
+        }
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '请先处理必填项'
+        });
+      }
+    },
+    *saveOwnerStatus({ payload: data }, { call, put, select }) {
+      const { is_owner } = data;
+      const { id, is_certification, areas, build, unit, room } = yield select((state) => state.common.communityUser);
+      if (id && is_certification && areas && build && unit && room) {
+        const result = yield call(superUpdateCommunityUser, { is_owner, id });
+        if (result && result.status == 200) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
+          Toast.show({
+            icon: 'success',
+            content: '反馈已经提交'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '服务问题请重试'
+          });
+        }
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '请先处理必填项'
+        });
+      }
+    },
+    // 提交 意愿申请
+    *submitContractPDF({ payload: data }, { call, put, select }) {
+      const { is_certification, name, idcard, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
+      const { id, areas, build, unit, room, signatureFile, is_owner } = yield select(
+        (state) => state.common.communityUser
+      );
+      if (is_certification && areas && build && unit && room && signatureFile && id && mobile && is_checkMobile) {
+        yield put({ type: 'update', payload: { communityUserSubmitLoading: true } });
+        const result = yield call(submitContractAgree, {
+          id,
+          areas,
+          build,
+          unit,
+          room,
+          name,
+          idcard,
+          is_certification,
+          is_checkMobile,
+          mobile,
+          is_owner
+        });
+        if (result && result.status == 200) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
+          yield put({ type: 'update', payload: { communityUserSubmitLoading: false } });
+          Toast.show({
+            icon: 'success',
+            content: '意愿提交成功！'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '检测参数'
+          });
+        }
+      }
+    },
+    // 不惨 意愿申请
+    *submitContractUnwilling({ payload: data }, { call, put, select }) {
+      const { is_certification, name, idcard, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
+      const { id, areas, build, unit, room, is_owner } = yield select((state) => state.common.communityUser);
+      if ((is_certification, name, idcard, is_checkMobile, mobile && areas && build && unit && room)) {
+        yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: true } });
+        const result = yield call(submitContractUnwilling, {
+          id,
+          areas,
+          build,
+          unit,
+          room,
+          name,
+          idcard,
+          is_certification,
+          is_checkMobile,
+          mobile,
+          is_owner
+        });
+        if (result && result.status == 200) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
+          yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: false } });
+          Toast.show({
+            icon: 'success',
+            content: '不同意意愿申请提交成功！'
+          });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '检测参数'
+          });
+        }
       }
     }
   },
 
   reducers: {
     update(state, { payload: data }) {
+      console.log('reducers update data:', { ...data });
+      console.log('reducers update:', { ...state, ...data });
       return { ...state, ...data };
     }
   }

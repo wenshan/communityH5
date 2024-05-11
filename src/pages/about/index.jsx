@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'umi';
 import { TabBar, Badge, Space, Grid, List, Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
-import WxQRcode from '@/components/WxQRcode';
+import WxShare from '@/utils/wxShare';
 
 import './index.less';
 
@@ -19,21 +19,6 @@ class About extends Component {
       this.props.dispatch(routerRedux.push(val));
     }
   }
-  shareToPage = () => {
-    /*
-    wx.ready(function () {
-      wx.updateAppMessageShareData({
-        title: '西湖翠苑社区', // 分享标题
-        desc: '复刻专属的声音，让我们创造更有个性。', // 分享描述
-        link: 'https://www.dreamstep.top/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: 'https://img.dreamstep.top/ai/banner_03_01.png', // 分享图标
-        success: () => {
-          Toast.info('分享成功！');
-        }
-      })
-    });
-    */
-  }
 
   componentDidMount() {
     /** 分享 -- start */
@@ -47,9 +32,42 @@ class About extends Component {
       <div className="page">
         <div className="about-page">
           <div className="content">
-            <p>
-              翠苑三区生活服务
-            </p>
+          <div className='logo'>
+            <img src='https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/img/logo2.png' />
+          </div>
+          <div class="topic-statement">
+            <div className='title'>声明</div>
+            <div className='content'>
+              <div className='text'>
+                <ul>
+                  <li>
+                    <h5>1. 数据安全和个人隐私</h5>
+                    <div>
+                      <p>- 我个人 和 暂时志愿者筹备小组 所有成员承诺在法律的基础上严格保护数据和用户隐私，即使项目失败及时销毁。</p>
+                      <p>- 数据使用是方便推动共同愿景的执行和落地，并且数据使用过程中会公示在 暂时志愿者筹备小组 群并通过 暂时志愿者筹备小组 同意。</p>
+                    </div>
+                  </li>
+                  <li>
+                    <h5>2. 暂时志愿者筹备小组</h5>
+                    <div>
+                      <p>- 暂时志愿者筹备小组 由小区业主自发组建，组织和推动小区公共事务落地。</p>
+                      <p>- 由于 翠苑区“老破小”等政府行为落后，要想有所改变向更好方式，暂时志愿者筹备小组 积极推动和起草两个事项《原拆原建项目》和《翠苑三区业主委员会》。</p>
+                      <p>- 暂时志愿者筹备小组 在法律的基础上积极推进和起草《翠苑三区业主委员会》成立，业主委员会后 暂时志愿者筹备小组 自行解散。</p>
+                      <p>- 暂时志愿者筹备小组 推动《原拆原建项目》需要收集大家的意愿，这也是此片文章的目的，希望广大业主积极参与，项目早日确定。</p>
+                    </div>
+                  </li>
+                  <li>
+                    <h5>3. 《西子翠苑》公众号 公益服务说明</h5>
+                    <div>
+                      <p>- 《西子翠苑》公众号为基础的，主旨是服务翠苑社区业主服务，信息互通，共商共助，携手共建美好家园。</p>
+                      <p>- 《西子翠苑》公众号 所有权归 暂时志愿者筹备小组，正大事项由 暂时志愿者筹备小组确定。 </p>
+                      <p>- 《西子翠苑》公众号 是非盈利性，日常运营和技术支持均有 暂时志愿者筹备小组 人员参与，云服务等等硬件成本需要后续广大业主募捐支持。 </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
           </div>
         </div>
       </div>

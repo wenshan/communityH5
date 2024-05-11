@@ -3,6 +3,7 @@ import { connect } from 'umi';
 import { TabBar, Badge, Space, Grid, List, Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
 import WxQRcode from '@/components/WxQRcode';
+import WxShare from '@/utils/wxShare';
 
 import './index.less';
 

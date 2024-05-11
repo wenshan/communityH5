@@ -63,7 +63,7 @@ class Home extends Component {
           </div>
           <Space></Space>
           <div className='warning-box'>
-            <h1>此公众号H项目正在测试阶段，数据随时清理，功能完善中，5月10号（周日）后正式对外使用</h1>
+            <h1>此公众号项目正在测试阶段，数据随时清理，功能完善中，5月10号（周日）后正式对外使用</h1>
           </div>
           <Space></Space>
           <div className='intention-view'>

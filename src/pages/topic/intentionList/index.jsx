@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'umi';
 import { TabBar, Badge, Space, Input, Button, Popup, Cascader, Toast, List } from 'antd-mobile';
 import { List as VirtualizedList, AutoSizer } from 'react-virtualized'
-import { CheckCircleOutline, CloseCircleOutline} from 'antd-mobile-icons'
-import Signature from '../components/Signature';
-import Footer from '@/components/Footer';
 import cascaderOptionsFilter from '@/utils/roomDataFilter';
+import WxShare from '@/utils/wxShare';
 
 import 'rmc-dialog/assets/index.css';
 import './index.less';

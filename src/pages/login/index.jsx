@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { Toast, Button, Space } from 'antd-mobile';
 import './index.less';
 import { Tool } from '@/utils/index';
-console.log('Tool:', Tool.isWeiXin());
+import WxShare from '@/utils/wxShare';
 
 
 let setIntervalTime = null;

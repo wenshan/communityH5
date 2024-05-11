@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { connect, history } from 'umi';
-import { TabBar, Badge, Space, Grid, List, Toast } from 'antd-mobile';
+import { TabBar, Badge, Space, Grid, List, Toast, Dialog } from 'antd-mobile';
 import {
   UnorderedListOutline,
   PayCircleOutline,
   SetOutline,
+  UserSetOutline,
+  HeartOutline,
+  TeamOutline,
+  SmileOutline
 } from 'antd-mobile-icons'
 import WxQRcode from '@/components/WxQRcode';
-import Footer from '@/components/Footer';
+import WxShare from '@/utils/wxShare';
 
 import './index.less';
 
@@ -39,6 +43,11 @@ class User extends Component {
       })
     });
     */
+  }
+  handelShare =()=> {
+    return Dialog.alert({
+      content: '微信小程序右上角分享...',
+    })
   }
   modalWxQRcodeStatus = () => {
     this.props.dispatch({
@@ -101,19 +110,19 @@ class User extends Component {
           </div>
           <Space size="lg"></Space>
           <List header='基础'>
-            <List.Item prefix={<UnorderedListOutline />} onClick={() => {this.gotoPage('/index.html')}}>
+            <List.Item prefix={<UserSetOutline />} onClick={() => {this.gotoPage('/index.html')}}>
             我的信息
             </List.Item>
-            <List.Item prefix={<PayCircleOutline />} onClick={() => {this.gotoPage('/wish.html')}}>
+            <List.Item prefix={<HeartOutline />} onClick={() => {this.gotoPage('/wish.html')}}>
             我的意愿
             </List.Item>
           </List>
           <Space size="lg"></Space>
           <List header='其他'>
-            <List.Item prefix={<UnorderedListOutline />} onClick={() => { }}>
+            <List.Item prefix={<TeamOutline />} onClick={this.handelShare}>
               分享给我的好友
             </List.Item>
-            <List.Item prefix={<UnorderedListOutline />} onClick={() => {}}>
+            <List.Item prefix={<SmileOutline />} onClick={() => {this.gotoPage('/help.html')}}>
               关于《西子翠苑》
             </List.Item>
           </List>
