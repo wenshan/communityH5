@@ -92,3 +92,8 @@ export const mobileCertification = (params) =>
     method: 'POST',
     data: params
   });
+export const saveFeedback = (params) =>
+  request('/api/community/saveFeedback', {
+    method: 'POST',
+    data: params
+  });

@@ -7,6 +7,7 @@
     text-align: right;
     padding-right: 30px;
   }
+  background-color: transparent;
 }
 .page-topic {
   line-height: 50px;
@@ -28,44 +29,105 @@
   }
 }
 .topic-action {
+  margin-top: 20px;
   padding: 20px 20px 50px 20px;
   font-size: 28px;
   background-color: #fff;
   .title {
-    font-size: 30px;
+    font-size: 26px;
     line-height: 50px;
     height: 50px;
     clear: both;
+    padding-bottom: 10px;
     .operate {
       height: 50px;
       float: right;
     }
+    .required {
+      color: #fa541c;
+      display: inline-block;
+      padding-right: 5px;
+      vertical-align: middle;
+      width: 20px;
+    }
+  }
+  .content {
+    font-size: 28px;
+    padding-left: 18px;
   }
   .tx {
     color: #000;
     font-size: 28px;
   }
   .submit {
-    padding: 20px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+  }
+  .room {
+    font-size: 30px;
+    min-height: 150px;
+  }
+  .certification {
+    min-height: 150px;
+  }
+  .signature {
+    min-height: 150px;
+    .signature-img {
+      max-width: 300px;
+      border: 1px solid #f4f4f4;
+      background-color: #fff;
+    }
+  }
+  .contact-info {
+    min-height: 150px;
+  }
+  .owner {
+    min-height: 150px;
+  }
+  .feedback {
+    min-height: 150px;
+  }
+  .box-warp {
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    margin-bottom: 20px;
+    min-height: 150px;
   }
 }
-.room {
-  font-size: 30px;
-  height: 150px;
-}
-.certification {
-  height: 150px;
-}
-.signature {
-  height: 280px;
-  .signature-img {
-    max-width: 300px;
-    border: 1px solid #f4f4f4;
-    background-color: #fff;
+.topic-statement {
+  margin-top: 20px;
+  padding: 20px 20px 50px 20px;
+  background-color: #fff;
+  .title {
+    font-size: 28px;
+    font-weight: 500;
+  }
+  .text {
+    font-size: 24px;
+    h5 {
+      font-size: 26px;
+      line-height: 60px;
+      font-weight: 500;
+    }
+    p{
+      line-height: 36px;
+      padding-bottom: 10px;
+    }
+    ul li {
+      margin-bottom: 10px;
+    }
   }
 }
-.contact-info {
-  height: 150px;
+.process-description {
+  margin-top: 20px;
+  padding: 20px 20px 50px 20px;
+  background-color: #fff;
+  .title {
+    font-size: 28px;
+    font-weight: 500;
+  }
+  .text {
+    padding: 0px;
+  }
 }
 .popup {
   .from {
@@ -108,6 +170,9 @@
     .button {
       text-align: center;
       padding-top: 40px;
+    }
+    .adm-text-area {
+      background-color: #fff;
     }
   }
   .input {

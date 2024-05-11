@@ -14,7 +14,8 @@ import {
   delUser,
   getShareConfig,
   sendSms,
-  mobileCertification
+  mobileCertification,
+  saveFeedback
 } from '@/utils/commonService';
 import { getUserInfo, getCommunityUserInfo } from '@/pages/user/service';
 
@@ -104,11 +105,12 @@ export default {
       is_checkSignature: 0,
       is_submitConfirmation: 0,
       areas: '翠苑三区',
-      build: 0,
-      unit: 0,
-      room: 0,
+      build: null,
+      unit: null,
+      room: null,
       smsCode: '',
-      mobile: ''
+      mobile: '',
+      is_owner: false
     },
     communityUserFilter: {
       areas: '翠苑三区',
@@ -477,6 +479,13 @@ export default {
           icon: 'fail',
           content: '请输入手机号和验证码'
         });
+      }
+    },
+    // 反馈
+    *saveFeedback({ payload: data }, { call, put, select }) {
+      const { feedback } = data;
+      if (feedback) {
+        const result = yield call(saveFeedback, { feedback });
       }
     }
   },
