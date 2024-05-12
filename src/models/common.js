@@ -126,8 +126,7 @@ export default {
       rows: []
     },
     communityUserSubmitLoading: false,
-    communityUserSubmitUnwillingLoading: false,
-    communityUserCount: 0 // 当前申请人数
+    communityUserSubmitUnwillingLoading: false
   },
 
   subscriptions: {
@@ -367,9 +366,6 @@ export default {
         const result = yield call(getUserList, { areas, build, unit });
         if (result && result.status == 200 && result.data) {
           yield put({ type: 'update', payload: { communityUserList: result.data } });
-          if (build == null && unit == null) {
-            yield put({ type: 'update', payload: { communityUserCount: result.data.count } });
-          }
         } else {
           Toast.show({
             icon: 'fail',

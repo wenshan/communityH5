@@ -48,13 +48,12 @@ class Home extends Component {
       }
     });
     this.props.dispatch({
-      type: 'common/getUserList',
-      payload: { areas: '翠苑三区', build: null, unit: null }
+      type: 'home/lastDayIntention',
     });
   }
   // https://echarts.apache.org/zh/option.html#title
   render() {
-    const { communityUserCount  } = this.props
+    const { value, days, agreeUserNum, unwillingUserNum, communityUserNum} = this.props.lastDayIntention;
     return (
       <div className="page">
         <div className="home-page">
@@ -75,11 +74,11 @@ class Home extends Component {
             </div>
             <div className='content'>
               <div className='topic'>
-                <div className='rate'>{(communityUserCount/951).toFixed(4)*100} %</div>
-                <div className='des'>共计: 951户 当前申请: {communityUserCount}户</div>
+                <div className='rate'>{(communityUserNum/951).toFixed(4)*100} %</div>
+                <div className='des'>共户数: <span>951</span> 已申请户数: <span>{communityUserNum}</span> 同意意愿申请人数: <span>{agreeUserNum}</span></div>
               </div>
               <div className='chart'>
-                <ChartColumn></ChartColumn>
+                <ChartColumn data={{value, days}}></ChartColumn>
               </div>
             </div>
             <div className='footer-box'>
@@ -96,8 +95,7 @@ class Home extends Component {
 
 export default connect(
   (state) => ({
-    home: state.home,
     swiperBanner: state.home.swiperBanner,
-    communityUserCount: state.common.communityUserCount,
+    lastDayIntention: state.home.lastDayIntention,
   }),
 )(Home);

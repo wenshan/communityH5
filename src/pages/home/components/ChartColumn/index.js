@@ -8,17 +8,18 @@ class ChartColumn extends Component {
     this.state = {};
   }
   getOption = () => {
+    const { value, days } = this.props.data;
     return {
       xAxis: {
         type: 'category',
-        data: [ '1', '2', '3', '4', '5', '6', '7' ]
+        data: days
       },
       yAxis: {
         type: 'value'
       },
       series: [
         {
-          data: [ 120, 200, 150, 80, 70, 110, 130 ],
+          data: value,
           type: 'bar'
         }
       ]
