@@ -12,7 +12,6 @@ class Intention extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowCertification: false,
       isShowSignature: false,
       isShowCascader: false,
       isShowMobile: false,
@@ -20,22 +19,15 @@ class Intention extends Component {
       cascaderOptions,
     };
   }
-
-  handelCertificationShowButton=() => {
-    this.setState({
-      isShowCertification: true,
-    });
-  }
   handelMaskCertificationPopup = () => {
     this.setState({
-      isShowCertification: false,
       isShowSignature: false,
       isShowCascader: false,
       isShowMobile: false,
       isShowFeedback: false,
     });
   }
-  handelCertificationName = (val) => {
+  handelNameInput = (val) => {
     const { communityUser, userinfo } = this.props;
     const newUserinfo = Object.assign({}, userinfo, { name: val});
     const newCommunityUser = Object.assign({}, communityUser, { name: val});
@@ -105,25 +97,13 @@ class Intention extends Component {
       });
     }
   }
-  handelCertificationIdcard = (val) => {
-    const { communityUser, userinfo } = this.props;
-    const newUserinfo = Object.assign({}, userinfo, { idcard: val});
-    const newCommunityUser = Object.assign({}, communityUser, { idcard: val});
-    this.props.dispatch({
-      type: 'common/update',
-      payload: { communityUser: newCommunityUser, userinfo: newUserinfo }
-    });
-  }
-  handelCertificationButtonSubmit = () => {
-    const { communityUser } = this.props;
-    const { name, idcard } = communityUser;
-    if (communityUser && communityUser.name && communityUser.idcard) {
-      this.setState({
-        isShowCertification: false,
-      });
+  // 姓名
+  handelNameButtonSubmit = () => {
+    const { name } = this.props.communityUser;
+    if (name) {
       this.props.dispatch({
         type: 'common/userCertification',
-        payload: { name, idcard }
+        payload: { name }
       });
     } else {
       Toast.show({
@@ -166,6 +146,7 @@ class Intention extends Component {
       isShowFeedback: true,
     });
   }
+  // 房号
   handelCascaderStatusOnConfirm = (value) => {
     const { communityUser } = this.props;
     if (value && value[0] && value[1] && value[2] && value[3]) {
@@ -191,7 +172,7 @@ class Intention extends Component {
   handelOwnerStatus =(val)=> {
     this.props.dispatch({
       type: 'common/saveOwnerStatus',
-      payload: { is_owner: val }
+      payload: { owner: val }
     });
   }
 
@@ -218,7 +199,7 @@ class Intention extends Component {
   // 同意意愿
   handelSubmitContractPDF =() => {
     const { is_certification, name, idcard, mobile, is_checkMobile } = this.props.userinfo;
-    const {  signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, is_owner, feedback, is_submitContractUnwilling } = this.props.communityUser;
+    const {  signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, owner, feedback, is_submitContractUnwilling } = this.props.communityUser;
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -262,7 +243,7 @@ class Intention extends Component {
   // 不同意愿意
   handelSubmitUnwilling =()=>{
     const { is_certification, name, idcard, mobile, is_checkMobile } = this.props.userinfo;
-    const {  areas, build, unit, room, is_submitConfirmation, smsCode, is_owner, feedback, is_submitContractUnwilling } = this.props.communityUser;
+    const {  areas, build, unit, room, is_submitConfirmation, smsCode, owner, feedback, is_submitContractUnwilling } = this.props.communityUser;
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -315,10 +296,10 @@ class Intention extends Component {
   }
 
   render() {
-    const { isShowCertification, isShowSignature, isShowCascader,isShowMobile, isShowFeedback, cascaderOptions } = this.state;
+    const { isShowSignature, isShowCascader,isShowMobile, isShowFeedback, cascaderOptions } = this.state;
     const { communityUser, userinfo } = this.props;
-    const { is_certification, name, idcard, mobile, is_checkMobile } = userinfo;
-    const { signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, is_owner, feedback, is_submitContractUnwilling} = communityUser;
+    const { is_certification, name, mobile, is_checkMobile } = userinfo;
+    const { signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, owner, feedback, is_submitContractUnwilling} = communityUser;
     const submitButtonDisabledStatusAgree = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
     const submitButtonDisabledStatusUnwilling = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
     return (
@@ -354,45 +335,9 @@ class Intention extends Component {
               </div>
             </div>
             <div className="certification box-warp">
-              <div className="title"><span className='required'>*</span>实名认证 {is_certification? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{is_certification? '':(<Button color='primary' fill='outline' size='small' onClick={this.handelCertificationShowButton}>请进行实名认证</Button>)}</div></div>
+              <div className="title"><span className='required'>*</span>姓名 {name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
               <div className="content">
-                {name && idcard && is_certification && (<> 姓名：<span className='tx'>{name} </span>
-                身份证号码：<span className='tx'>{idcard}</span> </>)}
-                <Popup className="popup" visible={isShowCertification} onMaskClick={this.handelMaskCertificationPopup} title="实名认证" onClose={this.handelMaskCertificationPopup} showCloseButton
-                              bodyStyle={{
-                                borderTopLeftRadius: '8px',
-                                borderTopRightRadius: '8px',
-                                minHeight: '40vh',
-                              }}>
-                  <>
-                    <div className="from">
-                      <div className="item">
-                        <div className='label'>姓名:</div>
-                        <div className='input'>
-                          <Input
-                            placeholder='请输入姓名'
-                            value={name}
-                            onChange={this.handelCertificationName}
-                          />
-                        </div>
-                      </div>
-                      <div className="item">
-                        <div className='label'>身份证号码:</div>
-                        <div className='input'>
-                          <Input
-                            placeholder='请输入身份证号码'
-                            value={idcard}
-                            onChange={this.handelCertificationIdcard}
-                          />
-                        </div>
-                      </div>
-                      <div className="item button">
-                        <Button block color='primary' size='middle' onClick={this.handelCertificationButtonSubmit}>提交实名认证</Button>
-                      </div>
-                    </div>
-                  </>
-                </Popup>
-
+                {name && (<> 姓名：<span className='tx'>{name} </span> </>)}
               </div>
             </div>
             <div className='contact-info box-warp'>
@@ -457,7 +402,7 @@ class Intention extends Component {
               <div className='title'><span className='required'></span>确认产权人信息</div>
               <div className='content'>
                 <Space>
-                  <Checkbox checked={!!is_owner} disabled={is_submitConfirmation} onChange={this.handelOwnerStatus}>是否是产权所有人</Checkbox>
+                  <Checkbox checked={!!owner} disabled={is_submitConfirmation} onChange={this.handelOwnerStatus}>是否是产权所有人</Checkbox>
                 </Space>
               </div>
             </div>

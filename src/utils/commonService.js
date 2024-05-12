@@ -47,12 +47,6 @@ export const saveSignature = (params) =>
     data: params
   });
 
-// 实名认证
-export const userCertification = (params) =>
-  request('/api/community/userCertification', {
-    method: 'POST',
-    data: params
-  });
 export const uploadRoomNum = (params) =>
   request('/api/community/uploadRoomNum', {
     method: 'POST',

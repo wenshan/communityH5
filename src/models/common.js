@@ -7,13 +7,11 @@ import Tool from '@/utils/tool';
 import {
   getWebToken,
   saveSignature,
-  userCertification,
   submitContractAgree,
   submitContractUnwilling,
   uploadRoomNum,
   getUserList,
   delUser,
-  getShareConfig,
   sendSms,
   mobileCertification,
   superUpdateCommunityUser
@@ -29,8 +27,6 @@ const initCommunityUser = {
   userid: '',
   roomid: '',
   name: '',
-  idcard: '',
-  is_certification: 0,
   contractId: '',
   contractPath: '',
   signatureFile: '',
@@ -78,7 +74,6 @@ export default {
       unionid: '',
       gender: '',
       name: '',
-      idcard: '',
       is_certification: 0
     },
     wxConfig: {
@@ -99,8 +94,6 @@ export default {
       userid: '',
       roomid: '',
       name: '',
-      idcard: '',
-      is_certification: 0,
       contractId: '',
       contractPath: '',
       signatureFile: '',
@@ -113,8 +106,9 @@ export default {
       room: null,
       smsCode: '',
       mobile: '',
-      is_owner: false,
-      feedback: ''
+      owner: 0, // [0, 1]
+      feedback: '',
+      propertyType: 0 // [0,1]
     },
     communityUserFilter: {
       areas: '翠苑三区',
@@ -223,11 +217,6 @@ export default {
         }
       }
     },
-    // https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index
-    // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7284b74cc03f0299&redirect_uri=https%3A%2F%2Fwww.dreamstep.top%2Findex.html&response_type=code&scope=snsapi_userinfo&forcePopup=true
-    // https://api.weixin.qq.com/sns/userinfo?access_token=80_SSLqnIHKo-Z3hrp-0QigEMWg8jSAG8RjaUha6qcs_Fwx6y0ADhNeYxd-s7xR-Y9_tvsAvGOi930UoibPIuej5vqO1un-nrSYwnXHy5481mk&openid=o_Vnq6RT2B-FJv6G6iKia7PwonTA&lang=zh_CN
-    // 获取到 code，换取token openid
-    // https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
     *getWeixinToken({ payload }, { call, put, select }) {
       const code = yield select((state) => state.common.code);
       const currentUserinfo = yield select((state) => state.common.userinfo);
@@ -241,9 +230,6 @@ export default {
         CommonStore.session('userinfo', userinfo);
         CommonStore.session('access_token', result.data.access_token);
         Cookies.set('access_token', result.data.access_token, { expires: 1, path: '/' });
-
-        // Cookies.set('access_token', result.data.access_token, { expires: 1 });
-        // yield put({ type: 'update', payload: { userinfo } });
         yield put({ type: 'getUserInfo', payload: {} });
       } else {
         // 用户授权失败 手动授权
@@ -290,47 +276,16 @@ export default {
         }
       }
     },
-    // 实名认证
-    *userCertification({ payload: data }, { call, put, select }) {
-      const currentUserinfo = yield select((state) => state.common.userinfo);
-      const currentCommunityUser = yield select((state) => state.common.communityUser);
-      const { name, idcard } = data;
-      if (name && idcard) {
-        const resultUserInfo = yield call(userCertification, { name, idcard });
-        if (resultUserInfo && resultUserInfo.status == '200' && resultUserInfo.data) {
-          const newCurrentUserinfo = Object.assign({}, currentUserinfo, resultUserInfo.data);
-          const { name, idcard, is_certification } = newCurrentUserinfo;
-          const newCurrentCommunityUser = Object.assign({}, currentCommunityUser, { name, idcard, is_certification });
-          yield put({
-            type: 'update',
-            payload: { userinfo: newCurrentUserinfo, communityUser: newCurrentCommunityUser }
-          });
-          yield put({ type: 'getUserInfo', payload: {} });
-        } else {
-          Toast.show({
-            icon: 'fail',
-            content: '认证失败，请刷新重试'
-          });
-        }
-      } else {
-        Toast.show({
-          icon: 'fail',
-          content: '检测参数'
-        });
-      }
-    },
     // 保存 签名信息
     *saveSignature({ payload: data }, { call, put, select }) {
       const { signatureFile } = data;
       const currentUserinfo = yield select((state) => state.common.userinfo);
-      const communityUser = yield select((state) => state.common.communityUser);
-      const { name, idcard, is_certification, is_checkSignature } = currentUserinfo;
-      if (name && idcard && is_certification && signatureFile) {
+      // const communityUser = yield select((state) => state.common.communityUser);
+      const { name, is_checkSignature } = currentUserinfo;
+      if (name && is_certification && signatureFile) {
         const result = yield call(saveSignature, {
           signatureFile,
           name,
-          idcard,
-          is_certification,
           is_checkSignature
         });
         if (result && result.status == 200 && result.data) {
@@ -475,10 +430,10 @@ export default {
       }
     },
     *saveOwnerStatus({ payload: data }, { call, put, select }) {
-      const { is_owner } = data;
+      const { owner } = data;
       const { id, is_certification, areas, build, unit, room } = yield select((state) => state.common.communityUser);
       if (id && is_certification && areas && build && unit && room) {
-        const result = yield call(superUpdateCommunityUser, { is_owner, id });
+        const result = yield call(superUpdateCommunityUser, { owner, id });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
           Toast.show({
@@ -500,8 +455,8 @@ export default {
     },
     // 提交 意愿申请
     *submitContractPDF({ payload: data }, { call, put, select }) {
-      const { is_certification, name, idcard, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
-      const { id, areas, build, unit, room, signatureFile, is_owner } = yield select(
+      const { name, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
+      const { id, areas, build, unit, room, signatureFile, owner } = yield select(
         (state) => state.common.communityUser
       );
       if (is_certification && areas && build && unit && room && signatureFile && id && mobile && is_checkMobile) {
@@ -513,11 +468,9 @@ export default {
           unit,
           room,
           name,
-          idcard,
-          is_certification,
           is_checkMobile,
           mobile,
-          is_owner
+          owner
         });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
@@ -536,9 +489,9 @@ export default {
     },
     // 不惨 意愿申请
     *submitContractUnwilling({ payload: data }, { call, put, select }) {
-      const { is_certification, name, idcard, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
-      const { id, areas, build, unit, room, is_owner } = yield select((state) => state.common.communityUser);
-      if ((is_certification, name, idcard, is_checkMobile, mobile && areas && build && unit && room)) {
+      const { name, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
+      const { id, areas, build, unit, room, owner } = yield select((state) => state.common.communityUser);
+      if ((is_checkMobile, mobile && areas && build && unit && room)) {
         yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: true } });
         const result = yield call(submitContractUnwilling, {
           id,
@@ -547,11 +500,8 @@ export default {
           unit,
           room,
           name,
-          idcard,
-          is_certification,
-          is_checkMobile,
           mobile,
-          is_owner
+          owner
         });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });

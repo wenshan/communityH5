@@ -36,7 +36,7 @@ class WishList extends Component {
 
   render() {
     const { name, mobile } = this.props.userinfo;
-    const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt, is_owner, feedback, is_submitContractUnwilling} = this.props.communityUser;
+    const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt, owner, feedback, is_submitContractUnwilling} = this.props.communityUser;
     return (
       <div className="page">
         <div className="wish-list">
@@ -50,7 +50,7 @@ class WishList extends Component {
               <h3>翠苑三区C区原拆原建意愿申请</h3>
               <div className='status box'>申请状态: <span>{is_submitConfirmation?'同意原拆原建意愿的申请':'不同意原拆原建意愿申请'}</span></div>
               <div className='room box'>房号: <span>{areas}-{build}幢-{unit}单元-{room}室</span></div>
-              <div className='owner box'>是否拥有产权: <span>{is_owner? '是': '否/未知'}</span></div>
+              <div className='owner box'>是否拥有产权: <span>{owner? '是': '否/未知'}</span></div>
               <div className='certification box'>实名: <span></span>{name}</div>
               <div className='mobile box'>联系手机: <span>{mobile}</span></div>
               {is_submitConfirmation?(<div className='signature box'>电子签: <span>审核中...  </span></div>):''}
