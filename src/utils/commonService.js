@@ -97,3 +97,9 @@ export const submitContractUnwilling = (params) =>
     method: 'POST',
     data: params
   });
+// saveName
+export const saveName = (params) =>
+  request('/api/community/saveName', {
+    method: 'POST',
+    data: params
+  });

@@ -14,7 +14,8 @@ import {
   delUser,
   sendSms,
   mobileCertification,
-  superUpdateCommunityUser
+  superUpdateCommunityUser,
+  saveName
 } from '@/utils/commonService';
 import { getUserInfo, getCommunityUserInfo } from '@/pages/user/service';
 
@@ -73,8 +74,7 @@ export default {
       userid: '',
       unionid: '',
       gender: '',
-      name: '',
-      is_certification: 0
+      name: ''
     },
     wxConfig: {
       appid: 'wx7284b74cc03f0299',
@@ -239,11 +239,13 @@ export default {
     // 获取用户信息
     *getUserInfo({ payload }, { call, put, select }) {
       const currentUserinfo = yield select((state) => state.common.userinfo);
+      // const currentCommunityUser = yield select((state) => state.common.currentCommunityUser);
       const access_token = Cookies.get('access_token');
       if (access_token) {
         const result = yield call(getUserInfo, {});
         if (result && result.status == 200 && result.data) {
           const userinfo = Object.assign({}, currentUserinfo, result.data);
+          // const communityUser = Object.assign({}, currentCommunityUser, result.data);
           // 判断用户是否拥有
           let unionidModalStatus = false;
           if (!userinfo.unionid) {
@@ -279,14 +281,11 @@ export default {
     // 保存 签名信息
     *saveSignature({ payload: data }, { call, put, select }) {
       const { signatureFile } = data;
-      const currentUserinfo = yield select((state) => state.common.userinfo);
-      // const communityUser = yield select((state) => state.common.communityUser);
-      const { name, is_checkSignature } = currentUserinfo;
-      if (name && is_certification && signatureFile) {
+      const { is_checkMobile, name } = yield select((state) => state.common.userinfo);
+
+      if (name && signatureFile && is_checkMobile) {
         const result = yield call(saveSignature, {
-          signatureFile,
-          name,
-          is_checkSignature
+          signatureFile
         });
         if (result && result.status == 200 && result.data) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
@@ -295,8 +294,6 @@ export default {
     },
     // 更新房号
     *uploadRoomNum({ payload: data }, { call, put, select }) {
-      const communityUser = yield select((state) => state.common.communityUser);
-      // const { areas, build, unit, room } = communityUser;
       const { areas, build, unit, room } = data;
       if (areas && build && unit && room) {
         const result = yield call(uploadRoomNum, { areas, build, unit, room });
@@ -309,9 +306,14 @@ export default {
         } else {
           Toast.show({
             icon: 'fail',
-            content: '检测参数'
+            content: '服务器问题稍后重试'
           });
         }
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '检测参数'
+        });
       }
     },
     // 查询房号
@@ -407,8 +409,8 @@ export default {
     // 反馈
     *saveFeedback({ payload: data }, { call, put, select }) {
       const { feedback } = data;
-      const { id, is_certification, areas, build, unit, room } = yield select((state) => state.common.communityUser);
-      if (feedback && id && is_certification && areas && build && unit && room) {
+      const { id, name, areas, build, unit, room } = yield select((state) => state.common.communityUser);
+      if (feedback && id && name && areas && build && unit && room) {
         const result = yield call(superUpdateCommunityUser, { feedback, id });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
@@ -429,17 +431,38 @@ export default {
         });
       }
     },
-    *saveOwnerStatus({ payload: data }, { call, put, select }) {
-      const { owner } = data;
-      const { id, is_certification, areas, build, unit, room } = yield select((state) => state.common.communityUser);
-      if (id && is_certification && areas && build && unit && room) {
-        const result = yield call(superUpdateCommunityUser, { owner, id });
+    *saveName({ payload: data }, { call, put, select }) {
+      const { name } = data;
+      const { id, areas, build, unit, room } = yield select((state) => state.common.communityUser);
+      if (id && areas && build && unit && room && name) {
+        const result = yield call(saveName, { name, id });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
           Toast.show({
             icon: 'success',
-            content: '反馈已经提交'
+            content: '姓名已保存'
           });
+        } else {
+          Toast.show({
+            icon: 'fail',
+            content: '服务问题请重试'
+          });
+        }
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '请先处理必填项'
+        });
+      }
+    },
+    *saveOwnerStatus({ payload: data }, { call, put, select }) {
+      const { is_checkMobile } = yield select((state) => state.common.userinfo);
+      const { id, areas, build, unit, room, name } = yield select((state) => state.common.communityUser);
+      if (id && areas && build && unit && room && data && name && is_checkMobile) {
+        const postData = Object.assign({}, data, { id });
+        const result = yield call(superUpdateCommunityUser, postData);
+        if (result && result.status == 200) {
+          yield put({ type: 'getCommunityUserInfo', payload: {} });
         } else {
           Toast.show({
             icon: 'fail',
@@ -455,11 +478,11 @@ export default {
     },
     // 提交 意愿申请
     *submitContractPDF({ payload: data }, { call, put, select }) {
-      const { name, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
-      const { id, areas, build, unit, room, signatureFile, owner } = yield select(
+      const { is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
+      const { id, areas, build, unit, room, signatureFile, owner, propertyType, name } = yield select(
         (state) => state.common.communityUser
       );
-      if (is_certification && areas && build && unit && room && signatureFile && id && mobile && is_checkMobile) {
+      if (areas && build && unit && room && signatureFile && id && mobile && is_checkMobile && propertyType) {
         yield put({ type: 'update', payload: { communityUserSubmitLoading: true } });
         const result = yield call(submitContractAgree, {
           id,
@@ -469,8 +492,8 @@ export default {
           room,
           name,
           is_checkMobile,
-          mobile,
-          owner
+          owner,
+          propertyType
         });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
@@ -480,18 +503,26 @@ export default {
             content: '意愿提交成功！'
           });
         } else {
+          yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: true } });
           Toast.show({
             icon: 'fail',
-            content: '检测参数'
+            content: '提交失败，刷新页面重试'
           });
         }
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '检测参数'
+        });
       }
     },
     // 不惨 意愿申请
     *submitContractUnwilling({ payload: data }, { call, put, select }) {
-      const { name, is_checkMobile, mobile } = yield select((state) => state.common.userinfo);
-      const { id, areas, build, unit, room, owner } = yield select((state) => state.common.communityUser);
-      if ((is_checkMobile, mobile && areas && build && unit && room)) {
+      const { is_checkMobile } = yield select((state) => state.common.userinfo);
+      const { id, areas, build, unit, room, owner, name, propertyType } = yield select(
+        (state) => state.common.communityUser
+      );
+      if (is_checkMobile && areas && build && unit && room && propertyType) {
         yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: true } });
         const result = yield call(submitContractUnwilling, {
           id,
@@ -500,8 +531,9 @@ export default {
           unit,
           room,
           name,
-          mobile,
-          owner
+          owner,
+          is_checkMobile,
+          propertyType
         });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
@@ -511,11 +543,17 @@ export default {
             content: '不同意意愿申请提交成功！'
           });
         } else {
+          yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: true } });
           Toast.show({
             icon: 'fail',
-            content: '检测参数'
+            content: '提交失败，刷新页面重试'
           });
         }
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '检测参数'
+        });
       }
     }
   },

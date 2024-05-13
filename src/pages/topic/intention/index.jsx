@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect, Link } from 'umi';
-import { TabBar, Badge, Space, Input, Button, Popup, Cascader, Toast, Checkbox, TextArea, Collapse } from 'antd-mobile';
+import { TabBar, Badge, Space, Input, Button, Popup, Cascader, Toast, Checkbox, TextArea, Collapse, Radio } from 'antd-mobile';
 import { CheckCircleOutline, CloseCircleOutline, RightOutline} from 'antd-mobile-icons'
 import Signature from '../components/Signature';
 import cascaderOptions from '@/utils/roomData';
@@ -16,6 +16,7 @@ class Intention extends Component {
       isShowCascader: false,
       isShowMobile: false,
       isShowFeedback: false,
+      isShowName: false,
       cascaderOptions,
     };
   }
@@ -25,6 +26,7 @@ class Intention extends Component {
       isShowCascader: false,
       isShowMobile: false,
       isShowFeedback: false,
+      isShowName: false
     });
   }
   handelNameInput = (val) => {
@@ -34,6 +36,29 @@ class Intention extends Component {
     this.props.dispatch({
       type: 'common/update',
       payload: { communityUser: newCommunityUser,  userinfo: newUserinfo}
+    });
+  }
+  // 姓名
+  handelNameButtonSubmit = () => {
+    const { name } = this.props.userinfo;
+    if (name) {
+      this.setState({
+        isShowName: false,
+      });
+      this.props.dispatch({
+        type: 'common/saveName',
+        payload: { name }
+      });
+    } else {
+      Toast.show({
+        icon: 'fail',
+        content: '请填写姓名和身份证号码',
+      });
+    }
+  }
+  handelNameShowButton=()=>{
+    this.setState({
+      isShowName: true,
     });
   }
   handelMobileShowButton=() => {
@@ -97,21 +122,6 @@ class Intention extends Component {
       });
     }
   }
-  // 姓名
-  handelNameButtonSubmit = () => {
-    const { name } = this.props.communityUser;
-    if (name) {
-      this.props.dispatch({
-        type: 'common/userCertification',
-        payload: { name }
-      });
-    } else {
-      Toast.show({
-        icon: 'fail',
-        content: '请填写姓名和身份证号码',
-      });
-    }
-  }
 
   handelSignatureShowButton=() => {
     this.setState({
@@ -148,13 +158,11 @@ class Intention extends Component {
   }
   // 房号
   handelCascaderStatusOnConfirm = (value) => {
-    const { communityUser } = this.props;
     if (value && value[0] && value[1] && value[2] && value[3]) {
       const areas = value[0];
       const build = value[1];
       const unit = value[2];
       const room = value[3];
-      const newCommunityUser = Object.assign({}, communityUser, { areas, build, unit, room});
       this.setState({
         isShowCascader: false
       });
@@ -173,6 +181,12 @@ class Intention extends Component {
     this.props.dispatch({
       type: 'common/saveOwnerStatus',
       payload: { owner: val }
+    });
+  }
+  handelPropertyTypeStatus=(val)=> {
+    this.props.dispatch({
+      type: 'common/saveOwnerStatus',
+      payload: { propertyType: val }
     });
   }
 
@@ -198,8 +212,8 @@ class Intention extends Component {
   }
   // 同意意愿
   handelSubmitContractPDF =() => {
-    const { is_certification, name, idcard, mobile, is_checkMobile } = this.props.userinfo;
-    const {  signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, owner, feedback, is_submitContractUnwilling } = this.props.communityUser;
+    const {name, is_checkMobile } = this.props.userinfo;
+    const {  signatureFile, areas, build, unit, room, owner, propertyType, is_submitContractUnwilling } = this.props.communityUser;
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -207,10 +221,10 @@ class Intention extends Component {
       });
       return false;
     }
-    if (!is_certification){
+    if (!name){
       Toast.show({
         icon: 'fail',
-        content: '请进行实名认证',
+        content: '请输入姓名',
       });
       return false;
     }
@@ -228,6 +242,20 @@ class Intention extends Component {
       });
       return false;
     }
+    if (!propertyType){
+      Toast.show({
+        icon: 'fail',
+        content: '请选择产权类型',
+      });
+      return false;
+    }
+    if (!owner){
+      Toast.show({
+        icon: 'fail',
+        content: '请选择产权人信息',
+      });
+      return false;
+    }
     if(!is_submitContractUnwilling) {
       this.props.dispatch({
         type: 'common/submitContractPDF'
@@ -242,8 +270,8 @@ class Intention extends Component {
   }
   // 不同意愿意
   handelSubmitUnwilling =()=>{
-    const { is_certification, name, idcard, mobile, is_checkMobile } = this.props.userinfo;
-    const {  areas, build, unit, room, is_submitConfirmation, smsCode, owner, feedback, is_submitContractUnwilling } = this.props.communityUser;
+    const { name, is_checkMobile } = this.props.userinfo;
+    const {  areas, build, unit, room, is_submitConfirmation, owner, propertyType } = this.props.communityUser;
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -251,10 +279,10 @@ class Intention extends Component {
       });
       return false;
     }
-    if (!is_certification){
+    if (!name){
       Toast.show({
         icon: 'fail',
-        content: '请进行实名认证',
+        content: '请进行姓名',
       });
       return false;
     }
@@ -262,6 +290,20 @@ class Intention extends Component {
       Toast.show({
         icon: 'fail',
         content: '请进行手机验证',
+      });
+      return false;
+    }
+    if (!propertyType){
+      Toast.show({
+        icon: 'fail',
+        content: '请选择产权类型',
+      });
+      return false;
+    }
+    if (!owner){
+      Toast.show({
+        icon: 'fail',
+        content: '请选择产权人信息',
       });
       return false;
     }
@@ -296,10 +338,10 @@ class Intention extends Component {
   }
 
   render() {
-    const { isShowSignature, isShowCascader,isShowMobile, isShowFeedback, cascaderOptions } = this.state;
+    const { isShowSignature, isShowCascader,isShowMobile, isShowFeedback, isShowName, cascaderOptions } = this.state;
     const { communityUser, userinfo } = this.props;
-    const { is_certification, name, mobile, is_checkMobile } = userinfo;
-    const { signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, owner, feedback, is_submitContractUnwilling} = communityUser;
+    const { name, mobile, is_checkMobile } = userinfo;
+    const { signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, owner, propertyType, feedback, is_submitContractUnwilling} = communityUser;
     const submitButtonDisabledStatusAgree = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
     const submitButtonDisabledStatusUnwilling = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
     return (
@@ -323,7 +365,7 @@ class Intention extends Component {
           </div>
           <div className="topic-action">
             <div className="room box-warp">
-              <div className="title"><span className='required'>*</span>选择房号 {(areas && build && unit && room)? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{is_submitConfirmation ? '' : (<Button color='primary' fill='outline' size='small' onClick={this.handelCascaderShowButton}>选择</Button>)}</div></div>
+              <div className="title"><span className='required'>*</span>选择房号 {(areas && build && unit && room)? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelCascaderShowButton}>选择</Button>)}</div></div>
               <div className="content">
                 {!!(areas && build && unit && room) && (<div><span>{areas}-{build}幢-{unit}单元-{room}室</span></div>)}
                 <Cascader
@@ -335,13 +377,38 @@ class Intention extends Component {
               </div>
             </div>
             <div className="certification box-warp">
-              <div className="title"><span className='required'>*</span>姓名 {name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
+              <div className="title"><span className='required'>*</span> 姓名：{name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelNameShowButton}>输入</Button>)}</div></div>
               <div className="content">
-                {name && (<> 姓名：<span className='tx'>{name} </span> </>)}
+                {name && (<><span className='tx'>{name} </span></>)}
+                <Popup className="popup" visible={isShowName} onMaskClick={this.handelMaskCertificationPopup} title="姓名：" onClose={this.handelMaskCertificationPopup} showCloseButton
+                              bodyStyle={{
+                                borderTopLeftRadius: '8px',
+                                borderTopRightRadius: '8px',
+                                minHeight: '40vh',
+                              }}>
+                  <>
+                    <div className="from">
+                      <div className="item">
+                        <div className='label'>姓名:</div>
+                        <div className='input'>
+                          <Input
+                            placeholder='请输入姓名'
+                            value={name}
+                            onChange={this.handelNameInput}
+                          />
+                        </div>
+                      </div>
+                      <div className="item button">
+                        <Button block color='primary' size='middle' onClick={this.handelNameButtonSubmit}>保存</Button>
+                      </div>
+                    </div>
+                  </>
+                </Popup>
+
               </div>
             </div>
             <div className='contact-info box-warp'>
-              <div className="title"><span className='required'>*</span>联系方式验证 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{is_checkMobile? '':(<Button color='primary' fill='outline' size='small' onClick={this.handelMobileShowButton}>请进行联系方式验证</Button>)}</div></div>
+              <div className="title"><span className='required'>*</span>联系方式验证 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelMobileShowButton}>请进行联系方式验证</Button>)}</div></div>
               <div className="content">
                 {mobile && is_checkMobile && (<>手机号码：<span className='tx'>{mobile} </span></>)}
                 <Popup className="popup" visible={isShowMobile} onMaskClick={this.handelMaskCertificationPopup} title="联系方式验证" onClose={this.handelMaskCertificationPopup} showCloseButton
@@ -378,8 +445,34 @@ class Intention extends Component {
 
               </div>
             </div>
+            <div className="owner box-warp">
+              <div className='title'><span className='required'>*</span>产权类型  {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
+              <div className='content'>
+              <Space>
+                  <Radio.Group value={propertyType.toString()} disabled={submitButtonDisabledStatusAgree} onChange={this.handelPropertyTypeStatus}>
+                    <Space direction='vertical'>
+                      <Radio value='1'>个人住房</Radio>
+                      <Radio value='2'>企业住房</Radio>
+                    </Space>
+                  </Radio.Group>
+                </Space>
+              </div>
+            </div>
+            <div className="owner box-warp">
+              <div className='title'><span className='required'>*</span>产权人信息  {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
+              <div className='content'>
+                <Space>
+                  <Radio.Group value={owner.toString()} disabled={submitButtonDisabledStatusAgree} onChange={this.handelOwnerStatus}>
+                    <Space direction='vertical'>
+                      <Radio value='1'>无产权</Radio>
+                      <Radio value='2'>拥有产权{propertyType ==2 ? '(我是法人)': ''}</Radio>
+                    </Space>
+                  </Radio.Group>
+                </Space>
+              </div>
+            </div>
             <div className="signature box-warp">
-              <div className="title"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{is_submitConfirmation? '':(<Button color='primary' fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
+              <div className="title"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
               <div className="content">
                 {signatureFile && (<div className='signature-img'><img src={signatureFile} /></div>)}
                 <Popup className="popup" visible={isShowSignature} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
@@ -398,16 +491,8 @@ class Intention extends Component {
                 </Popup>
               </div>
             </div>
-            <div className="owner box-warp">
-              <div className='title'><span className='required'></span>确认产权人信息</div>
-              <div className='content'>
-                <Space>
-                  <Checkbox checked={!!owner} disabled={is_submitConfirmation} onChange={this.handelOwnerStatus}>是否是产权所有人</Checkbox>
-                </Space>
-              </div>
-            </div>
             <div className="feedback box-warp">
-              <div className='title'><span className='required'></span>建议&妙想 <div className='operate'>{!is_submitConfirmation && (<Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button>)}</div></div>
+              <div className='title'><span className='required'></span>建议&妙想 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'>{!is_submitConfirmation && (<Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button>)}</div></div>
               <div className='content'>
                 <div>
                   <TextArea value={feedback} disabled></TextArea>
