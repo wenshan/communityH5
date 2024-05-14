@@ -6,7 +6,8 @@ export default defineConfig({
     type: 'none'
   },
   // base: '/docs/',
-  // publicPath: '/static/',
+  publicPath: '/',
+  // publicPath: 'https://img.dreamstep.top/community/dist/',
   hash: true,
   antd: { mobile: false },
   // history: {

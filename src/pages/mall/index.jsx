@@ -43,11 +43,11 @@ class Mall extends Component {
   render() {
     return (
       <div className="page">
-        <div className="about-page">
+        <div className="mall-page">
           <div className="content">
-            <p>
-              翠苑三区生活服务，闲置易物建设中...
-            </p>
+            <h1>
+              翠苑三区生活服务-易物（闲置物品以物换物）功能正在建设中...
+            </h1>
           </div>
         </div>
       </div>

@@ -75,7 +75,7 @@ class Home extends Component {
             <div className='content'>
               <div className='topic'>
                 <div className='rate'>{(communityUserNum/951).toFixed(4)*100} %</div>
-                <div className='des'>共户数: <span>951</span> 已申请户数: <span>{communityUserNum}</span> 同意意愿申请人数: <span>{agreeUserNum}</span></div>
+                <div className='des'>总户数: <span>951</span> 已申请户数: <span>{communityUserNum}</span> 同意意愿申请人数: <span>{agreeUserNum}</span></div>
               </div>
               <div className='chart'>
                 <ChartColumn data={{value, days}}></ChartColumn>

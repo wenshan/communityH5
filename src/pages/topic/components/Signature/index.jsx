@@ -1,5 +1,5 @@
 import React from "react";
-import { TabBar, Badge, Space, Input, Button, Popup } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import Bezier from "./bezier";
 import Point from "./point";
 
@@ -8,7 +8,7 @@ import './index.less';
 export default class SignaturePad extends React.Component {
   constructor(props) {
     super(props);
-
+    this.index = this.props.index;
     this.velocityFilterWeight = this.props.velocityFilterWeight || 0.7;
     this.minWidth = this.props.minWidth || 0.5;
     this.maxWidth = this.props.maxWidth || 2.5;
@@ -52,12 +52,11 @@ export default class SignaturePad extends React.Component {
     this._reset();
   }
 
-  toDataURL(imageType, quality) {
+  toDataURL() {
     var canvas = this._canvas;
     const dataURL = canvas.toDataURL('image/png');
-    console.log(dataURL);
     if (this.props.callbackSubmitDataURL && dataURL) {
-      this.props.callbackSubmitDataURL(dataURL);
+      this.props.callbackSubmitDataURL({dataURL, idx: this.props.index});
     }
   }
 
@@ -356,7 +355,7 @@ export default class SignaturePad extends React.Component {
 
   render() {
     return (
-      <div id="signature-pad" className="m-signature-pad">
+      <div id="signature-pad" className="m-signature-pad" key={this.props.index}>
         <div className="m-signature-pad--body">
           <canvas ref="cv" />
         </div>

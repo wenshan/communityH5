@@ -47,8 +47,8 @@ export const saveSignature = (params) =>
     data: params
   });
 
-export const uploadRoomNum = (params) =>
-  request('/api/community/uploadRoomNum', {
+export const createRoom = (params) =>
+  request('/api/community/createRoom', {
     method: 'POST',
     data: params
   });

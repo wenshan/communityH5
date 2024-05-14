@@ -1,12 +1,30 @@
 import React, { Component } from 'react';
 import { connect, Link } from 'umi';
-import { TabBar, Badge, Space, Input, Button, Popup, Cascader, Toast, Checkbox, TextArea, Collapse, Radio } from 'antd-mobile';
-import { CheckCircleOutline, CloseCircleOutline, RightOutline} from 'antd-mobile-icons'
+import { Space, Input, Button, Popup, Cascader, Toast, TextArea, Collapse, Radio } from 'antd-mobile';
+import { CheckCircleOutline, CloseCircleOutline, RightOutline, AddOutline} from 'antd-mobile-icons'
 import Signature from '../components/Signature';
 import cascaderOptions from '@/utils/roomData';
+import WxQRcode from '@/components/WxQRcode';
 import WxShare from '@/utils/wxShare';
 
 import './index.less';
+
+const initCommunityUser = {
+  id: '',
+  userid: '',
+  roomid: '',
+  name: '',
+  contractId: '',
+  contractPath: '',
+  signatureFile: '',
+  is_checkSignature: 0,
+  is_submitConfirmation: 0,
+  is_submitContractUnwilling: 0,
+  areas: '翠苑三区',
+  build: 0,
+  unit: 0,
+  room: 0
+};
 
 class Intention extends Component {
   constructor(props) {
@@ -18,7 +36,14 @@ class Intention extends Component {
       isShowFeedback: false,
       isShowName: false,
       cascaderOptions,
+      actionIdx: 0
     };
+  }
+  // 手风琴
+  handelCollapseOnChange=(activeKey)=>{
+    this.setState({
+      actionIdx: activeKey
+    });
   }
   handelMaskCertificationPopup = () => {
     this.setState({
@@ -30,12 +55,11 @@ class Intention extends Component {
     });
   }
   handelNameInput = (val) => {
-    const { communityUser, userinfo } = this.props;
+    const { userinfo } = this.props;
     const newUserinfo = Object.assign({}, userinfo, { name: val});
-    const newCommunityUser = Object.assign({}, communityUser, { name: val});
     this.props.dispatch({
       type: 'common/update',
-      payload: { communityUser: newCommunityUser,  userinfo: newUserinfo}
+      payload: { userinfo: newUserinfo}
     });
   }
   // 姓名
@@ -58,7 +82,7 @@ class Intention extends Component {
   }
   handelNameShowButton=()=>{
     this.setState({
-      isShowName: true,
+      isShowName: true
     });
   }
   handelMobileShowButton=() => {
@@ -67,25 +91,22 @@ class Intention extends Component {
     });
   }
   handelCertificationMobile = (val) => {
-    const { communityUser, userinfo } = this.props;
+    const { userinfo } = this.props;
     const newUserinfo = Object.assign({}, userinfo, { mobile: val});
-    const newCommunityUser = Object.assign({}, communityUser, { mobile: val});
     this.props.dispatch({
       type: 'common/update',
-      payload: { communityUser: newCommunityUser, userinfo: newUserinfo }
+      payload: { userinfo: newUserinfo }
     });
   }
   handelMobileSmsCode= (val) => {
-    const { communityUser } = this.props;
-    const newCommunityUser = Object.assign({}, communityUser, { smsCode: val});
     this.props.dispatch({
       type: 'common/update',
-      payload: { communityUser: newCommunityUser }
+      payload: { smsCode: val }
     });
   }
   handelMobileSendSmsCode= () => {
-    const { communityUser } = this.props;
-    const { mobile } = communityUser;
+    const { userinfo } = this.props;
+    const { mobile } = userinfo;
     if (mobile) {
       this.props.dispatch({
         type: 'common/communitySendSms',
@@ -99,7 +120,15 @@ class Intention extends Component {
     }
   }
   handelMobileButtonSubmit = () => {
-    const { mobile, smsCode } = this.props.communityUser;
+    const { smsCode, userinfo } = this.props;
+    const { mobile } = userinfo;
+    if (!smsCode || smsCode.length !== 5) {
+      Toast.show({
+        icon: 'fail',
+        content: '验证码错误',
+      });
+      return;
+    }
     if (mobile && smsCode) {
       if (mobile.length == 11 ) {
         this.setState({
@@ -128,21 +157,15 @@ class Intention extends Component {
       isShowSignature: true,
     });
   }
-  handelSignatureButtonSubmit =(dataURL) => {
-    const { communityUser } = this.props;
-    const newCommunityUser = Object.assign({}, communityUser, { signatureFile: dataURL});
+  handelSignatureButtonSubmit =({dataURL}) => {
+    const { actionIdx} = this.state;
     if (dataURL) {
       this.setState({
         isShowSignature: false,
       });
-      // 保存签名
-      this.props.dispatch({
-        type: 'common/update',
-        payload: { communityUser: newCommunityUser }
-      });
       this.props.dispatch({
         type: 'common/saveSignature',
-        payload: { signatureFile: dataURL }
+        payload: { signatureFile: dataURL, idx: actionIdx }
       });
     }
   }
@@ -167,7 +190,7 @@ class Intention extends Component {
         isShowCascader: false
       });
       this.props.dispatch({
-        type: 'common/uploadRoomNum',
+        type: 'common/createRoom',
         payload: { areas, build, unit, room }
       });
     } else {
@@ -177,43 +200,49 @@ class Intention extends Component {
       });
     }
   }
-  handelOwnerStatus =(val)=> {
+  handelOwnerStatus =({owner})=> {
+    const { actionIdx} = this.state;
     this.props.dispatch({
-      type: 'common/saveOwnerStatus',
-      payload: { owner: val }
+      type: 'common/saveSuperStatus',
+      payload: { owner, idx: actionIdx }
     });
   }
-  handelPropertyTypeStatus=(val)=> {
+  handelPropertyTypeStatus=({propertyType})=> {
+    const { actionIdx} = this.state;
     this.props.dispatch({
-      type: 'common/saveOwnerStatus',
-      payload: { propertyType: val }
+      type: 'common/saveSuperStatus',
+      payload: {propertyType, idx: actionIdx}
     });
   }
 
   handelTextAreaChange=(val)=>{
+    const { actionIdx } = this.state;
     const { communityUser } = this.props;
-    const newCommunityUser = Object.assign({}, communityUser, { feedback: val});
+    const newCommunityUser = communityUser.concat();
+    newCommunityUser[actionIdx] = Object.assign({}, communityUser[actionIdx], { feedback: val});
     this.props.dispatch({
       type: 'common/update',
       payload: { communityUser: newCommunityUser }
     });
   }
   handelFeedbackButtonSubmit =() => {
-    const { feedback } = this.props.communityUser;
+    const { actionIdx } = this.state;
+    const { feedback } = this.props.communityUser[actionIdx];
     if (feedback) {
       this.setState({
         isShowFeedback: false,
       });
       this.props.dispatch({
         type: 'common/saveFeedback',
-        payload: { feedback }
+        payload: { feedback, idx: actionIdx }
       });
     }
   }
   // 同意意愿
   handelSubmitContractPDF =() => {
+    const { actionIdx } = this.state;
     const {name, is_checkMobile } = this.props.userinfo;
-    const {  signatureFile, areas, build, unit, room, owner, propertyType, is_submitContractUnwilling } = this.props.communityUser;
+    const { signatureFile, areas, build, unit, room, owner, propertyType, is_submitContractUnwilling } = this.props.communityUser[actionIdx];
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -258,7 +287,8 @@ class Intention extends Component {
     }
     if(!is_submitContractUnwilling) {
       this.props.dispatch({
-        type: 'common/submitContractPDF'
+        type: 'common/submitContractPDF',
+        payload: { idx: actionIdx }
       });
     } else {
       Toast.show({
@@ -270,8 +300,9 @@ class Intention extends Component {
   }
   // 不同意愿意
   handelSubmitUnwilling =()=>{
+    const { actionIdx } = this.state;
     const { name, is_checkMobile } = this.props.userinfo;
-    const {  areas, build, unit, room, is_submitConfirmation, owner, propertyType } = this.props.communityUser;
+    const {  areas, build, unit, room, is_submitConfirmation, owner, propertyType } = this.props.communityUser[actionIdx];
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -309,7 +340,8 @@ class Intention extends Component {
     }
     if (!is_submitConfirmation){
       this.props.dispatch({
-        type: 'common/submitContractUnwilling'
+        type: 'common/submitContractUnwilling',
+        payload: { idx: actionIdx }
       });
     } else {
       Toast.show({
@@ -317,6 +349,222 @@ class Intention extends Component {
         content: '已经提交了同意意愿申请',
       });
     }
+  }
+  modalWxQRcodeStatus = () => {
+    this.props.dispatch({
+      type: 'common/update',
+      payload: {
+        unionidModalStatus: true
+      }
+    });
+  }
+  // html
+  renderHtmlTopicAction = ()=>{
+    const html = [];
+    const { isShowSignature, isShowMobile, isShowFeedback, isShowName } = this.state;
+    const { communityUser, userinfo, smsCode } = this.props;
+    const { name, mobile, is_checkMobile } = userinfo;
+    communityUser && communityUser.length && communityUser.map((item, idx)=>{
+      const { signatureFile, areas, build, unit, room, is_submitConfirmation, owner, propertyType, feedback, is_submitContractUnwilling} = item;
+      const submitButtonDisabledStatusAgree = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
+      const submitButtonDisabledStatusUnwilling = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
+      let label = '未申报';
+      if (is_submitConfirmation && !is_submitContractUnwilling) {
+        label = '意愿已申报';
+      }
+      if (!is_submitConfirmation && is_submitContractUnwilling) {
+        label = '不同意意愿已提交';
+      }
+      if (!is_submitConfirmation && !is_submitContractUnwilling) {
+        label = '未申报';
+      }
+      if (areas && build && unit && room) {
+        const title = `${areas}-${build}幢-${unit}单元-${room}室 --- ${label}`
+        html.push(
+          <>
+          <Collapse.Panel key={idx} title={title}>
+            <div className='item' key={idx}>
+              {/** name start 2 */}
+              <div className='box-warp'>
+              <div className="title"><span className='required'>*</span> 姓名：{name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelNameShowButton}>输入</Button>)}</div></div>
+                <div className="content">
+                    {name && (<><span className='tx'>{name} </span></>)}
+                    <Popup className="popup" visible={isShowName} onMaskClick={this.handelMaskCertificationPopup} title="姓名：" onClose={this.handelMaskCertificationPopup} showCloseButton
+                                  bodyStyle={{
+                                    borderTopLeftRadius: '8px',
+                                    borderTopRightRadius: '8px',
+                                    minHeight: '40vh',
+                                  }}>
+                      <>
+                        <div className="from">
+                          <div className="item">
+                            <Space>
+                              <p className='des'>请输入真实的姓名，方便我们尽快推进此项目进度！</p>
+                            </Space>
+                            <div className='label'>姓名:</div>
+                            <div className='input'>
+                              <Input
+                                placeholder='请输入姓名'
+                                value={name}
+                                onChange={this.handelNameInput}
+                              />
+                            </div>
+                          </div>
+                          <div className="item button">
+                            <Button block color='primary' size='middle' onClick={this.handelNameButtonSubmit}>保存</Button>
+                          </div>
+                        </div>
+                      </>
+                    </Popup>
+                  </div>
+              </div>
+              {/** name end */}
+              {/** mobile start 3 */}
+              <div className='box-warp'>
+                <div className="title"><span className='required'>*</span>联系方式验证 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={is_checkMobile} fill='outline' size='small' onClick={this.handelMobileShowButton}>请进行手机验证</Button>)}</div></div>
+                <div className="content">
+                    {mobile && is_checkMobile && (<>手机号码：<span className='tx'>{mobile} </span></>)}
+                    <Popup className="popup" visible={isShowMobile} onMaskClick={this.handelMaskCertificationPopup} title="联系方式验证" onClose={this.handelMaskCertificationPopup} showCloseButton
+                                  bodyStyle={{
+                                    borderTopLeftRadius: '8px',
+                                    borderTopRightRadius: '8px',
+                                    minHeight: '40vh',
+                                  }}>
+                      <>
+                        <div className="from">
+                          <div className="item">
+                            <div className='label'>手机号码:</div>
+                            <div className='input'>
+                              <Input
+                                placeholder='手机号码'
+                                value={mobile}
+                                type="number"
+                                onChange={this.handelCertificationMobile}
+                              />
+                            </div>
+                          </div>
+                          <div className="item">
+                            <div className='label'>验证码:</div>
+                            <div className='input-sms'>
+                              <Input placeholder='请输入验证码' value={smsCode}  onChange={this.handelMobileSmsCode} clearable />  <Button color='primary' className="sms-send" fill='outline' size='small' onClick={this.handelMobileSendSmsCode}>发送验证码</Button>
+                            </div>
+                          </div>
+                          <div className="item button">
+                            <Button block color='primary' size='middle' onClick={this.handelMobileButtonSubmit}>提交手机号码验证</Button>
+                          </div>
+                        </div>
+                      </>
+                    </Popup>
+                  </div>
+              </div>
+              {/** mobile end */}
+              {/** propertyType start 4 */}
+              <div className='box-warp'>
+                <div className='title'><span className='required'>*</span>产权类型  {propertyType? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
+                <div className='content'>
+                  <Space>
+                    <Radio.Group value={String(propertyType)} disabled={submitButtonDisabledStatusAgree}>
+                      <Space direction='vertical'>
+                        <Radio value='1' onClick={()=>{this.handelPropertyTypeStatus({propertyType:1})}}>个人住房</Radio>
+                        <Radio value='2' onClick={()=>{this.handelPropertyTypeStatus({propertyType:2})}}>企业住房</Radio>
+                      </Space>
+                    </Radio.Group>
+                  </Space>
+                </div>
+              </div>
+              {/** propertyType end  */}
+              {/** owner start 5 */}
+              <div className='box-warp'>
+                <div className='title'><span className='required'>*</span>产权人信息  {owner? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
+                <div className='content'>
+                  <Space>
+                    <Radio.Group value={String(owner)} disabled={submitButtonDisabledStatusAgree}>
+                      <Space direction='vertical'>
+                        <Radio value='1' onClick={()=>this.handelOwnerStatus({owner: 1})}>无产权</Radio>
+                        <Radio value='2' onClick={()=>this.handelOwnerStatus({owner: 2})}>拥有产权{propertyType ==2 ? '（我是法人）': ''}</Radio>
+                      </Space>
+                    </Radio.Group>
+                  </Space>
+                </div>
+              </div>
+              {/** owner end */}
+              {/** signature start 6 */}
+              <div className='signature box-warp'>
+                <div className="title"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
+                <div className="content">
+                  {signatureFile && (<div className='signature-img'><img src={signatureFile} /></div>)}
+                  <Popup className="popup" visible={isShowSignature} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
+                                bodyStyle={{
+                                  borderTopLeftRadius: '8px',
+                                  borderTopRightRadius: '8px',
+                                  minHeight: '60vh',
+                                }}>
+                    <>
+                      <div className="from">
+                        <div className="item">
+                          <Signature index={idx} callbackSubmitDataURL={this.handelSignatureButtonSubmit} clearButton="true"></Signature>
+                        </div>
+                      </div>
+                    </>
+                  </Popup>
+                </div>
+              </div>
+              {/** signature end */}
+              {/** feedback start 7 */}
+              <div className='box-warp'>
+                <div className='title'><span className='required'></span>宝贵的建议<span className='des'>（可随时更改）</span> {feedback? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'>{!is_submitConfirmation && (<Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button>)}</div></div>
+                <div className='content'>
+                  <div>
+                    <TextArea value={feedback} disabled></TextArea>
+                  </div>
+                  <Popup className="popup" visible={isShowFeedback} onMaskClick={this.handelMaskCertificationPopup} title="宝贵的建议" onClose={this.handelMaskCertificationPopup} showCloseButton
+                                bodyStyle={{
+                                  borderTopLeftRadius: '8px',
+                                  borderTopRightRadius: '8px',
+                                  minHeight: '60vh',
+                                }}>
+                    <>
+                      <div className="from">
+                        <div className="item">
+                          <Space>
+                            <p className='des'>共商共助，携手共建美好家园，请提供您宝贵的意见！</p>
+                          </Space>
+                          <TextArea value={feedback} onChange={this.handelTextAreaChange} placeholder="最大输入250个字符" showCount maxLength={250} rows={8}></TextArea>
+                        </div>
+                        <div className="item button">
+                          <Button block color='primary' size='middle' onClick={this.handelFeedbackButtonSubmit}>保存建议</Button>
+                        </div>
+                      </div>
+                    </>
+                  </Popup>
+                </div>
+              </div>
+              {/** feedback end */}
+              {/** operate start 8 */}
+              <div className='box-warp'>
+                <div className='topic-operate'>
+                  <div className="submit clearfix">
+                    <Button className='left' loading={this.props.communityUserSubmitUnwillingLoading} disabled={submitButtonDisabledStatusUnwilling} color='primary' fill='outline' size='middle' onClick={this.handelSubmitUnwilling}>{is_submitContractUnwilling? (<>不同意意愿申请已提交</>): (<>不同意意愿申请</>)}</Button>
+                    <Button className='right' loading={this.props.communityUserSubmitLoading} disabled={submitButtonDisabledStatusAgree} color='success' size='middle' onClick={this.handelSubmitContractPDF}>{is_submitConfirmation? (<>意愿申请已提交</>): (<>同意意愿申请</>)}</Button>
+                  </div>
+                  <div className="check-info">
+                      <Link to="/wish.html">点击查看已提交的申请 <RightOutline /></Link>
+                  </div>
+                </div>
+              </div>
+              {/** operate end */}
+            </div>
+            </Collapse.Panel>
+          </>
+        );
+      }
+    });
+    return html;
+  }
+  handelSubmitAdd=()=>{
+    this.setState({
+      isShowCascader: true,
+    });
   }
 
   componentDidMount() {
@@ -335,15 +583,16 @@ class Intention extends Component {
     this.props.dispatch({
       type: 'common/getCommunityUserInfo'
     });
+    this.props.dispatch({
+      type: 'common/update',
+      payload: {
+        unionidModalStatus: false
+      }
+    });
   }
 
   render() {
-    const { isShowSignature, isShowCascader,isShowMobile, isShowFeedback, isShowName, cascaderOptions } = this.state;
-    const { communityUser, userinfo } = this.props;
-    const { name, mobile, is_checkMobile } = userinfo;
-    const { signatureFile, areas, build, unit, room, is_submitConfirmation, smsCode, owner, propertyType, feedback, is_submitContractUnwilling} = communityUser;
-    const submitButtonDisabledStatusAgree = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
-    const submitButtonDisabledStatusUnwilling = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
+    const { isShowCascader, cascaderOptions, actionIdx } = this.state;
     return (
       <div className="page">
         <div className="intention-page">
@@ -352,188 +601,43 @@ class Intention extends Component {
             <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/banner/banner_intention.png" />
             <Space></Space>
             <p>各位小区业主(C区1-14/19-28幢):</p>
-            <p>根据2024年4月，由浙江省住建厅、发改委、自然资源厅联合发布的《关于稳步推进城镇老旧小区自主更新试点工作的指导意见》文件精神，
-              杭州多个老旧小区在做原拆原建有机更新调研。<span className='red'>业主同意率高的小区可以申报杭州市政府，由政府牵头结合业主意见建议编制具体的拆建方案。</span>
-              目前，杭州市已经有浙工新村通过具体方案，进入到拆除重建的具体实施阶段;还有翠苑北二区完成了业主意向征集，进入到向市政府申请阶段。
-              参考他们的改造成本，<span className='red'>翠苑三区业主在不扩面的情况下，出资一定金额就有望申报我们小区进行原拆原建，同时政府还会在建设期间给每户发放租房补贴。</span>
+            <p>根据2024年4月，由浙江省住建厅、发改委、自然资源厅联合发布的《关于稳步推进城镇老旧小区自主更新试点工作的指导意见》文件精神，<span className='red'>杭州众多历史悠久的小区正在做原拆原建自主意向更新调研工作。我们小区业主若能展现出强烈意愿，并得到大多业主支持，便有资格向杭州市政府申请原拆原建项目</span>，由政府牵头结合业主意见建议编制具体的拆建方案。目前，杭州市已经有浙工新村通过具体方案，进入到拆除重建的具体实施阶段。
             </p>
 
-            <p><span className='red'>为统一征集意见，翠苑三区C区1-14/19-28幢已建立微信群，请各位业主加入微信群填写意见，共商共助，携手共建美好家园。</span>
-              各位业主不用担心，目前只是意愿登记不代表法律上的同意拆迁，大家统一意见后才会申报市政府，之后再综合业主们的各项要求出具体拆建方案。
+            <p>为尽快能启动申报工作，我们在此恳请各位业主扫码下方的二维码关注我们的微信公众号，在上面表达您的拆建意愿。这将有助于我们统一的搜集大的意向，并进行后续的整理工作。此次申报只是对全体业主意愿的调查，不具有任何法律效力，大家尽可放心申报。
             </p>
-            <p><span className='red'>各位业主请关注公众号《西子翠苑》私信加群，共商小区建设大计。</span></p>
+            <p>在此我们邀请各位业主一起为翠苑三区的自主更新献计献策，共商共助，携手共建美好家园。</p>
+            <Space></Space>
+            <p className='tx-right'>翠苑三区自主更新委员会(筹)</p>
+            <p className='tx-right'>2024年5月1日</p>
+            <div className="qrcode" onClick={this.modalWxQRcodeStatus}>点击关注公众号</div>
+            <WxQRcode></WxQRcode>
+          </div>
+          <div className='other-user'>
+            <p><span className='title'>注意：</span>非翠苑三区( C区1-14/19-28幢)住户请不要在此提交申请，如果提交了请即时删除。</p>
+            {/**
+            <p>其他区域的接入请联系 翠苑三区自主更新委员会(筹) 周委员（可以在 翠苑三区便民服务群 寻找）</p>
+            */}
           </div>
           <div className="topic-action">
-            <div className="room box-warp">
-              <div className="title"><span className='required'>*</span>选择房号 {(areas && build && unit && room)? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelCascaderShowButton}>选择</Button>)}</div></div>
-              <div className="content">
-                {!!(areas && build && unit && room) && (<div><span>{areas}-{build}幢-{unit}单元-{room}室</span></div>)}
-                <Cascader
-                  options={cascaderOptions}
-                  visible={isShowCascader}
-                  onClose={this.handelMaskCertificationPopup}
-                  onConfirm={this.handelCascaderStatusOnConfirm}
-                />
-              </div>
-            </div>
-            <div className="certification box-warp">
-              <div className="title"><span className='required'>*</span> 姓名：{name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelNameShowButton}>输入</Button>)}</div></div>
-              <div className="content">
-                {name && (<><span className='tx'>{name} </span></>)}
-                <Popup className="popup" visible={isShowName} onMaskClick={this.handelMaskCertificationPopup} title="姓名：" onClose={this.handelMaskCertificationPopup} showCloseButton
-                              bodyStyle={{
-                                borderTopLeftRadius: '8px',
-                                borderTopRightRadius: '8px',
-                                minHeight: '40vh',
-                              }}>
-                  <>
-                    <div className="from">
-                      <div className="item">
-                        <div className='label'>姓名:</div>
-                        <div className='input'>
-                          <Input
-                            placeholder='请输入姓名'
-                            value={name}
-                            onChange={this.handelNameInput}
-                          />
-                        </div>
-                      </div>
-                      <div className="item button">
-                        <Button block color='primary' size='middle' onClick={this.handelNameButtonSubmit}>保存</Button>
-                      </div>
-                    </div>
-                  </>
-                </Popup>
+          <Collapse accordion={true} activeKey={actionIdx} onChange={this.handelCollapseOnChange}>
+            {this.renderHtmlTopicAction()}
+          </Collapse>
+            <div className='action-add'>
+                <div className="submit">
+                  <Button block color='warning' size='large' onClick={this.handelSubmitAdd}><AddOutline />新增住房户号申请意愿</Button>
+                  <p>注：最多支持5套申报，如需更多请关注公众号私信管理员</p>
+                  <Cascader
+                    options={cascaderOptions}
+                    visible={isShowCascader}
+                    onClose={this.handelMaskCertificationPopup}
+                    onConfirm={this.handelCascaderStatusOnConfirm}
+                  />
 
-              </div>
-            </div>
-            <div className='contact-info box-warp'>
-              <div className="title"><span className='required'>*</span>联系方式验证 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelMobileShowButton}>请进行联系方式验证</Button>)}</div></div>
-              <div className="content">
-                {mobile && is_checkMobile && (<>手机号码：<span className='tx'>{mobile} </span></>)}
-                <Popup className="popup" visible={isShowMobile} onMaskClick={this.handelMaskCertificationPopup} title="联系方式验证" onClose={this.handelMaskCertificationPopup} showCloseButton
-                              bodyStyle={{
-                                borderTopLeftRadius: '8px',
-                                borderTopRightRadius: '8px',
-                                minHeight: '40vh',
-                              }}>
-                  <>
-                    <div className="from">
-                      <div className="item">
-                        <div className='label'>手机号码:</div>
-                        <div className='input'>
-                          <Input
-                            placeholder='手机号码'
-                            value={mobile}
-                            type="number"
-                            onChange={this.handelCertificationMobile}
-                          />
-                        </div>
-                      </div>
-                      <div className="item">
-                        <div className='label'>验证码:</div>
-                        <div className='input-sms'>
-                          <Input placeholder='请输入验证码' value={smsCode}  onChange={this.handelMobileSmsCode} clearable />  <Button color='primary' className="sms-send" fill='outline' size='small' onClick={this.handelMobileSendSmsCode}>发送验证码</Button>
-                        </div>
-                      </div>
-                      <div className="item button">
-                        <Button block color='primary' size='middle' onClick={this.handelMobileButtonSubmit}>提交手机号码验证</Button>
-                      </div>
-                    </div>
-                  </>
-                </Popup>
-
-              </div>
-            </div>
-            <div className="owner box-warp">
-              <div className='title'><span className='required'>*</span>产权类型  {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
-              <div className='content'>
-              <Space>
-                  <Radio.Group value={propertyType.toString()} disabled={submitButtonDisabledStatusAgree} onChange={this.handelPropertyTypeStatus}>
-                    <Space direction='vertical'>
-                      <Radio value='1'>个人住房</Radio>
-                      <Radio value='2'>企业住房</Radio>
-                    </Space>
-                  </Radio.Group>
-                </Space>
-              </div>
-            </div>
-            <div className="owner box-warp">
-              <div className='title'><span className='required'>*</span>产权人信息  {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
-              <div className='content'>
-                <Space>
-                  <Radio.Group value={owner.toString()} disabled={submitButtonDisabledStatusAgree} onChange={this.handelOwnerStatus}>
-                    <Space direction='vertical'>
-                      <Radio value='1'>无产权</Radio>
-                      <Radio value='2'>拥有产权{propertyType ==2 ? '(我是法人)': ''}</Radio>
-                    </Space>
-                  </Radio.Group>
-                </Space>
-              </div>
-            </div>
-            <div className="signature box-warp">
-              <div className="title"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
-              <div className="content">
-                {signatureFile && (<div className='signature-img'><img src={signatureFile} /></div>)}
-                <Popup className="popup" visible={isShowSignature} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
-                              bodyStyle={{
-                                borderTopLeftRadius: '8px',
-                                borderTopRightRadius: '8px',
-                                minHeight: '60vh',
-                              }}>
-                  <>
-                    <div className="from">
-                      <div className="item">
-                        <Signature callbackSubmitDataURL={this.handelSignatureButtonSubmit} clearButton="true"></Signature>
-                      </div>
-                    </div>
-                  </>
-                </Popup>
-              </div>
-            </div>
-            <div className="feedback box-warp">
-              <div className='title'><span className='required'></span>建议&妙想 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'>{!is_submitConfirmation && (<Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button>)}</div></div>
-              <div className='content'>
-                <div>
-                  <TextArea value={feedback} disabled></TextArea>
+                  <div className="check-info">
+                    <Link to="/wish.html">点击查看已提交的申请 <RightOutline /></Link>
+                  </div>
                 </div>
-                <Popup className="popup" visible={isShowFeedback} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
-                              bodyStyle={{
-                                borderTopLeftRadius: '8px',
-                                borderTopRightRadius: '8px',
-                                minHeight: '60vh',
-                              }}>
-                  <>
-                    <div className="from">
-                      <div className="item">
-                        <Space>
-                          <p>共商共助，携手共建美好家园</p>
-                        </Space>
-                        <TextArea value={feedback} onChange={this.handelTextAreaChange} placeholder="最大输入250个字符" showCount maxLength={250} rows={8}></TextArea>
-                      </div>
-                      <div className="item button">
-                        <Button block color='primary' size='middle' onClick={this.handelFeedbackButtonSubmit}>保存建议</Button>
-                      </div>
-                    </div>
-                  </>
-                </Popup>
-              </div>
-            </div>
-          </div>
-          <div className="topic-agree">
-            <div className="submit">
-              <Button loading={this.props.communityUserSubmitLoading} disabled={submitButtonDisabledStatusAgree} block color='success' size='large' onClick={this.handelSubmitContractPDF}>{is_submitConfirmation? (<>同意意愿申请已提交</>): (<>确认同意提交意愿申请</>)}</Button>
-            </div>
-            <div className="check-info">
-                <Link to="/wish.html">点击查看已提交的申请 <RightOutline /></Link>
-            </div>
-          </div>
-          <div className='topic-unwilling'>
-            <div className="submit">
-              <Button loading={this.props.communityUserSubmitUnwillingLoading} disabled={submitButtonDisabledStatusUnwilling} block color='warning' size='large' onClick={this.handelSubmitUnwilling}>{is_submitContractUnwilling? (<>不同意意愿申请已提交</>): (<>不同意意愿申请</>)}</Button>
-            </div>
-            <div className="check-info">
-                <Link to="/wish.html">点击查看已提交的申请 <RightOutline /></Link>
             </div>
           </div>
           <div className='process-description'>
@@ -552,26 +656,26 @@ class Intention extends Component {
                   <li>
                     <h5>1. 数据安全和个人隐私</h5>
                     <div>
-                      <p>- 我个人(和珅) 和 暂时志愿者筹备小组 所有成员承诺在法律的基础上严格保护数据和用户隐私，即使项目失败及时销毁。</p>
-                      <p>- 数据使用是方便推动共同愿景的执行和落地，并且数据使用过程中会公示在 暂时志愿者筹备小组 群并通过 暂时志愿者筹备小组 同意。</p>
+                      <p>- 我个人(和珅) 和 翠苑三区自主更新委员会(筹) 所有成员承诺在法律的基础上严格保护数据和用户隐私，即使项目失败及时销毁。</p>
+                      <p>- 数据使用是方便推动共同愿景的执行和落地，并且数据使用过程中会公示在 翠苑三区自主更新委员会(筹) 群并通过 翠苑三区自主更新委员会(筹) 同意。</p>
                       <p>- 数据访问安全 所有的数据都要经过网关的加密解密</p>
                     </div>
                   </li>
                   <li>
-                    <h5>2. 暂时志愿者筹备小组</h5>
+                    <h5>2. 翠苑三区自主更新委员会(筹)</h5>
                     <div>
-                      <p>- 暂时志愿者筹备小组 由小区业主自发组建，组织和推动小区公共事务落地。</p>
-                      <p>- 由于 翠苑区“老破小”等政府行为落后，要想有所改变向更好方式，暂时志愿者筹备小组 积极推动和起草两个事项《原拆原建项目》和《翠苑三区业主委员会》。</p>
-                      <p>- 暂时志愿者筹备小组 在法律的基础上积极推进和起草《翠苑三区业主委员会》成立，业主委员会后 暂时志愿者筹备小组 自行解散。</p>
-                      <p>- 暂时志愿者筹备小组 推动《原拆原建项目》需要收集大家的意愿，这也是此片文章的目的，希望广大业主积极参与，项目早日确定。</p>
+                      <p>- 翠苑三区自主更新委员会(筹) 由小区业主自发组建，组织和推动小区公共事务落地。</p>
+                      <p>- 由于 翠苑区“老破小”等政府行为落后，要想有所改变向更好方式，翠苑三区自主更新委员会(筹) 积极推动和起草两个事项《原拆原建项目》和《翠苑三区业主委员会》。</p>
+                      <p>- 翠苑三区自主更新委员会(筹) 在法律的基础上积极推进和起草《翠苑三区业主委员会》成立，业主委员会后 翠苑三区自主更新委员会(筹) 自行解散。</p>
+                      <p>- 翠苑三区自主更新委员会(筹) 推动《原拆原建项目》需要收集大家的意愿，这也是此片文章的目的，希望广大业主积极参与，项目早日确定。</p>
                     </div>
                   </li>
                   <li>
                     <h5>3. 《西子翠苑》公众号 公益服务说明</h5>
                     <div>
                       <p>- 《西子翠苑》公众号为基础的，主旨是服务翠苑社区业主服务，信息互通，共商共助，携手共建美好家园。</p>
-                      <p>- 《西子翠苑》公众号 所有权归 暂时志愿者筹备小组，正大事项由 暂时志愿者筹备小组确定。 </p>
-                      <p>- 《西子翠苑》公众号 是非盈利性，日常运营和技术支持均有 暂时志愿者筹备小组 人员参与，云服务等等硬件成本需要后续广大业主募捐支持。 </p>
+                      <p>- 《西子翠苑》公众号 所有权归 翠苑三区自主更新委员会(筹)，正大事项由 翠苑三区自主更新委员会(筹) 确定。 </p>
+                      <p>- 《西子翠苑》公众号 是非盈利性，日常运营和技术支持均有 翠苑三区自主更新委员会(筹) 人员参与，云服务等等硬件成本需要后续广大业主募捐支持。 </p>
                     </div>
                   </li>
                 </ul>
@@ -591,5 +695,6 @@ export default connect(
     userinfo:  state.common.userinfo,
     communityUserSubmitLoading: state.common.communityUserSubmitLoading,
     communityUserSubmitUnwillingLoading: state.common.communityUserSubmitUnwillingLoading,
+    smsCode: state.common.smsCode,
   }),
 )(Intention);
