@@ -5,7 +5,7 @@ class WxShare {
   constructor() {
     this.params = {
       baseurl: 'https://www.dreamstep.top/',
-      img_url: 'https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/img/logo2.png',
+      img_url: 'https://img.dreamstep.top/community/img/logo2.png',
       page_url: 'https://www.dreamstep.top/index.html',
       timeline_url: 'https://www.dreamstep.top/index.html',
       friend_title: '西子翠苑-翠苑社区公益服务',

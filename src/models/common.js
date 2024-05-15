@@ -90,6 +90,7 @@ export default {
     }, // 微信公共配置
     activeKey: '/',
     smsCode: '', // 短信验证码
+    isAuthorized: false, // 是否已经授权
     communityUser: [
       {
         id: '',
@@ -461,7 +462,7 @@ export default {
       }
     },
     *saveName({ payload: data }, { call, put, select }) {
-      const { name } = data;
+      const { name, idx } = data;
       const { communityUser } = yield select((state) => state.common);
       const { id, room } = communityUser[idx];
       if (name && room && id) {

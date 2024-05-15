@@ -7,7 +7,7 @@ export default {
       {
         id: 123244,
         name: 'banner1',
-        src: 'https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/banner/banner_intention.png',
+        src: 'https://img.dreamstep.top/community/banner/banner_intention.png',
         value: '/intention.html'
       }
     ],

@@ -64,6 +64,7 @@ class Intention extends Component {
   }
   // 姓名
   handelNameButtonSubmit = () => {
+    const { actionIdx} = this.state;
     const { name } = this.props.userinfo;
     if (name) {
       this.setState({
@@ -71,7 +72,7 @@ class Intention extends Component {
       });
       this.props.dispatch({
         type: 'common/saveName',
-        payload: { name }
+        payload: { name, idx: actionIdx }
       });
     } else {
       Toast.show({
@@ -573,7 +574,7 @@ class Intention extends Component {
     initShare.reset({
       friend_title: '翠苑三区( C区1-14/19-28幢)原拆原建业主意向征集和倡议书',
       friend_content: '为统一征集意见，翠苑三区C区1-14/19-28幢已建立微信群，请各位业主加入微信群填写意见，共商共助，携手共建美好家园。',
-      img_url: 'https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/banner/banner_intention.png',
+      img_url: 'https://img.dreamstep.top/community/banner/banner_intention.png',
       page_url: 'https://www.dreamstep.top/intention.html'
     });
     /** 分享 -- end */
@@ -599,7 +600,7 @@ class Intention extends Component {
           <div className="page-topic">
             <h1>原拆原建业主意向征集和倡议书</h1>
             <p className='tx-center'>翠苑三区( C区1-14/19-28幢)</p>
-            <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/banner/banner_intention.png" />
+            <img src="https://img.dreamstep.top/community/banner/banner_intention.png" />
             <Space></Space>
             <p>各位小区业主(C区1-14/19-28幢):</p>
             <p>根据2024年4月，由浙江省住建厅、发改委、自然资源厅联合发布的《关于稳步推进城镇老旧小区自主更新试点工作的指导意见》文件精神，<span className='red'>杭州众多历史悠久的小区正在做原拆原建自主意向更新调研工作。我们小区业主若能展现出强烈意愿，并得到大多业主支持，便有资格向杭州市政府申请原拆原建项目</span>，由政府牵头结合业主意见建议编制具体的拆建方案。目前，杭州市已经有浙工新村通过具体方案，进入到拆除重建的具体实施阶段。

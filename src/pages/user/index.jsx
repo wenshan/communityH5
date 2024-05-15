@@ -82,12 +82,12 @@ class User extends Component {
         <div className="user-page">
           <Space></Space>
           <div className="userinfor">
-            <div className="avatar"><img src={this.props.userinfo.avatar? this.props.userinfo.avatar : 'https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/img/avatar.png'} /></div>
+            <div className="avatar"><img src={this.props.userinfo.avatar? this.props.userinfo.avatar : 'https://img.dreamstep.top/community/img/avatar.png'} /></div>
             <div className="middle">
               <div className="nickname">{this.props.userinfo.nickname}</div>
               <div className="account-type"><span>账户类型：</span>微信授权 | {this.props.userinfo.unionid ? '公众号已关注' : '公众号未关注'}</div>
             </div>
-            <div className="arrow"><img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/img/arrow_right.png" /></div>
+            <div className="arrow"><img src="https://img.dreamstep.top/community/img/arrow_right.png" /></div>
           </div>
           <Space size="lg"></Space>
           <div className="tool-wrap">

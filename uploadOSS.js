@@ -19,7 +19,7 @@ console.log('au:', `${remoteAddress}:${remoteFilePath}`);
 // 上传
 async function upload() {
   return new Promise((resolve, reject) => {
-    ClientScp.scp(`${localFilePath}/index.html`, `${remoteAddress}:${remoteFilePath}`, (err) => {
+    ClientScp.scp(`${localFilePath}`, `${remoteAddress}:${remoteFilePath}`, (err) => {
       if (err) {
         // eslint-disable-next-line prefer-promise-reject-errors
         reject(`Fail: 1 ${err.message}`);
@@ -32,7 +32,12 @@ async function upload() {
 // oss 上传
 async function uploadOss() {
   console.log('目录：', localFilePath);
-  const ClientOss = new OSS({});
+  const ClientOss = new OSS({
+    region: 'oss-cn-hongkong',
+    accessKeyId: 'LTAI5tRDFWD6tDB1n67XvQhj',
+    accessKeySecret: 'U6RiRYlt0UpZ8IU8Rbs3nMRzC9gDa6',
+    bucket: 'affiliate-traffic'
+  });
   try {
     const files = fs.readdirSync(localFilePath);
     // 文件列表在files变量中

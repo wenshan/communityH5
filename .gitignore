@@ -28,3 +28,4 @@ jenkins.sh
 gita.py
 dist
 node_modules
+uploadOSS.js

@@ -91,7 +91,7 @@ class WxQRcode extends React.Component {
           <div className='modal-content'>
             <div className='img-box'>
               <img
-                src='https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/qrcode_for_gh_41d638333ec8_430.jpg'
+                src='https://img.dreamstep.top/community/qrcode_for_gh_41d638333ec8_430.jpg'
                 onClick={this.handSubmit}
               />
             </div>

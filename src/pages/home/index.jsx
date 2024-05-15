@@ -39,7 +39,12 @@ class Home extends Component {
   componentDidMount() {
     /** 分享 -- start */
     const initShare = new WxShare();
-    initShare.reset();
+    initShare.reset({
+      friend_title: '翠苑三区( C区1-14/19-28幢)原拆原建业主意向征集和倡议书',
+      friend_content: '为统一征集意见，翠苑三区C区1-14/19-28幢已建立微信群，请各位业主加入微信群填写意见，共商共助，携手共建美好家园。',
+      img_url: 'https://img.dreamstep.top/community/banner/banner_intention.png',
+      page_url: 'https://www.dreamstep.top/intention.html'
+    });
     /** 分享 -- end */
     this.props.dispatch({
       type: 'common/update',
@@ -68,7 +73,7 @@ class Home extends Component {
           <div className='intention-view'>
             <div className="header">
               <Link to="/intention.html">
-                <h2>翠苑三区C区原建原拆意向数据</h2>
+                <h2>翠苑三区C区原拆原建意向数据</h2>
                 <span className='link'>点击去申请<RightOutline /></span>
               </Link>
             </div>

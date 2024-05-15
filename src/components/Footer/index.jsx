@@ -16,22 +16,22 @@ class LayoutFooter extends Component {
       {
         key: '/index.html',
         title: '首页',
-        icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-home-ac.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-home.png" />,
+        icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-home-ac.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-home.png" />,
       },
       {
         key: '/mall.html',
         title: '易物(建设中..)',
-        icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-gift-ac.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-gift.png" />,
+        icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-gift-ac.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-gift.png" />,
       },
       {
         key: '/intention.html',
         title: '话题',
-        icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-topic-ac.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-topic.png" />,
+        icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-topic-ac.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-topic.png" />,
       },
       {
         key: '/user.html',
         title: '我的',
-        icon: (active) => active ? <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-user.png" /> : <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/tab/icon-user.png" />,
+        icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-user.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-user.png" />,
       },
     ]
   }
