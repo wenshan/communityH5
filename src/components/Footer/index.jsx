@@ -19,14 +19,14 @@ class LayoutFooter extends Component {
         icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-home-ac.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-home.png" />,
       },
       {
-        key: '/mall.html',
-        title: '易物(建设中..)',
-        icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-gift-ac.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-gift.png" />,
+        key: '/intention.html',
+        title: '申报',
+        icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-topic-ac.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-topic.png" />,
       },
       {
-        key: '/intention.html',
-        title: '话题',
-        icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-topic-ac.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-topic.png" />,
+        key: '/intentionList.html',
+        title: '检索',
+        icon: (active) => active ? <img src="https://img.dreamstep.top/community/tab/icon-search-ac.png" /> : <img src="https://img.dreamstep.top/community/tab/icon-search.png" />,
       },
       {
         key: '/user.html',
