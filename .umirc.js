@@ -1,12 +1,13 @@
 import { defineConfig } from 'umi';
 const path = require('path');
-
+const isDev = process.env.NODE_ENV === 'development';
 export default defineConfig({
   nodeModulesTransform: {
     type: 'none'
   },
   // base: '/docs/',
-  publicPath: '/',
+  publicPath: isDev ? '/' : 'https://img.dreamstep.top/community/dist/',
+  // publicPath: '/',
   // publicPath: 'https://img.dreamstep.top/community/dist/',
   hash: true,
   antd: { mobile: false },

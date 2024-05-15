@@ -218,7 +218,7 @@ class Intention extends Component {
   handelTextAreaChange=(val)=>{
     const { actionIdx } = this.state;
     const { communityUser } = this.props;
-    const newCommunityUser = communityUser.concat();
+    const newCommunityUser = communityUser.concat([]);
     newCommunityUser[actionIdx] = Object.assign({}, communityUser[actionIdx], { feedback: val});
     this.props.dispatch({
       type: 'common/update',
@@ -379,7 +379,7 @@ class Intention extends Component {
         label = '未申报';
       }
       if (areas && build && unit && room) {
-        const title = `${areas}-${build}幢-${unit}单元-${room}室 --- ${label}`
+        const title = `${areas}-${build}幢-${unit}单元-${room}室 - ${label}`
         html.push(
           <>
           <Collapse.Panel key={idx} title={title}>
@@ -512,7 +512,7 @@ class Intention extends Component {
               {/** signature end */}
               {/** feedback start 7 */}
               <div className='box-warp'>
-                <div className='title'><span className='required'></span>宝贵的建议<span className='des'>（可随时更改）</span> {feedback? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'>{!is_submitConfirmation && (<Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button>)}</div></div>
+                <div className='title'><span className='required'></span>宝贵的建议<span className='des'>（可随时更改）</span> {feedback? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'><Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button></div></div>
                 <div className='content'>
                   <div>
                     <TextArea value={feedback} disabled></TextArea>
@@ -597,14 +597,15 @@ class Intention extends Component {
       <div className="page">
         <div className="intention-page">
           <div className="page-topic">
-            <h1>翠苑三区( C区1-14/19-28幢)原拆原建业主意向征集和倡议书</h1>
+            <h1>原拆原建业主意向征集和倡议书</h1>
+            <p className='tx-center'>翠苑三区( C区1-14/19-28幢)</p>
             <img src="https://affiliate-traffic.oss-cn-hongkong.aliyuncs.com/community/banner/banner_intention.png" />
             <Space></Space>
             <p>各位小区业主(C区1-14/19-28幢):</p>
             <p>根据2024年4月，由浙江省住建厅、发改委、自然资源厅联合发布的《关于稳步推进城镇老旧小区自主更新试点工作的指导意见》文件精神，<span className='red'>杭州众多历史悠久的小区正在做原拆原建自主意向更新调研工作。我们小区业主若能展现出强烈意愿，并得到大多业主支持，便有资格向杭州市政府申请原拆原建项目</span>，由政府牵头结合业主意见建议编制具体的拆建方案。目前，杭州市已经有浙工新村通过具体方案，进入到拆除重建的具体实施阶段。
             </p>
 
-            <p>为尽快能启动申报工作，我们在此恳请各位业主扫码下方的二维码关注我们的微信公众号，在上面表达您的拆建意愿。这将有助于我们统一的搜集大的意向，并进行后续的整理工作。此次申报只是对全体业主意愿的调查，不具有任何法律效力，大家尽可放心申报。
+            <p>为尽快能启动申报工作，我们在此恳请各位业主扫码下方的二维码关注我们的微信公众号，在上面表达您的拆建意愿。这将有助于我们统一的搜集大家的意向，并进行后续的整理工作。此次申报只是对全体业主意愿的调查，不具有任何法律效力，大家尽可放心申报。
             </p>
             <p>在此我们邀请各位业主一起为翠苑三区的自主更新献计献策，共商共助，携手共建美好家园。</p>
             <Space></Space>
@@ -626,7 +627,7 @@ class Intention extends Component {
             <div className='action-add'>
                 <div className="submit">
                   <Button block color='warning' size='large' onClick={this.handelSubmitAdd}><AddOutline />新增住房户号申请意愿</Button>
-                  <p>注：最多支持5套申报，如需更多请关注公众号私信管理员</p>
+                  <p>注：最多支持5套住房申报，如需更多请关注公众号私信管理员</p>
                   <Cascader
                     options={cascaderOptions}
                     visible={isShowCascader}

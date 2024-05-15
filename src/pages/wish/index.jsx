@@ -50,16 +50,16 @@ class WishList extends Component {
               <div className='info'>
                 <>
                   <h3>翠苑三区C区原拆原建意愿申请</h3>
-                  <div className='status box'>申请状态: <span>{label}</span></div>
-                  <div className='room box'>房号: <span>{areas}-{build}幢-{unit}单元-{room}室</span></div>
-                  <div className='room box'>产权类型: <span>{propertyType > 1? '企业房': '个人房'}</span></div>
-                  <div className='owner box'>是否拥有产权: <span>{owner? '是': '否/未知'}</span></div>
-                  <div className='certification box'>姓名: <span>{name}</span></div>
-                  <div className='mobile box'>联系手机: <span>{mobile}</span></div>
-                  {is_submitConfirmation?(<div className='signature box'>电子签: <span>审核中...  </span></div>):''}
-                  <div className='feedback box'>宝贵的建议: <span>{feedback? (<p>{feedback}</p>) : '无' }</span></div>
-                  {is_submitConfirmation?(<div className='pdf box'>意愿申请文件: <span>{contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</span></div>):''}
-                  <div className='date box'>日期: <span>{createdAt}</span></div>
+                  <div className='status box'><label>申请状态:</label><span>{label}</span></div>
+                  <div className='room box'><label>房号:</label><span>{areas}-{build}幢-{unit}单元-{room}室</span></div>
+                  <div className='room box'><label>产权类型:</label><span>{propertyType > 1? '企业房': '个人房'}</span></div>
+                  <div className='owner box'><label>是否拥有产权:</label><span>{owner? '是': '否/未知'}</span></div>
+                  <div className='certification box'><label>姓名:</label><span>{name}</span></div>
+                  <div className='mobile box'><label>联系手机:</label><span>{mobile}</span></div>
+                  {is_submitConfirmation?(<div className='signature box'><label>电子签:</label><span>审核中...  </span></div>):''}
+                  <div className='feedback box'><label>宝贵的建议:</label><span>{feedback? (<p>{feedback}</p>) : '无' }</span></div>
+                  {is_submitConfirmation?(<div className='pdf box'><label>意愿申请文件:</label><span>{contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</span></div>):''}
+                  <div className='date box'><label>日期:</label><span>{createdAt}</span></div>
                   <div className='footer-box'>
                     <span onClick={()=>{this.delUser(id)}}>删除重新意愿申请</span>
                   </div>
