@@ -109,23 +109,25 @@ class User extends Component {
             </div>
           </div>
           <Space size="lg"></Space>
-          <List header='基础'>
-            <List.Item prefix={<UserSetOutline />} onClick={() => {this.gotoPage('/index.html')}}>
-            我的信息
-            </List.Item>
-            <List.Item prefix={<HeartOutline />} onClick={() => {this.gotoPage('/wish.html')}}>
-            我的意愿
-            </List.Item>
-          </List>
-          <Space size="lg"></Space>
-          <List header='其他'>
-            <List.Item prefix={<TeamOutline />} onClick={this.handelShare}>
-              分享给我的好友
-            </List.Item>
-            <List.Item prefix={<SmileOutline />} onClick={() => {this.gotoPage('/help.html')}}>
-              关于《西子翠苑》
-            </List.Item>
-          </List>
+          <div className='list'>
+            <List header='基础'>
+              <List.Item prefix={<UserSetOutline />} onClick={() => {this.gotoPage('/index.html')}}>
+              我的信息
+              </List.Item>
+              <List.Item prefix={<HeartOutline />} onClick={() => {this.gotoPage('/wish.html')}}>
+              我的意愿
+              </List.Item>
+            </List>
+            <Space size="lg"></Space>
+            <List header='其他'>
+              <List.Item prefix={<TeamOutline />} onClick={this.handelShare}>
+                分享给我的好友
+              </List.Item>
+              <List.Item prefix={<SmileOutline />} onClick={() => {this.gotoPage('/help.html')}}>
+                关于《西子翠苑》
+              </List.Item>
+            </List>
+          </div>
           <Space size="lg"></Space>
         </div>
         <WxQRcode></WxQRcode>

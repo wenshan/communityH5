@@ -60,6 +60,16 @@ export default defineConfig({
           component: '@/pages/help'
         },
         {
+          name: '群落',
+          path: '/intentionMap.html',
+          component: '@/pages/topic/intentionMap/index.jsx'
+        },
+        {
+          name: '数据格式',
+          path: '/intentionData.html',
+          component: '@/pages/topic/intentionData/index.jsx'
+        },
+        {
           name: '闲置易物',
           path: '/mall.html',
           component: '@/pages/mall'

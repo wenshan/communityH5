@@ -59,6 +59,18 @@ export function getRoutes() {
         "exact": true
       },
       {
+        "name": "群落",
+        "path": "/intentionMap.html",
+        "component": require('@/pages/topic/intentionMap/index.jsx').default,
+        "exact": true
+      },
+      {
+        "name": "数据格式",
+        "path": "/intentionData.html",
+        "component": require('@/pages/topic/intentionData/index.jsx').default,
+        "exact": true
+      },
+      {
         "name": "闲置易物",
         "path": "/mall.html",
         "component": require('@/pages/mall').default,

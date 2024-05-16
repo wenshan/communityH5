@@ -66,9 +66,11 @@ class Home extends Component {
             <BannerSwiper history={history} swiperBanner={this.props.swiperBanner} callback={this.swpierClick}></BannerSwiper>
           </div>
           <Space></Space>
+          {/**
           <div className='warning-box'>
             <h1>此公众号项目正在测试阶段，数据随时清理，功能完善中，5月15号（周三）后正式对外使用</h1>
           </div>
+          */}
           <Space></Space>
           <div className='intention-view'>
             <div className="header">

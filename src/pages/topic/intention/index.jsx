@@ -611,12 +611,18 @@ class Intention extends Component {
             <p>在此我们邀请各位业主一起为翠苑三区的自主更新献计献策，共商共助，携手共建美好家园。</p>
             <Space></Space>
             <p className='tx-right'>翠苑三区自主更新委员会(筹)</p>
-            <p className='tx-right'>2024年5月1日</p>
+            <p className='tx-right'>2024年5月15日</p>
             <div className="qrcode" onClick={this.modalWxQRcodeStatus}>点击关注公众号</div>
             <WxQRcode></WxQRcode>
           </div>
           <div className='other-user'>
-            <p><span className='title'>注意：</span>非翠苑三区( C区1-14/19-28幢)住户请不要在此提交申请，如果提交了请即时删除。</p>
+            <p><span className='title'>注意：</span></p>
+            <p>1. 非翠苑三区( C区1-14/19-28幢)住户请不要在此提交申请，如果提交了请即时删除，其他区域正在接入中，详情情况咨询各区志愿者群主。</p>
+            <p>2. 严禁提交和自身不相关的房产信息，占用他人房产信息。</p>
+            <p>3. 意愿申请人，只限于本区域内住户（包含有产权、无产权、租客），期望小区会更好。</p>
+            <Space></Space>
+            <p className='tx-right'><Link to="/intentionMap.html">翠苑三区原拆原建项目各区群落汇总 <RightOutline /></Link></p>
+            <p className='tx-right'><Link to="/intentionData.html">翠苑三区原拆原建项目接入公众号上报数据规范 <RightOutline /></Link></p>
             {/**
             <p>其他区域的接入请联系 翠苑三区自主更新委员会(筹) 周委员（可以在 翠苑三区便民服务群 寻找）</p>
             */}

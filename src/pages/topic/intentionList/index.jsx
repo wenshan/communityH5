@@ -56,27 +56,27 @@ class intentionList extends Component {
       rows.map( (item, idx) => {
         const { areas, build, unit, room, is_submitConfirmation, owner, propertyType, feedback, is_submitContractUnwilling} = item;
         if (areas && build && unit && room ) {
-          let label = '未申报';
+          let label = (<span className='tx-cfa541c'>未申报</span>);
           if (is_submitConfirmation && !is_submitContractUnwilling) {
-            label = '意愿已申报';
+            label = (<span className='tx-c7cb305'>意愿已申报</span>);
           }
           if (!is_submitConfirmation && is_submitContractUnwilling) {
-            label = '不同意意愿已提交';
+            // label = '不同意意愿已提交';
+            label = (<span className='tx-cfa541c'>未申报</span>);
           }
           if (!is_submitConfirmation && !is_submitContractUnwilling) {
-            label = '未申报';
+            label = (<span className='tx-cfa541c'>未申报</span>);
           }
           const nameLabel = item.name ? `${item.name.substring(0,1)}${item.name.length > 2? '** ':'* '}` : '***'
           html.push(
-            <>
-              <List.Item
-              key={item.userid}
-              prefix={<span>{item.areas}-{item.build}幢-{item.unit}单元-{item.room}室</span>}
-              description={<span>{nameLabel} {label}</span>}
-              >
-              时间: {item.createdAt}
-              </List.Item>
-            </>
+            <li key={item.userid}>
+              <div className='title'>{item.areas}-{item.build}幢-{item.unit}单元-{item.room}室</div>
+              <div className='main'>
+                <p><span className='label'>上报人:</span>{nameLabel}</p>
+                <p><span className='label'>上报状态:</span>{label}</p>
+                <p><span className='label'>时间:</span>{item.createdAt}</p>
+              </div>
+            </li>
           );
         }
       });
@@ -124,20 +124,12 @@ class intentionList extends Component {
 
           </div>
           <div className='content'>
-            <List>
-              <AutoSizer disableHeight>
-                {({ width }) => (
-                  <VirtualizedList
-                    rowCount={count}
-                    rowRenderer={this.rowRenderer}
-                    width={width}
-                    height={480}
-                    rowHeight={60}
-                    overscanRowCount={10}
-                  />
-                )}
-              </AutoSizer>
-            </List>
+            <div className='count'>查询数据 <span>{count}</span> 条</div>
+            <div className='list'>
+              <ul>
+                {this.rowRenderer()}
+              </ul>
+            </div>
           </div>
           <div className='footer'></div>
         </div>
