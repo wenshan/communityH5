@@ -37,7 +37,7 @@ class IntentionData extends Component {
     return (
       <div className="page">
         <div className="map-page">
-          <div class="topic-map">
+          <div className="topic-map">
             <div className='title'>翠苑三区原拆原建项目各区群落汇总</div>
             <div className='content'>
               <img src='https://img.dreamstep.top/community/img/qun_2048.png' />

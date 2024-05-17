@@ -9,8 +9,20 @@ export default {
         name: 'banner1',
         src: 'https://img.dreamstep.top/community/banner/banner_intention.png',
         value: '/intention.html'
+      },
+      {
+        id: 12324,
+        name: 'banner2',
+        src: 'https://img.dreamstep.top/community/banner/qun_400_220.png',
+        value: '/intentionMap.html'
       }
     ],
+    currentBanner: {
+      id: 12324,
+      name: 'banner2',
+      src: 'https://img.dreamstep.top/community/banner/qun_400_220.png',
+      value: '/intentionMap.html'
+    },
     lastDayIntention: {
       value: [],
       days: [],

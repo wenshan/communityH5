@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import { connect, Link } from 'umi';
-import { TabBar, Badge, Space, Grid } from 'antd-mobile';
+import { connect, Link, history } from 'umi';
+import { Space, Swiper } from 'antd-mobile';
 import { RightOutline} from 'antd-mobile-icons'
-import { router } from 'dva';
-const { routerRedux } = router;
-import BannerSwiper from './components/BannerSwiper';
 import ChartColumn from './components/ChartColumn';
 import WxShare from '@/utils/wxShare';
-import Cookies  from 'cookie_js';
-import moment from 'moment';
-
 
 import './index.less';
 
@@ -21,15 +15,19 @@ class Home extends Component {
     };
   }
 
-  swpierClick = (val) => {
-    if (val){
-      this.props.dispatch(routerRedux.push(val));
+  swpierClick = (item) => {
+    if (item && item.value){
+      this.props.dispatch({
+        type: 'home/update',
+        payload: { currentBanner: item }
+      });
+      history.push(item.value);
     }
   }
 
   gotoPage = (val) => {
     if (val){
-      this.props.dispatch(routerRedux.push(val));
+      history.push(val);
     }
   }
   handleClickWeixinOauth2 = () => {
@@ -39,14 +37,27 @@ class Home extends Component {
       payload: { isOperateType: false }
     });
   }
+  // 走马灯
+  swiperRender =() => {
+    const html = [];
+    const { swiperBanner } = this.props;
+    console.log('swiperBanner:', swiperBanner);
+    if (swiperBanner && swiperBanner.length) {
+      swiperBanner.map((item,idx) => {
+        if (item.value && item.id) {
+          html.push(
+            <Swiper.Item key={`${idx}-${item.id}`} onClick={()=>{this.swpierClick(item)}}>
+              <div className='swiper-slide' key={item.id}>
+                <img src={item.src} />
+              </div>
+            </Swiper.Item>
+          );
+        }
+      });
+    }
+    return html;
+  }
   componentDidMount() {
-    // Cookies.expiresMultiplier = 60 * 60 * 2;
-    Cookies.set({'name': 123123},{
-      path: '/',
-      secure: false,
-      expires: moment().second(10)
-    })
-    // console.log('CookiesJs:', cookies );
     const { value, days, agreeUserNum, unwillingUserNum, communityUserNum} = this.props.lastDayIntention;
     /** 分享 -- start */
     const initShare = new WxShare();
@@ -74,7 +85,13 @@ class Home extends Component {
       <div className="page">
         <div className="home-page">
           <div className="swiper-wrap">
-            <BannerSwiper history={history} swiperBanner={this.props.swiperBanner} callback={this.swpierClick}></BannerSwiper>
+            <div className='banner-swiper'>
+              <section className='swiper-container'>
+                <Swiper loop autoplay>
+                  {this.swiperRender()}
+                </Swiper>
+              </section>
+            </div>
           </div>
           <Space></Space>
           {/**

@@ -386,7 +386,7 @@ class Intention extends Component {
         const title = `${areas}-${build}幢-${unit}单元-${room}室 - ${label}`
         html.push(
           <>
-          <Collapse.Panel key={item.roomid} title={title}>
+          <Collapse.Panel key={idx} title={title}>
             <div className='item' key={item.roomid}>
               {/** name start 2 */}
               <div className='box-warp'>
@@ -636,7 +636,7 @@ class Intention extends Component {
           </Collapse>
             <div className='action-add'>
                 <div className="submit">
-                  <Button block color='warning' size='large' onClick={this.handelSubmitAdd}><AddOutline />新增住房户号申请意愿</Button>
+                  <Button block color='warning' size='large' onClick={this.handelSubmitAdd}><AddOutline />新增住房户号申请</Button>
                   <p>注：最多支持5套住房申报，如需更多请关注公众号私信管理员</p>
                   <Cascader
                     options={cascaderOptions}

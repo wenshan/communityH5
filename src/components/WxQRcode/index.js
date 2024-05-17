@@ -59,14 +59,10 @@ class WxQRcode extends React.Component {
       if (!userinfo.unionid) {
         setTimeout(() => {
           this.props.dispatch({
-            type: 'common/getUserUnionID'
+            type: 'common/getUserInfo'
           });
-        }, 5000);
+        }, 3000);
       }
-    }
-
-    if (this.props.submit) {
-      this.props.submit();
     }
   };
   componentDidMount() {}

@@ -1,13 +1,27 @@
 .intention-list {
-  padding: 20px;
+  padding: 0px;
+  margin: 10px;
+  background: transparent;
   .no-data {
     text-align: center;
     background-color: #fff;
   }
+  .icon-good, .icon-cry, .icon-bad{
+    font-size: 32px;
+  }
+  .icon-good {
+    color: #7cb305;
+  }
+  .icon-bad {
+    color: #fa541c;
+  }
+  .icon-cry {
+    color: #fa541c;
+  }
   .header {
     padding: 20px;
     background-color: #fff;
-    margin: 10px;
+    margin-bottom: 20px;
     .filter {
       span.tx{
         font-size: 32px;
@@ -34,11 +48,12 @@
   }
   .content {
     background-color: #fff;
-    margin: 20px 10px 20px 10px;
     padding: 20px;
+    margin-bottom: 20px;
     .count {
       font-size: 20px;
       text-align: right;
+      font-size: 20px;
       span {
         color: #d46b08;
         font-size: 24px;
@@ -63,16 +78,21 @@
           }
           .main {
             padding: 10px;
+            font-size: 22px;
             .label {
               display: inline-block;
               padding-right: 10px;
               text-align: right;
-              width: 100px;
+              width: 120px;
             }
           }
           .title {
-            font-size: 24px;
+            font-size: 26px;
             line-height: 32px;
+            .status {
+              float: right;
+              font-size: 22px;
+            }
           }
         }
       }
