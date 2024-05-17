@@ -2,7 +2,8 @@ import Store from 'store2';
 import QueryString from 'query-string';
 import Cookies from 'js-cookie';
 import { Toast } from 'antd-mobile';
-import { routerRedux } from 'dva/router';
+import { router } from 'dva';
+const { routerRedux } = router;
 import * as login from './service';
 
 export default {

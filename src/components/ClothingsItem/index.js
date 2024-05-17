@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Space, Tag } from 'antd-mobile';
-import { Link } from 'dva/router';
+import { router } from 'dva';
+const { Link } = router;
 import tool from '@/utils/tool';
 import './index.less';
 

@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { Toast } from 'antd-mobile';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
-import {
-  userCard,
-  confirmUpgrade,
-  cardUserCard,
-} from '@/pages/couponList/service';
+import { router } from 'dva';
+const { routerRedux } = router;
+import { userCard, confirmUpgrade, cardUserCard } from '@/pages/couponList/service';
 import './index.less';
 
 class CouponItemDialog extends Component {
   couponDetail(range) {
     if (range.use_limit > 0 && range.discount_max_price > 0) {
       return (
-        <div className="price-text">
+        <div className='price-text'>
           {`满${range.use_limit / 100}元使用`}
           <br />
           {`最高可减${range.discount_max_price / 100}元`}
@@ -21,18 +18,12 @@ class CouponItemDialog extends Component {
       );
     }
     if (range.use_limit > 0) {
-      return (
-        <div className="price-text">{`满${range.use_limit / 100}元使用`}</div>
-      );
+      return <div className='price-text'>{`满${range.use_limit / 100}元使用`}</div>;
     }
     if (range.discount_max_price > 0) {
-      return (
-        <div className="price-text">{`最高可减${range.discount_max_price / 100}元`}</div>
-      );
+      return <div className='price-text'>{`最高可减${range.discount_max_price / 100}元`}</div>;
     }
-    return (
-      <div className="price-text">满任意金额使用</div>
-    );
+    return <div className='price-text'>满任意金额使用</div>;
   }
 
   async goUse(item) {
@@ -109,82 +100,81 @@ class CouponItemDialog extends Component {
   render() {
     const { range, type = [], onClose } = this.props;
     return (
-      <div className="CouponItemDialog-page">
-        <div className="card-confirm-select">
-          <div className="top-wrap">
-            <i className="iconfont icon-close close" onClick={onClose} />
+      <div className='CouponItemDialog-page'>
+        <div className='card-confirm-select'>
+          <div className='top-wrap'>
+            <i className='iconfont icon-close close' onClick={onClose} />
             {range.type == 1 && (
-              <div className="price-wrap">
-                <div className="price-num">
-                  <div className="num">
+              <div className='price-wrap'>
+                <div className='price-num'>
+                  <div className='num'>
                     {Math.floor(range.discount / 100)}
-                    {range.discount % 100 > 0 && <span className="sub">{`.${range.discount % 100}`}</span>}
-                    <span className="sub">元</span>
+                    {range.discount % 100 > 0 && <span className='sub'>{`.${range.discount % 100}`}</span>}
+                    <span className='sub'>元</span>
                   </div>
                 </div>
-                <div className="price-text">{`满${range.use_limit / 100}元使用`}</div>
+                <div className='price-text'>{`满${range.use_limit / 100}元使用`}</div>
               </div>
             )}
             {range.type == 2 && (
-              <div className="price-wrap">
-                <div className="price-num">
-                  <div className="num">
+              <div className='price-wrap'>
+                <div className='price-num'>
+                  <div className='num'>
                     {range.discount}
-                    <span className="sub">%</span>
+                    <span className='sub'>%</span>
                   </div>
                 </div>
                 {this.couponDetail(range)}
               </div>
             )}
             {range.type == 3 && (
-              <div className="price-wrap">
-                <div className="price-num">
-                  <div className="num">
+              <div className='price-wrap'>
+                <div className='price-num'>
+                  <div className='num'>
                     {Math.floor(range.discount / 100)}
-                    {range.discount % 100 > 0 && (
-                      <font className="sub">
-                        {`.${range.discount % 100}`}
-                      </font>
-                    )}
-                    <font className="sub">元</font>
+                    {range.discount % 100 > 0 && <font className='sub'>{`.${range.discount % 100}`}</font>}
+                    <font className='sub'>元</font>
                   </div>
                 </div>
-                <div className="price-text">满任意金额使用</div>
+                <div className='price-text'>满任意金额使用</div>
               </div>
             )}
             {range.type == 4 && (
-              <div className="price-wrap">
-                <div className="price-num">
-                  <div className="num">
+              <div className='price-wrap'>
+                <div className='price-num'>
+                  <div className='num'>
                     {range.discount}
                     <font>%</font>
                   </div>
                   {range.discount_max_price > 0 && (
-                    <div className="price-text">{`最高可减${range.discount_max_price / 100}元`}</div>
+                    <div className='price-text'>{`最高可减${range.discount_max_price / 100}元`}</div>
                   )}
                 </div>
-                <div className="price-text">满任意金额使用</div>
+                <div className='price-text'>满任意金额使用</div>
               </div>
             )}
-            <div className="price-info">
-              <div className="name">{range.name}</div>
-              <div className="date">{`${range.from_date_show} - ${range.to_date_show}`}</div>
+            <div className='price-info'>
+              <div className='name'>{range.name}</div>
+              <div className='date'>{`${range.from_date_show} - ${range.to_date_show}`}</div>
             </div>
           </div>
-          <div className="bottom-wrap">
-            <div className="description">
-              {range.description || ''}
-            </div>
-            {type.length > 0 && <div className="title">适用范围：</div>}
+          <div className='bottom-wrap'>
+            <div className='description'>{range.description || ''}</div>
+            {type.length > 0 && <div className='title'>适用范围：</div>}
             {type.length > 0 && (
-              <div className="ul">
+              <div className='ul'>
                 {type.map((item, index) => (
-                  <div className="li" key={index}>
+                  <div className='li' key={index}>
                     <div>
                       <span>{item.name}</span>
-                      <span onClick={() => { this.goUse(item); }} className="link">
+                      <span
+                        onClick={() => {
+                          this.goUse(item);
+                        }}
+                        className='link'
+                      >
                         去使用
-                        <i className="iconfont icon-more"></i>
+                        <i className='iconfont icon-more' />
                       </span>
                     </div>
                   </div>

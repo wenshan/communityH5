@@ -2,7 +2,7 @@
 import QueryString from 'query-string';
 import Store from 'store2';
 import Cookies from 'js-cookie';
-import { Toast, Modal, Dialog } from 'antd-mobile';
+import { Toast, Dialog } from 'antd-mobile';
 import Tool from '@/utils/tool';
 import {
   getWebToken,

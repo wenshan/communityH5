@@ -76,7 +76,7 @@ class User extends Component {
   }
 
   render() {
-    console.log('props userinfo:', this.props.userinfo);
+    // console.log('props userinfo:', this.props.userinfo);
     return (
       <div className="page">
         <div className="user-page">

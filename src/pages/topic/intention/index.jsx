@@ -56,11 +56,13 @@ class Intention extends Component {
   }
   handelNameInput = (val) => {
     const { userinfo } = this.props;
-    const newUserinfo = Object.assign({}, userinfo, { name: val});
+    const value = val? val.replace(/\s+/g, '') : '';
+    const newUserinfo = Object.assign({}, userinfo, { name: value});
     this.props.dispatch({
       type: 'common/update',
       payload: { userinfo: newUserinfo}
     });
+
   }
   // 姓名
   handelNameButtonSubmit = () => {
@@ -93,7 +95,8 @@ class Intention extends Component {
   }
   handelCertificationMobile = (val) => {
     const { userinfo } = this.props;
-    const newUserinfo = Object.assign({}, userinfo, { mobile: val});
+    const value = val ? val.replace(/\s+/g, '') : '';
+    const newUserinfo = Object.assign({}, userinfo, { mobile: value});
     this.props.dispatch({
       type: 'common/update',
       payload: { userinfo: newUserinfo }
@@ -383,8 +386,8 @@ class Intention extends Component {
         const title = `${areas}-${build}幢-${unit}单元-${room}室 - ${label}`
         html.push(
           <>
-          <Collapse.Panel key={idx} title={title}>
-            <div className='item' key={idx}>
+          <Collapse.Panel key={item.roomid} title={title}>
+            <div className='item' key={item.roomid}>
               {/** name start 2 */}
               <div className='box-warp'>
               <div className="title"><span className='required'>*</span> 姓名：{name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelNameShowButton}>输入</Button>)}</div></div>
@@ -597,7 +600,7 @@ class Intention extends Component {
     return (
       <div className="page">
         <div className="intention-page">
-          <div className="page-topic">
+          <div className="page-topic" key="page-topic">
             <h1>原拆原建业主意向征集和倡议书</h1>
             <p className='tx-center'>翠苑三区( C区1-14/19-28幢)</p>
             <img src="https://img.dreamstep.top/community/banner/banner_intention.png" />
@@ -606,7 +609,7 @@ class Intention extends Component {
             <p>根据2024年4月，由浙江省住建厅、发改委、自然资源厅联合发布的《关于稳步推进城镇老旧小区自主更新试点工作的指导意见》文件精神，<span className='red'>杭州众多历史悠久的小区正在做原拆原建自主意向更新调研工作。我们小区业主若能展现出强烈意愿，并得到大多业主支持，便有资格向杭州市政府申请原拆原建项目</span>，由政府牵头结合业主意见建议编制具体的拆建方案。目前，杭州市已经有浙工新村通过具体方案，进入到拆除重建的具体实施阶段。
             </p>
 
-            <p>为尽快能启动申报工作，我们在此恳请各位业主扫码下方的二维码关注我们的微信公众号，在上面表达您的拆建意愿。这将有助于我们统一的搜集大家的意向，并进行后续的整理工作。此次申报只是对全体业主意愿的调查，不具有任何法律效力，大家尽可放心申报。
+            <p>为尽快能启动申报工作，我们在此恳请各位业主扫码下方的二维码关注我们的微信公众号，在上面表达您的拆建意愿。这将有助于我们统一搜集大家的意向，并进行后续的整理工作。此次申报只是对全体业主意愿的调查，不具有任何法律效力，大家尽可放心申报。
             </p>
             <p>在此我们邀请各位业主一起为翠苑三区的自主更新献计献策，共商共助，携手共建美好家园。</p>
             <Space></Space>
@@ -615,7 +618,7 @@ class Intention extends Component {
             <div className="qrcode" onClick={this.modalWxQRcodeStatus}>点击关注公众号</div>
             <WxQRcode></WxQRcode>
           </div>
-          <div className='other-user'>
+          <div className='other-user' key="other-user">
             <p><span className='title'>注意：</span></p>
             <p>1. 非翠苑三区( C区1-14/19-28幢)住户请不要在此提交申请，如果提交了请即时删除，其他区域正在接入中，详情情况咨询各区志愿者群主。</p>
             <p>2. 严禁提交和自身不相关的房产信息，占用他人房产信息。</p>
@@ -627,7 +630,7 @@ class Intention extends Component {
             <p>其他区域的接入请联系 翠苑三区自主更新委员会(筹) 周委员（可以在 翠苑三区便民服务群 寻找）</p>
             */}
           </div>
-          <div className="topic-action">
+          <div className="topic-action" key="topic-action">
           <Collapse accordion={true} activeKey={actionIdx} onChange={this.handelCollapseOnChange}>
             {this.renderHtmlTopicAction()}
           </Collapse>
@@ -648,7 +651,7 @@ class Intention extends Component {
                 </div>
             </div>
           </div>
-          <div className='process-description'>
+          <div className='process-description' key="process-description">
             <div className='title'>流程说明</div>
             <div className='content'>
               <div className='text'>
@@ -656,7 +659,7 @@ class Intention extends Component {
               </div>
             </div>
           </div>
-          <div className="topic-statement">
+          <div className="topic-statement" key="topic-statement">
             <div className='title'>声明</div>
             <div className='content'>
               <div className='text'>

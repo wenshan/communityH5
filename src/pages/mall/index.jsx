@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'umi';
 import { TabBar, Badge, Space, Grid, List, Toast } from 'antd-mobile';
-import { routerRedux } from 'dva/router';
+import { router } from 'dva';
+const { routerRedux } = router;
 import WxQRcode from '@/components/WxQRcode';
 import WxShare from '@/utils/wxShare';
 
