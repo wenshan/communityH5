@@ -8,6 +8,9 @@
   }
   .icon-good, .icon-cry, .icon-bad{
     font-size: 32px;
+    display: inline-block;
+    padding-right: 4px;
+    vertical-align: middle;
   }
   .icon-good {
     color: #7cb305;
@@ -79,16 +82,26 @@
           .main {
             padding: 10px;
             font-size: 22px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
             .label {
               display: inline-block;
               padding-right: 10px;
               text-align: right;
-              width: 120px;
+              font-size: 20px;
+            }
+            .item {
+              width: 47%;
+            }
+            .value {
+              font-size: 24px;
             }
           }
           .title {
             font-size: 26px;
             line-height: 32px;
+            overflow: hidden;
             .status {
               float: right;
               font-size: 22px;

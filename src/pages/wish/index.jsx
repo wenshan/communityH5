@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'umi';
-import { Empty, Dialog } from 'antd-mobile';
+import { Empty, Dialog, Modal } from 'antd-mobile';
 import { CheckCircleOutline, CloseCircleOutline} from 'antd-mobile-icons'
 
 import './index.less';
@@ -11,20 +11,28 @@ class WishList extends Component {
     this.state = {
     };
   }
-  delUser=(id)=>{
+  delUser=({id, is_checkSignature})=>{
     const _self = this;
-    Dialog.confirm({
-      content: '确认删除',
-      title: '确认',
-      cancelText: '取消',
-      confirmText: '确认',
-      onConfirm: () => {
-        _self.props.dispatch({
-          type: 'common/delUser',
-          payload: { id }
-        });
-      },
-    })
+    if (is_checkSignature) {
+      Modal.alert({
+        title: '当前的意愿已审核',
+        content: '审核后意愿不能删除，如果想删除重新申报意愿，请先联系群主退回审核，才能操作删除。',
+        showCloseButton: true,
+      })
+    } else {
+      Dialog.confirm({
+        content: '确认删除',
+        title: '确认',
+        cancelText: '取消',
+        confirmText: '确认',
+        onConfirm: () => {
+          _self.props.dispatch({
+            type: 'common/delUser',
+            payload: { id }
+          });
+        },
+      })
+    }
   }
 
   renderHtml =() => {
@@ -33,7 +41,7 @@ class WishList extends Component {
     const { name, mobile } = userinfo;
     if (communityUser && communityUser.length) {
       communityUser.map((item, idx)=>{
-        const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt, owner, feedback, is_submitContractUnwilling, propertyType } = item;
+        const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt, owner, feedback, is_submitContractUnwilling, propertyType, is_checkSignature } = item;
         let label = '未申报';
         if (is_submitConfirmation && !is_submitContractUnwilling) {
           label = '意愿已申报';
@@ -56,12 +64,12 @@ class WishList extends Component {
                   <div className='owner box'><label>是否拥有产权:</label><span>{owner? '是': '否/未知'}</span></div>
                   <div className='certification box'><label>姓名:</label><span>{name}</span></div>
                   <div className='mobile box'><label>联系手机:</label><span>{mobile}</span></div>
-                  {is_submitConfirmation?(<div className='signature box'><label>电子签:</label><span>审核中...  </span></div>):''}
+                  {is_submitConfirmation?(<div className='signature box'><label>电子签:</label><span>{is_checkSignature? '已审核 ': '审核中...'} </span></div>):''}
                   <div className='feedback box'><label>宝贵的建议:</label><span>{feedback? (<p>{feedback}</p>) : '无' }</span></div>
                   {is_submitConfirmation?(<div className='pdf box'><label>意愿申请文件:</label><span>{contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</span></div>):''}
                   <div className='date box'><label>日期:</label><span>{createdAt}</span></div>
                   <div className='footer-box'>
-                    <span onClick={()=>{this.delUser(id)}}>删除重新意愿申请</span>
+                    <span className={`${is_checkSignature ? 'checked': 'default'}`}onClick={()=>{this.delUser({id, is_checkSignature})}}>删除重新意愿申请</span>
                   </div>
                 </>
               </div>

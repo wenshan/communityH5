@@ -55,24 +55,25 @@ class intentionList extends Component {
       rows.map( (item, idx) => {
         const { areas, build, unit, room, is_submitConfirmation, owner, propertyType, feedback, is_submitContractUnwilling} = item;
         if (areas && build && unit && room ) {
-          let label = (<span className='tx-cfa541c'><i class="iconfont icon-cry"></i>未申报</span>);
+          let label = (<span className='tx-cfa541c'><i className="iconfont icon-cry">&#xe839;</i>未申报</span>);
           if (is_submitConfirmation && !is_submitContractUnwilling) {
-            label = (<span className='tx-c7cb305'><i class="iconfont icon-good"></i>意愿已申报</span>);
+            label = (<span className='tx-c7cb305'><i className="iconfont icon-good">&#xe83c;</i>意愿已申报</span>);
           }
           if (!is_submitConfirmation && is_submitContractUnwilling) {
             // label = '不同意意愿已提交';
-            label = (<span className='tx-cfa541c'><i class="iconfont icon-bad"></i>未申报</span>);
+            label = (<span className='tx-cfa541c'><i className="iconfont icon-bad">&#xe838;</i>未申报</span>);
           }
           if (!is_submitConfirmation && !is_submitContractUnwilling) {
-            label = (<span className='tx-cfa541c'><i class="iconfont icon-cry"></i>未申报</span>);
+            label = (<span className='tx-cfa541c'><i className="iconfont icon-cry">&#xe839;</i>未申报</span>);
           }
           const nameLabel = item.name ? `${item.name.substring(0,1)}${item.name.length > 2? '** ':'* '}` : '***'
           html.push(
             <li key={`${item.userid}_${item.roomid}`}>
               <div className='title'>{item.areas}-{item.build}幢-{item.unit}单元-{item.room}室 <span className='status'>{label}</span></div>
               <div className='main'>
-                <p><span className='label' key="ren">上报人:</span>{nameLabel}</p>
-                <p><span className='label' key="time">时间:</span>{item.createdAt}</p>
+                <div className='item'><span className='label' key="ren">用户ID:</span><span className='value'>{item.userid}</span></div>
+                <div className='item'><span className='label' key="ren">姓名:</span><span className='value'>{nameLabel}</span></div>
+                <div className='item'><span className='label' key="time">时间:</span><span className='value'>{item.createdAt}</span></div>
               </div>
             </li>
           );
@@ -91,7 +92,7 @@ class intentionList extends Component {
     /** 分享 -- end */
     this.props.dispatch({
       type: 'common/getUserList',
-      payload: { areas: '翠苑三区C区', build: null, unit: null }
+      payload: { areas: '翠苑三区', build: null, unit: null }
     });
   }
 
