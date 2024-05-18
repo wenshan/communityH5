@@ -1,24 +1,13 @@
 import React, { Component } from 'react';
-import { connect } from 'umi';
-import { TabBar, Badge, Space, Grid, List, Toast } from 'antd-mobile';
-import { router } from 'dva';
-const { routerRedux } = router;
+import ICP from '@/components/Icp';
 import WxShare from '@/utils/wxShare';
 
 import './index.less';
-
-const Item = List.Item;
-const Brief = Item.Brief;
 
 class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-  }
-  gotoPage = (val) => {
-    if (val){
-      this.props.dispatch(routerRedux.push(val));
-    }
   }
 
   componentDidMount() {
@@ -60,7 +49,7 @@ class Map extends Component {
                 </div>
               </div>
             </div>
-
+            <ICP></ICP>
           </div>
     );
   }

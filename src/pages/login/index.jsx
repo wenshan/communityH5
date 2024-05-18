@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'umi';
 import Cookies from 'js-cookie';
 import { Toast, Button, Space } from 'antd-mobile';
+import ICP from '@/components/Icp';
 import './index.less';
 import { Tool } from '@/utils/index';
-import WxShare from '@/utils/wxShare';
 
 
 let setIntervalTime = null;

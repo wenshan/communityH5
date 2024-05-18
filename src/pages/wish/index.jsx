@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'umi';
 import { Empty, Dialog, Modal } from 'antd-mobile';
-import { CheckCircleOutline, CloseCircleOutline} from 'antd-mobile-icons'
+import { CheckCircleOutline, CloseCircleOutline} from 'antd-mobile-icons';
 
 import './index.less';
 

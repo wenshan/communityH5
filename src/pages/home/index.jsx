@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect, Link, history } from 'umi';
 import { Space, Swiper } from 'antd-mobile';
 import { RightOutline} from 'antd-mobile-icons'
+import ICP from '@/components/Icp';
 import ChartColumn from './components/ChartColumn';
 import WxShare from '@/utils/wxShare';
 
@@ -120,9 +121,8 @@ class Home extends Component {
               <span><Link to="/intentionList.html">查看数据明细<RightOutline /></Link></span>
             </div>
           </div>
-          <Space></Space>
-          <Space></Space>
         </div>
+        <ICP></ICP>
       </div>
     );
   }

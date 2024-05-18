@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'umi';
 import { TabBar, Badge, Space, Grid, List, Toast } from 'antd-mobile';
 import { router } from 'dva';
+import ICP from '@/components/Icp';
 import WxShare from '@/utils/wxShare';
 
 import './index.less';
@@ -69,6 +70,7 @@ class PublicPlatform extends Component {
             </div>
           </div>
         </div>
+        <ICP></ICP>
       </div>
     );
   }

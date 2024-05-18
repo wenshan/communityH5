@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import { connect, history } from 'umi';
-import { TabBar, Badge, Space, Grid, List, Toast, Dialog } from 'antd-mobile';
+import { Space, Grid, List, Toast, Dialog } from 'antd-mobile';
 import {
-  UnorderedListOutline,
-  PayCircleOutline,
-  SetOutline,
   UserSetOutline,
   HeartOutline,
   TeamOutline,
   SmileOutline
-} from 'antd-mobile-icons'
+} from 'antd-mobile-icons';
 import WxQRcode from '@/components/WxQRcode';
 import WxShare from '@/utils/wxShare';
 

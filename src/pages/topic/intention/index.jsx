@@ -5,6 +5,7 @@ import { CheckCircleOutline, CloseCircleOutline, RightOutline, AddOutline} from 
 import Signature from '../components/Signature';
 import cascaderOptions from '@/utils/roomData';
 import WxQRcode from '@/components/WxQRcode';
+import ICP from '@/components/Icp';
 import WxShare from '@/utils/wxShare';
 
 import './index.less';
@@ -694,6 +695,7 @@ class Intention extends Component {
             </div>
           </div>
         </div>
+        <ICP></ICP>
       </div>
     );
   }

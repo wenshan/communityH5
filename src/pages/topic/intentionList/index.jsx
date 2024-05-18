@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'umi';
 import { Empty, Button, Cascader, Toast } from 'antd-mobile';
 import cascaderOptionsFilter from '@/utils/roomDataFilter';
+import ICP from '@/components/Icp';
 import WxShare from '@/utils/wxShare';
 
 import 'rmc-dialog/assets/index.css';
@@ -132,6 +133,7 @@ class intentionList extends Component {
           </div>
           <div className='footer'></div>
         </div>
+        <ICP></ICP>
       </div>
     );
   }
