@@ -102,8 +102,7 @@ export default {
         contractPath: '',
         signatureFile: '',
         is_checkSignature: 0,
-        is_submitConfirmation: 0,
-        is_submitContractUnwilling: 0,
+        submitConfirmation: 0, // [0,1,2][不同意 同意]
         areas: '翠苑三区',
         build: null,
         unit: null,
@@ -331,9 +330,9 @@ export default {
     },
     // 更新房号
     *createRoom({ payload: data }, { call, put, select }) {
-      const { areas, build, unit, room } = data;
-      if (areas && build && unit && room) {
-        const result = yield call(createRoom, { areas, build, unit, room });
+      const { areas, build, unit, room, region } = data;
+      if (areas && build && unit && room && region) {
+        const result = yield call(createRoom, { areas, build, unit, room, region });
         if (result && result.status == 200 && result.msg) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
           Toast.show({
@@ -355,9 +354,9 @@ export default {
     },
     // 查询房号
     *getUserList({ payload: data }, { call, put, select }) {
-      const { areas, build, unit } = data;
-      if (areas) {
-        const result = yield call(getUserList, { areas, build, unit });
+      const { areas, region, build, unit } = data;
+      if (areas && region) {
+        const result = yield call(getUserList, { areas, region, build, unit });
         if (result && result.status == 200 && result.data) {
           yield put({ type: 'update', payload: { communityUserList: result.data } });
         } else {
@@ -513,8 +512,8 @@ export default {
       }
     },
     // 提交 意愿申请
-    *submitContractPDF({ payload: data }, { call, put, select }) {
-      const { idx } = data;
+    *submitContractAgree({ payload: data }, { call, put, select }) {
+      const { idx, submitConfirmation } = data;
       const { userinfo, communityUser } = yield select((state) => state.common);
       const { is_checkMobile, name } = userinfo;
       const { id, areas, build, unit, room, signatureFile, owner, propertyType, roomid } = communityUser[idx];
@@ -530,7 +529,8 @@ export default {
           is_checkMobile,
           owner,
           propertyType,
-          signatureFile
+          signatureFile,
+          submitConfirmation
         });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
@@ -555,7 +555,7 @@ export default {
     },
     // 不惨 意愿申请
     *submitContractUnwilling({ payload: data }, { call, put, select }) {
-      const { idx } = data;
+      const { idx, submitConfirmation } = data;
       const { userinfo, communityUser } = yield select((state) => state.common);
       const { is_checkMobile, name } = userinfo;
       const { id, areas, build, unit, room, owner, propertyType, roomid } = communityUser[idx];
@@ -570,7 +570,8 @@ export default {
           name,
           owner,
           is_checkMobile,
-          propertyType
+          propertyType,
+          submitConfirmation
         });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });

@@ -2,6 +2,7 @@ import { defineConfig } from 'umi';
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
 export default defineConfig({
+  title: '西子翠苑',
   nodeModulesTransform: {
     type: 'none'
   },

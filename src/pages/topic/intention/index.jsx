@@ -20,7 +20,6 @@ const initCommunityUser = {
   signatureFile: '',
   is_checkSignature: 0,
   is_submitConfirmation: 0,
-  is_submitContractUnwilling: 0,
   areas: '翠苑三区',
   build: 0,
   unit: 0,
@@ -37,7 +36,8 @@ class Intention extends Component {
       isShowFeedback: false,
       isShowName: false,
       cascaderOptions,
-      actionIdx: 0
+      actionIdx: 0,
+      region: 'C',
     };
   }
   // 手风琴
@@ -184,7 +184,7 @@ class Intention extends Component {
       isShowFeedback: true,
     });
   }
-  // 房号
+  // 添加房号
   handelCascaderStatusOnConfirm = (value) => {
     if (value && value[0] && value[1] && value[2] && value[3]) {
       const areas = value[0];
@@ -196,7 +196,7 @@ class Intention extends Component {
       });
       this.props.dispatch({
         type: 'common/createRoom',
-        payload: { areas, build, unit, room }
+        payload: { areas, build, unit, room, region: this.state.region }
       });
     } else {
       Toast.show({
@@ -244,10 +244,11 @@ class Intention extends Component {
     }
   }
   // 同意意愿
-  handelSubmitContractPDF =() => {
+  handelSubmitContractAgree =() => {
+    const submitConfirmationAgree = 2; // 同意
     const { actionIdx } = this.state;
     const {name, is_checkMobile } = this.props.userinfo;
-    const { signatureFile, areas, build, unit, room, owner, propertyType, is_submitContractUnwilling } = this.props.communityUser[actionIdx];
+    const { signatureFile, areas, build, unit, room, owner, propertyType, submitConfirmation } = this.props.communityUser[actionIdx];
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -290,10 +291,10 @@ class Intention extends Component {
       });
       return false;
     }
-    if(!is_submitContractUnwilling) {
+    if(!submitConfirmation !== 1) {
       this.props.dispatch({
-        type: 'common/submitContractPDF',
-        payload: { idx: actionIdx }
+        type: 'common/submitContractAgree',
+        payload: { idx: actionIdx, submitConfirmation: submitConfirmationAgree}
       });
     } else {
       Toast.show({
@@ -305,9 +306,10 @@ class Intention extends Component {
   }
   // 不同意愿意
   handelSubmitUnwilling =()=>{
+    const submitConfirmationUnwilling = 1; // 不同意
     const { actionIdx } = this.state;
     const { name, is_checkMobile } = this.props.userinfo;
-    const {  areas, build, unit, room, is_submitConfirmation, owner, propertyType } = this.props.communityUser[actionIdx];
+    const {  areas, build, unit, room, submitConfirmation, owner, propertyType } = this.props.communityUser[actionIdx];
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -343,10 +345,10 @@ class Intention extends Component {
       });
       return false;
     }
-    if (!is_submitConfirmation){
+    if (submitConfirmation !== 2){
       this.props.dispatch({
         type: 'common/submitContractUnwilling',
-        payload: { idx: actionIdx }
+        payload: { idx: actionIdx, submitConfirmation:  submitConfirmationUnwilling}
       });
     } else {
       Toast.show({
@@ -370,17 +372,16 @@ class Intention extends Component {
     const { communityUser, userinfo, smsCode } = this.props;
     const { name, mobile, is_checkMobile } = userinfo;
     communityUser && communityUser.length && communityUser.map((item, idx)=>{
-      const { signatureFile, areas, build, unit, room, is_submitConfirmation, owner, propertyType, feedback, is_submitContractUnwilling} = item;
-      const submitButtonDisabledStatusAgree = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
-      const submitButtonDisabledStatusUnwilling = (is_submitConfirmation || is_submitContractUnwilling) ? true : false;
+      const { signatureFile, areas, build, unit, room, submitConfirmation, owner, propertyType, feedback} = item;
+      const submitButtonDisabledStatus = !!(submitConfirmation > 0);
       let label = '未申报';
-      if (is_submitConfirmation && !is_submitContractUnwilling) {
+      if (submitConfirmation == 2) {
         label = '意愿已申报';
       }
-      if (!is_submitConfirmation && is_submitContractUnwilling) {
+      if (submitConfirmation == 1) {
         label = '不同意意愿已提交';
       }
-      if (!is_submitConfirmation && !is_submitContractUnwilling) {
+      if (submitConfirmation == 0) {
         label = '未申报';
       }
       if (areas && build && unit && room) {
@@ -390,9 +391,9 @@ class Intention extends Component {
           <Collapse.Panel key={idx} title={title}>
             <div className='item' key={item.roomid}>
               {/** name start 2 */}
-              <div className='box-warp'>
-              <div className="title"><span className='required'>*</span> 姓名：{name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelNameShowButton}>输入</Button>)}</div></div>
-                <div className="content">
+              <div className='box-warp clearfix'>
+              <div className="title clearfix"><span className='required'>*</span> 姓名：{name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatus} fill='outline' size='small' onClick={this.handelNameShowButton}>输入</Button>)}</div></div>
+                <div className="content clearfix">
                     {name && (<><span className='tx'>{name} </span></>)}
                     <Popup className="popup" visible={isShowName} onMaskClick={this.handelMaskCertificationPopup} title="姓名：" onClose={this.handelMaskCertificationPopup} showCloseButton
                                   bodyStyle={{
@@ -425,9 +426,9 @@ class Intention extends Component {
               </div>
               {/** name end */}
               {/** mobile start 3 */}
-              <div className='box-warp'>
-                <div className="title"><span className='required'>*</span>联系方式验证 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={is_checkMobile} fill='outline' size='small' onClick={this.handelMobileShowButton}>请进行手机验证</Button>)}</div></div>
-                <div className="content">
+              <div className='box-warp clearfix'>
+                <div className="title clearfix"><span className='required'>*</span>联系方式验证 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={is_checkMobile} fill='outline' size='small' onClick={this.handelMobileShowButton}>请进行手机验证</Button>)}</div></div>
+                <div className="content clearfix">
                     {mobile && is_checkMobile && (<>手机号码：<span className='tx'>{mobile} </span></>)}
                     <Popup className="popup" visible={isShowMobile} onMaskClick={this.handelMaskCertificationPopup} title="联系方式验证" onClose={this.handelMaskCertificationPopup} showCloseButton
                                   bodyStyle={{
@@ -464,11 +465,11 @@ class Intention extends Component {
               </div>
               {/** mobile end */}
               {/** propertyType start 4 */}
-              <div className='box-warp'>
-                <div className='title'><span className='required'>*</span>产权类型  {propertyType? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
-                <div className='content'>
+              <div className='box-warp clearfix'>
+                <div className='title clearfix'><span className='required'>*</span>产权类型  {propertyType? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
+                <div className='content clearfix'>
                   <Space>
-                    <Radio.Group value={String(propertyType)} disabled={submitButtonDisabledStatusAgree}>
+                    <Radio.Group value={String(propertyType)} disabled={submitButtonDisabledStatus}>
                       <Space direction='vertical'>
                         <Radio value='1' onClick={()=>{this.handelPropertyTypeStatus({propertyType:1})}}>个人住房</Radio>
                         <Radio value='2' onClick={()=>{this.handelPropertyTypeStatus({propertyType:2})}}>企业住房</Radio>
@@ -479,11 +480,11 @@ class Intention extends Component {
               </div>
               {/** propertyType end  */}
               {/** owner start 5 */}
-              <div className='box-warp'>
-                <div className='title'><span className='required'>*</span>产权人信息  {owner? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
-                <div className='content'>
+              <div className='box-warp clearfix'>
+                <div className='title clearfix'><span className='required'>*</span>产权人信息  {owner? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}</div>
+                <div className='content clearfix'>
                   <Space>
-                    <Radio.Group value={String(owner)} disabled={submitButtonDisabledStatusAgree}>
+                    <Radio.Group value={String(owner)} disabled={submitButtonDisabledStatus}>
                       <Space direction='vertical'>
                         <Radio value='1' onClick={()=>this.handelOwnerStatus({owner: 1})}>无产权</Radio>
                         <Radio value='2' onClick={()=>this.handelOwnerStatus({owner: 2})}>拥有产权{propertyType ==2 ? '（我是法人）': ''}</Radio>
@@ -495,8 +496,8 @@ class Intention extends Component {
               {/** owner end */}
               {/** signature start 6 */}
               <div className='signature box-warp'>
-                <div className="title"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatusAgree} fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
-                <div className="content">
+                <div className="title clearfix"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatus} fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
+                <div className="content clearfix">
                   {signatureFile && (<div className='signature-img'><img src={signatureFile} /></div>)}
                   <Popup className="popup" visible={isShowSignature} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
                                 bodyStyle={{
@@ -516,10 +517,10 @@ class Intention extends Component {
               </div>
               {/** signature end */}
               {/** feedback start 7 */}
-              <div className='box-warp'>
-                <div className='title'><span className='required'></span>宝贵的建议<span className='des'>（可随时更改）</span> {feedback? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'><Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button></div></div>
-                <div className='content'>
-                  <div>
+              <div className='box-warp clearfix'>
+                <div className='title clearfix' onClick={this.handelFeedbackStatusButton}><span className='required'></span>宝贵的建议<span className='des'>（可随时更改）</span> {feedback? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'><Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button></div></div>
+                <div className='content clearfix'>
+                  <div className='textarea clearfix'>
                     <TextArea value={feedback} disabled></TextArea>
                   </div>
                   <Popup className="popup" visible={isShowFeedback} onMaskClick={this.handelMaskCertificationPopup} title="宝贵的建议" onClose={this.handelMaskCertificationPopup} showCloseButton
@@ -546,11 +547,11 @@ class Intention extends Component {
               </div>
               {/** feedback end */}
               {/** operate start 8 */}
-              <div className='box-warp'>
-                <div className='topic-operate'>
+              <div className='box-warp clearfix'>
+                <div className='topic-operate clearfix'>
                   <div className="submit clearfix">
-                    <Button className='left' loading={this.props.communityUserSubmitUnwillingLoading} disabled={submitButtonDisabledStatusUnwilling} color='primary' fill='outline' size='middle' onClick={this.handelSubmitUnwilling}>{is_submitContractUnwilling? (<>不同意意愿申请已提交</>): (<>不同意意愿申请</>)}</Button>
-                    <Button className='right' loading={this.props.communityUserSubmitLoading} disabled={submitButtonDisabledStatusAgree} color='success' size='middle' onClick={this.handelSubmitContractPDF}>{is_submitConfirmation? (<>意愿申请已提交</>): (<>同意意愿申请</>)}</Button>
+                    <Button className='left' loading={this.props.communityUserSubmitUnwillingLoading} disabled={submitButtonDisabledStatus} color='primary' fill='outline' size='middle' onClick={this.handelSubmitUnwilling}>{ submitConfirmation == 1? (<>不同意意愿申请已提交</>): (<>不同意意愿申请</>)}</Button>
+                    <Button className='right' loading={this.props.communityUserSubmitLoading} disabled={submitButtonDisabledStatus} color='success' size='middle' onClick={this.handelSubmitContractAgree}>{submitConfirmation == 2 ? (<>意愿申请已提交</>): (<>同意意愿申请</>)}</Button>
                   </div>
                   <div className="check-info">
                       <Link to="/wish.html">点击查看已提交的申请 <RightOutline /></Link>
@@ -652,14 +653,7 @@ class Intention extends Component {
                 </div>
             </div>
           </div>
-          <div className='process-description' key="process-description">
-            <div className='title'>流程说明</div>
-            <div className='content'>
-              <div className='text'>
-                <img src="https://img.dreamstep.top/community/img/process-description.png" />
-              </div>
-            </div>
-          </div>
+
           <div className="topic-statement" key="topic-statement">
             <div className='title'>声明</div>
             <div className='content'>
@@ -695,7 +689,6 @@ class Intention extends Component {
             </div>
           </div>
         </div>
-        <ICP></ICP>
       </div>
     );
   }

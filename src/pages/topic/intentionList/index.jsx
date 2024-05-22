@@ -14,6 +14,7 @@ class intentionList extends Component {
     this.state = {
       isShowCascader: false,
       cascaderOptionsFilter,
+      region: 'C'
     };
   }
 
@@ -93,7 +94,7 @@ class intentionList extends Component {
     /** 分享 -- end */
     this.props.dispatch({
       type: 'common/getUserList',
-      payload: { areas: '翠苑三区', build: null, unit: null }
+      payload: { areas: '翠苑三区', region: this.state.region, build: null, unit: null }
     });
   }
 
@@ -133,7 +134,6 @@ class intentionList extends Component {
           </div>
           <div className='footer'></div>
         </div>
-        <ICP></ICP>
       </div>
     );
   }

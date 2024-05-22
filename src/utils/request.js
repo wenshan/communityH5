@@ -5,8 +5,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const isDev = process.env.NODE_ENV === 'development';
-// const API_DEV = 'http://127.0.0.1:7001/';
-const API_DEV = 'https://www.dreamstep.top/';
+const API_DEV = 'http://127.0.0.1:7001/';
+// const API_DEV = 'https://www.dreamstep.top/';
 const API_PRO = 'https://www.dreamstep.top/';
 console.log('isDev:', isDev);
 const instance = axios.create({

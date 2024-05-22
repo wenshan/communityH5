@@ -14,7 +14,7 @@ class ICP extends Component {
   render() {
     return (
       <div className='footer-icp'>
-       <p>浙ICP备2023008986号</p>
+       <p><a href='https://beian.miit.gov.cn/#/Integrated/index' target='_blank'>浙ICP备2023008986号</a></p>
       </div>
     );
   }

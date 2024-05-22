@@ -122,7 +122,6 @@ class Home extends Component {
             </div>
           </div>
         </div>
-        <ICP></ICP>
       </div>
     );
   }
