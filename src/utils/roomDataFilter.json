@@ -3,11 +3,13 @@
       "label": "翠苑三区",
       "value": "翠苑三区",
       "key": "areas",
+      "count": "951",
       "children": [
           {
               "label": "1幢",
               "value": "1",
               "key": "build",
+              "count": "30",
               "children": [
                   {
                       "label": "1单元",
@@ -30,6 +32,7 @@
               "label": "2幢",
               "value": "2",
               "key": "build",
+              "count": "30",
               "children": [
                   {
                       "label": "1单元",
@@ -52,6 +55,7 @@
               "label": "3幢",
               "value": "3",
               "key": "build",
+              "count": "35",
               "children": [
                   {
                       "label": "1单元",
@@ -69,6 +73,7 @@
               "label": "4幢",
               "value": "4",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -86,6 +91,7 @@
               "label": "5幢",
               "value": "5",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -108,6 +114,7 @@
               "label": "6幢",
               "value": "6",
               "key": "build",
+              "count": "56",
               "children": [
                   {
                       "label": "1单元",
@@ -135,6 +142,7 @@
               "label": "7幢",
               "value": "7",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -152,6 +160,7 @@
               "label": "8幢",
               "value": "8",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -169,6 +178,7 @@
               "label": "9幢",
               "value": "9",
               "key": "build",
+              "count": "60",
               "children": [
                   {
                       "label": "1单元",
@@ -196,6 +206,7 @@
               "label": "10幢",
               "value": "10",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -218,6 +229,7 @@
               "label": "11幢",
               "value": "11",
               "key": "build",
+              "count": "78",
               "children": [
                   {
                       "label": "1单元",
@@ -250,6 +262,7 @@
               "label": "12幢",
               "value": "12",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -282,6 +295,7 @@
               "label": "13幢",
               "value": "13",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -309,6 +323,7 @@
               "label": "14幢",
               "value": "14",
               "key": "build",
+              "count": "1",
               "children": [
                   {
                       "label": "1单元",
@@ -321,6 +336,7 @@
               "label": "19幢",
               "value": "19",
               "key": "build",
+              "count": "13",
               "children": [
                   {
                       "label": "1单元",
@@ -338,6 +354,7 @@
               "label": "20幢",
               "value": "20",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -365,6 +382,7 @@
               "label": "21幢",
               "value": "21",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -382,6 +400,7 @@
               "label": "22幢",
               "value": "22",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -399,6 +418,7 @@
               "label": "23幢",
               "value": "23",
               "key": "build",
+              "count": "18",
               "children": [
                   {
                       "label": "1单元",
@@ -411,6 +431,7 @@
               "label": "24幢",
               "value": "24",
               "key": "build",
+              "count": "18",
               "children": [
                   {
                       "label": "1单元",
@@ -423,6 +444,7 @@
               "label": "25幢",
               "value": "25",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -450,6 +472,7 @@
               "label": "26幢",
               "value": "26",
               "key": "build",
+              "count": "24",
               "children": [
                   {
                       "label": "1单元",
@@ -462,6 +485,7 @@
               "label": "27幢",
               "value": "27",
               "key": "build",
+              "count": "24",
               "children": [
                   {
                       "label": "1单元",
@@ -474,6 +498,7 @@
               "label": "28幢",
               "value": "28",
               "key": "build",
+              "count": "24",
               "children": [
                   {
                       "label": "1单元",
@@ -486,6 +511,7 @@
               "label": "42幢",
               "value": "42",
               "key": "build",
+              "count": "30",
               "children": [
                   {
                       "label": "1单元",
@@ -503,6 +529,7 @@
               "label": "43幢",
               "value": "43",
               "key": "build",
+              "count": "18",
               "children": [
                   {
                       "label": "1单元",
@@ -515,6 +542,7 @@
               "label": "44幢",
               "value": "44",
               "key": "build",
+              "count": "108",
               "children": [
                   {
                       "label": "1单元",
@@ -552,6 +580,7 @@
               "label": "45幢",
               "value": "45",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -579,6 +608,7 @@
               "label": "46幢",
               "value": "46",
               "key": "build",
+              "count": "18",
               "children": [
                   {
                       "label": "1单元",
@@ -591,6 +621,7 @@
               "label": "47幢",
               "value": "47",
               "key": "build",
+              "count": "60",
               "children": [
                   {
                       "label": "1单元",
@@ -618,6 +649,7 @@
               "label": "48幢",
               "value": "48",
               "key": "build",
+              "count": "60",
               "children": [
                   {
                       "label": "1单元",
@@ -645,6 +677,7 @@
               "label": "49幢",
               "value": "49",
               "key": "build",
+              "count": "18",
               "children": [
                   {
                       "label": "1单元",
@@ -657,6 +690,7 @@
               "label": "50幢",
               "value": "50",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -674,6 +708,7 @@
               "label": "51幢",
               "value": "51",
               "key": "build",
+              "count": "18",
               "children": [
                   {
                       "label": "1单元",
@@ -686,6 +721,7 @@
               "label": "52幢",
               "value": "52",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -713,6 +749,7 @@
               "label": "53幢",
               "value": "53",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -740,6 +777,7 @@
               "label": "54幢",
               "value": "54",
               "key": "build",
+              "count": "18",
               "children": [
                   {
                       "label": "1单元",
@@ -752,6 +790,7 @@
               "label": "55幢",
               "value": "55",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -769,6 +808,7 @@
               "label": "56幢",
               "value": "56",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -796,6 +836,7 @@
               "label": "57幢",
               "value": "57",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -813,6 +854,7 @@
               "label": "58幢",
               "value": "58",
               "key": "build",
+              "count": "72",
               "children": [
                   {
                       "label": "1单元",
@@ -840,6 +882,7 @@
               "label": "59幢",
               "value": "59",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -857,6 +900,7 @@
               "label": "60幢",
               "value": "60",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
@@ -874,6 +918,7 @@
               "label": "61幢",
               "value": "61",
               "key": "build",
+              "count": "36",
               "children": [
                   {
                       "label": "1单元",
