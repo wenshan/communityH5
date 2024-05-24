@@ -5,7 +5,6 @@ import { CheckCircleOutline, CloseCircleOutline, RightOutline, AddOutline} from 
 import Signature from '../components/Signature';
 import cascaderOptions from '@/utils/roomData';
 import WxQRcode from '@/components/WxQRcode';
-import ICP from '@/components/Icp';
 import WxShare from '@/utils/wxShare';
 
 import './index.less';
@@ -19,7 +18,7 @@ const initCommunityUser = {
   contractPath: '',
   signatureFile: '',
   is_checkSignature: 0,
-  is_submitConfirmation: 0,
+  submitConfirmation: 0,
   areas: '翠苑三区',
   build: 0,
   unit: 0,
@@ -39,6 +38,12 @@ class Intention extends Component {
       actionIdx: 0,
       region: 'C',
     };
+  }
+  // 滚动位置
+  scrollToPosition =()=>{
+    var x = 0;
+    var y = 900;
+    window.scrollTo(x, y);
   }
   // 手风琴
   handelCollapseOnChange=(activeKey)=>{
@@ -296,6 +301,10 @@ class Intention extends Component {
         type: 'common/submitContractAgree',
         payload: { idx: actionIdx, submitConfirmation: submitConfirmationAgree}
       });
+      this.setState({
+        actionIdx: 0
+      });
+      this.scrollToPosition();
     } else {
       Toast.show({
         icon: 'fail',
@@ -350,6 +359,10 @@ class Intention extends Component {
         type: 'common/submitContractUnwilling',
         payload: { idx: actionIdx, submitConfirmation:  submitConfirmationUnwilling}
       });
+      this.setState({
+        actionIdx: 0
+      });
+      this.scrollToPosition();
     } else {
       Toast.show({
         icon: 'fail',
@@ -392,7 +405,7 @@ class Intention extends Component {
             <div className='item' key={item.roomid}>
               {/** name start 2 */}
               <div className='box-warp clearfix'>
-              <div className="title clearfix"><span className='required'>*</span> 姓名：{name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatus} fill='outline' size='small' onClick={this.handelNameShowButton}>输入</Button>)}</div></div>
+              <div className="title clearfix"><span className='required'>*</span> 姓名：{name? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatus} fill='solid' size='small' onClick={this.handelNameShowButton}>输入</Button>)}</div></div>
                 <div className="content clearfix">
                     {name && (<><span className='tx'>{name} </span></>)}
                     <Popup className="popup" visible={isShowName} onMaskClick={this.handelMaskCertificationPopup} title="姓名：" onClose={this.handelMaskCertificationPopup} showCloseButton
@@ -427,7 +440,7 @@ class Intention extends Component {
               {/** name end */}
               {/** mobile start 3 */}
               <div className='box-warp clearfix'>
-                <div className="title clearfix"><span className='required'>*</span>联系方式验证 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={is_checkMobile} fill='outline' size='small' onClick={this.handelMobileShowButton}>请进行手机验证</Button>)}</div></div>
+                <div className="title clearfix"><span className='required'>*</span>联系方式验证 {is_checkMobile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={is_checkMobile} fill='solid' size='small' onClick={this.handelMobileShowButton}>请进行手机验证</Button>)}</div></div>
                 <div className="content clearfix">
                     {mobile && is_checkMobile && (<>手机号码：<span className='tx'>{mobile} </span></>)}
                     <Popup className="popup" visible={isShowMobile} onMaskClick={this.handelMaskCertificationPopup} title="联系方式验证" onClose={this.handelMaskCertificationPopup} showCloseButton
@@ -452,7 +465,7 @@ class Intention extends Component {
                           <div className="item">
                             <div className='label'>验证码:</div>
                             <div className='input-sms'>
-                              <Input placeholder='请输入验证码' value={smsCode}  onChange={this.handelMobileSmsCode} clearable />  <Button color='primary' className="sms-send" fill='outline' size='small' onClick={this.handelMobileSendSmsCode}>发送验证码</Button>
+                              <Input placeholder='请输入验证码' value={smsCode}  onChange={this.handelMobileSmsCode} clearable />  <Button color='primary' className="sms-send" fill='solid' size='small' onClick={this.handelMobileSendSmsCode}>发送验证码</Button>
                             </div>
                           </div>
                           <div className="item button">
@@ -496,7 +509,7 @@ class Intention extends Component {
               {/** owner end */}
               {/** signature start 6 */}
               <div className='signature box-warp'>
-                <div className="title clearfix"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatus} fill='outline' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
+                <div className="title clearfix"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatus} fill='solid' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
                 <div className="content clearfix">
                   {signatureFile && (<div className='signature-img'><img src={signatureFile} /></div>)}
                   <Popup className="popup" visible={isShowSignature} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
@@ -518,10 +531,10 @@ class Intention extends Component {
               {/** signature end */}
               {/** feedback start 7 */}
               <div className='box-warp clearfix'>
-                <div className='title clearfix' onClick={this.handelFeedbackStatusButton}><span className='required'></span>宝贵的建议<span className='des'>（可随时更改）</span> {feedback? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'><Button color='primary' fill='outline' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button></div></div>
+                <div className='title clearfix' onClick={this.handelFeedbackStatusButton}><span className='required'></span>宝贵的建议<span className='des'>（可随时更改）</span> {feedback? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)} <div className='operate'><Button color='primary' fill='solid' size='small' onClick={this.handelFeedbackStatusButton}>输入</Button></div></div>
                 <div className='content clearfix'>
                   <div className='textarea clearfix'>
-                    <TextArea value={feedback} disabled></TextArea>
+                    <div className='text-area-view' onClick={this.handelFeedbackStatusButton}>{feedback}</div>
                   </div>
                   <Popup className="popup" visible={isShowFeedback} onMaskClick={this.handelMaskCertificationPopup} title="宝贵的建议" onClose={this.handelMaskCertificationPopup} showCloseButton
                                 bodyStyle={{
@@ -604,9 +617,8 @@ class Intention extends Component {
         <div className="intention-page">
           <div className="page-topic" key="page-topic">
             <h1>原拆原建业主意向征集和倡议书</h1>
-            <p className='tx-center'>翠苑三区( C区1-14/19-28幢)</p>
-            <Space></Space>
-            <p>各位小区业主(C区1-14/19-28幢):</p>
+            <p className='tx-center'>翠苑三区</p>
+            <p>各位小区业主:</p>
             <p>根据2024年4月，由浙江省住建厅、发改委、自然资源厅联合发布的《关于稳步推进城镇老旧小区自主更新试点工作的指导意见》文件精神，<span className='red'>杭州众多历史悠久的小区正在做原拆原建自主意向更新调研工作。我们小区业主若能展现出强烈意愿，并得到大多业主支持，便有资格向杭州市政府申请原拆原建项目</span>，由政府牵头结合业主意见建议编制具体的拆建方案。目前，杭州市已经有浙工新村通过具体方案，进入到拆除重建的具体实施阶段。
             </p>
 
@@ -616,20 +628,8 @@ class Intention extends Component {
             <Space></Space>
             <p className='tx-right'>翠苑三区自主更新委员会(筹)</p>
             <p className='tx-right'>2024年5月15日</p>
-            <div className="qrcode" onClick={this.modalWxQRcodeStatus}>点击关注公众号</div>
+            <div className="qrcode" onClick={this.modalWxQRcodeStatus}>点击关注公众号 <RightOutline /></div>
             <WxQRcode></WxQRcode>
-          </div>
-          <div className='other-user' key="other-user">
-            <p><span className='title'>注意：</span></p>
-            <p>1. 非翠苑三区( C区1-14/19-28幢)住户请不要在此提交申请，如果提交了请即时删除，其他区域正在接入中，详情情况咨询各区志愿者群主。</p>
-            <p>2. 严禁提交和自身不相关的房产信息，占用他人房产信息。</p>
-            <p>3. 意愿申请人，只限于本区域内住户（包含有产权、无产权、租客），期望小区会更好。</p>
-            <Space></Space>
-            <p className='tx-right'><Link to="/intentionMap.html">翠苑三区原拆原建项目各区群落汇总 <RightOutline /></Link></p>
-            <p className='tx-right'><Link to="/intentionData.html">翠苑三区原拆原建项目接入公众号上报数据规范 <RightOutline /></Link></p>
-            {/**
-            <p>其他区域的接入请联系 翠苑三区自主更新委员会(筹) 周委员（可以在 翠苑三区便民服务群 寻找）</p>
-            */}
           </div>
           <div className="topic-action" key="topic-action">
           <Collapse accordion={true} activeKey={actionIdx} onChange={this.handelCollapseOnChange}>
@@ -651,6 +651,18 @@ class Intention extends Component {
                   </div>
                 </div>
             </div>
+          </div>
+          <div className='other-user' key="other-user">
+            <p><span className='title'>注意：</span></p>
+            <p>1. 目前支持翠苑三区【C区(1-14/19-28幢)】和【B区(42-61幢)】住户申报，如果非此片区住户提交了请即时删除，其他区域正在接入中，详情情况咨询各区志愿者群主。</p>
+            <p>2. 严禁提交和自身不相关的房产信息，占用他人房产信息。</p>
+            <p>3. 意愿申请人，只限于本区域内住户（包含有产权、无产权、租客），期望小区会更好。</p>
+            <Space></Space>
+            <p className='tx-right'><Link to="/intentionMap.html">翠苑三区原拆原建项目各区群落汇总 <RightOutline /></Link></p>
+            <p className='tx-right'><Link to="/intentionData.html">翠苑三区原拆原建项目接入公众号上报数据规范 <RightOutline /></Link></p>
+            {/**
+            <p>其他区域的接入请联系 翠苑三区自主更新委员会(筹) 周委员（可以在 翠苑三区便民服务群 寻找）</p>
+            */}
           </div>
 
           <div className="topic-statement" key="topic-statement">

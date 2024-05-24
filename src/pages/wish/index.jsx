@@ -40,17 +40,18 @@ class WishList extends Component {
     const { name, mobile } = userinfo;
     if (communityUser && communityUser.length) {
       communityUser.map((item, idx)=>{
-        const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt, owner, feedback, is_submitContractUnwilling, propertyType, is_checkSignature } = item;
+        const { areas, build, unit, room, submitConfirmation, id, contractPath, createdAt, owner, feedback, is_submitContractUnwilling, propertyType, is_checkSignature } = item;
         let label = '未申报';
-        if (is_submitConfirmation && !is_submitContractUnwilling) {
-          label = '意愿已申报';
-        }
-        if (!is_submitConfirmation && is_submitContractUnwilling) {
-          label = '不同意意愿已提交';
-        }
-        if (!is_submitConfirmation && !is_submitContractUnwilling) {
+        if (submitConfirmation > 0) {
+          if (submitConfirmation === 2) {
+            label = '意愿已申报';
+          } else {
+            label = '不同意意愿已提交';
+          }
+        } else {
           label = '未申报';
         }
+
         if (areas && build && unit && room) {
           html.push(
             <>
@@ -63,9 +64,9 @@ class WishList extends Component {
                   <div className='owner box'><label>是否拥有产权:</label><span>{owner? '是': '否/未知'}</span></div>
                   <div className='certification box'><label>姓名:</label><span>{name}</span></div>
                   <div className='mobile box'><label>联系手机:</label><span>{mobile}</span></div>
-                  {is_submitConfirmation?(<div className='signature box'><label>电子签:</label><span>{is_checkSignature? '已审核 ': '审核中...'} </span></div>):''}
+                  {submitConfirmation === 2 ?(<div className='signature box'><label>电子签:</label><span>{is_checkSignature? '已审核 ': '审核中...'} </span></div>):''}
                   <div className='feedback box'><label>宝贵的建议:</label><span>{feedback? (<p>{feedback}</p>) : '无' }</span></div>
-                  {is_submitConfirmation?(<div className='pdf box'><label>意愿申请文件:</label><span>{contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</span></div>):''}
+                  {submitConfirmation === 2 ?(<div className='pdf box'><label>意愿申请文件:</label><span>{contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</span></div>):''}
                   <div className='date box'><label>日期:</label><span>{createdAt}</span></div>
                   <div className='footer-box'>
                     <span className={`${is_checkSignature ? 'checked': 'default'}`}onClick={()=>{this.delUser({id, is_checkSignature})}}>删除重新意愿申请</span>
@@ -96,7 +97,6 @@ class WishList extends Component {
 
   render() {
     const { name, mobile } = this.props.userinfo;
-    const { areas, build, unit, room, is_submitConfirmation, id, contractPath, createdAt, owner, feedback, is_submitContractUnwilling, propertyType} = this.props.communityUser;
     return (
       <div className="page">
         <div className="wish-list">

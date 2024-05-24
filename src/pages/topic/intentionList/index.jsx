@@ -55,19 +55,19 @@ class intentionList extends Component {
     const { rows } = this.props.communityUserList;
     if (rows && rows.length) {
       rows.map( (item, idx) => {
-        const { areas, build, unit, room, is_submitConfirmation, owner, propertyType, feedback, is_submitContractUnwilling} = item;
+        const { areas, build, unit, room, submitConfirmation, owner, propertyType, feedback, is_submitContractUnwilling} = item;
         if (areas && build && unit && room ) {
           let label = (<span className='tx-cfa541c'><i className="iconfont icon-cry">&#xe839;</i>未申报</span>);
-          if (is_submitConfirmation && !is_submitContractUnwilling) {
-            label = (<span className='tx-c7cb305'><i className="iconfont icon-good">&#xe83c;</i>意愿已申报</span>);
-          }
-          if (!is_submitConfirmation && is_submitContractUnwilling) {
-            // label = '不同意意愿已提交';
-            label = (<span className='tx-cfa541c'><i className="iconfont icon-bad">&#xe838;</i>未申报</span>);
-          }
-          if (!is_submitConfirmation && !is_submitContractUnwilling) {
+          if (submitConfirmation > 0) {
+            if (submitConfirmation === 2) {
+              label = (<span className='tx-c7cb305'><i className="iconfont icon-good">&#xe83c;</i>意愿已申报</span>);
+            } else {
+              label = (<span className='tx-cfa541c'><i className="iconfont icon-bad">&#xe838;</i>未申报</span>);
+            }
+          } else {
             label = (<span className='tx-cfa541c'><i className="iconfont icon-cry">&#xe839;</i>未申报</span>);
           }
+
           const nameLabel = item.name ? `${item.name.substring(0,1)}${item.name.length > 2? '** ':'* '}` : '***'
           html.push(
             <li key={`${item.userid}_${item.roomid}`}>

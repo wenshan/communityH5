@@ -143,14 +143,6 @@ section {
   padding: 0;
 }
 
-body {
-  font: 12px/1.5 'Microsoft YaHei', '宋体', Tahoma, Arial, sans-serif;
-  color: #555;
-  background-color: #fbfbfb;
-  width: 100%;
-  height: auto !important;
-}
-
 em,
 i {
   font-style: normal;
@@ -179,12 +171,16 @@ strong {
 
 a {
   text-decoration: none;
-  color: #969696;
+  color: #1890ff;
   font-family: 'Microsoft YaHei', Tahoma, Arial, sans-serif;
 }
 
 a:hover {
   text-decoration: none;
+}
+
+.link {
+  color: #1890ff;
 }
 
 ul,
