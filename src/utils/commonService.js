@@ -55,7 +55,10 @@ export const createRoom = (params) =>
 export const getUserList = (params) =>
   request('/api/community/getUserList', {
     method: 'POST',
-    data: params
+    data: params,
+    config: {
+      isAccess: false
+    }
   });
 
 // delUser
@@ -68,7 +71,10 @@ export const delUser = (params) =>
 export const getShareConfig = (params) =>
   request('/api/community/getShareConfig', {
     method: 'POST',
-    data: params
+    data: params,
+    config: {
+      isAccess: false
+    }
   });
 export const sendSms = (params) =>
   request('/api/user/sendSms', {

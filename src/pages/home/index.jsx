@@ -42,7 +42,6 @@ class Home extends Component {
   swiperRender =() => {
     const html = [];
     const { swiperBanner } = this.props;
-    console.log('swiperBanner:', swiperBanner);
     if (swiperBanner && swiperBanner.length) {
       swiperBanner.map((item,idx) => {
         if (item.value && item.id) {
@@ -59,12 +58,12 @@ class Home extends Component {
     return html;
   }
   componentDidMount() {
-    const { value, days, agreeUserNum, unwillingUserNum, communityUserNum} = this.props.lastDayIntention;
+    const { lastDayIntentionC, lastDayIntentionB} = this.props;
     /** 分享 -- start */
     const initShare = new WxShare();
     initShare.reset({
-      friend_title: '翠苑三区( C区1-14/19-28幢)原拆原建业主意向征集和倡议书',
-      friend_content: `今日上报：住房户号比例 ${((communityUserNum/951)*100).toFixed(2)} %，申请住房户数:${communityUserNum}，已申报成功用户: ${agreeUserNum},加油💪🏻`,
+      friend_title: '翠苑三区(C区1-14/19-28幢)原拆原建业主意向征集和倡议书',
+      friend_content: `今日上报：住房户号比例 ${((lastDayIntentionC.communityUserNum/951)*100).toFixed(2)} %，申请住房户数:${lastDayIntentionC.communityUserNum}，已申报成功用户: ${lastDayIntentionC.agreeUserNum},加油💪🏻`,
       img_url: 'https://img.dreamstep.top/community/banner/banner_intention.png',
       page_url: 'https://www.dreamstep.top/intention.html'
     });
@@ -76,45 +75,69 @@ class Home extends Component {
       }
     });
     this.props.dispatch({
-      type: 'home/lastDayIntention',
+      type: 'home/lastDayIntentionC',
+      payload: {
+        areas: '翠苑三区',
+        region: 'C',
+      }
+    });
+    this.props.dispatch({
+      type: 'home/lastDayIntentionB',
+      payload: {
+        areas: '翠苑三区',
+        region: 'B',
+      }
     });
   }
   // https://echarts.apache.org/zh/option.html#title
   render() {
-    const { value, days, agreeUserNum, unwillingUserNum, communityUserNum} = this.props.lastDayIntention;
+    const { lastDayIntentionC, lastDayIntentionB} = this.props;
     return (
       <div className="page">
         <div className="home-page">
           <div className="swiper-wrap">
             <div className='banner-swiper'>
               <section className='swiper-container'>
-                <Swiper loop autoplay>
+                <Swiper loop autoplay autoplayInterval={5000}>
                   {this.swiperRender()}
                 </Swiper>
               </section>
             </div>
           </div>
           <Space></Space>
-          {/**
-          <div className='warning-box'>
-            <h1>此公众号项目正在测试阶段，数据随时清理，功能完善中，5月15号（周三）后正式对外使用</h1>
-          </div>
-          */}
-          <Space></Space>
           <div className='intention-view'>
             <div className="header">
               <Link to="/intention.html">
-                <h2>翠苑三区C区原拆原建意向数据</h2>
-                <span className='link'>点击去申请<RightOutline /></span>
+                <h2>翠苑三区(B区42-61幢)</h2>
               </Link>
             </div>
             <div className='content'>
               <div className='topic'>
-                <div className='rate'>{((communityUserNum/951)*100).toFixed(2)} %</div>
-                <div className='des'>总户数: <span>951</span> 已申请住房户数: <span>{communityUserNum}</span> 已申报成功用户: <span>{agreeUserNum}</span></div>
+                <div className='rate'>{((lastDayIntentionB.communityUserNum/870)*100).toFixed(2)} % <Link to="/intention.html"><span className='link'>点击去申报<RightOutline /></span></Link></div>
+                <div className='des'><p>总户数: <span>870</span></p> <p>已申请住房户数: <span>{lastDayIntentionB.communityUserNum}</span></p><p> 已申报成功用户: <span>{lastDayIntentionB.agreeUserNum}</span></p></div>
               </div>
               <div className='chart'>
-                <ChartColumn data={{value, days}}></ChartColumn>
+                <ChartColumn data={{value: lastDayIntentionB.value, days:lastDayIntentionB.days}}></ChartColumn>
+              </div>
+            </div>
+            <div className='footer-box'>
+              <span><Link to="/intentionList.html">查看数据明细<RightOutline /></Link></span>
+            </div>
+          </div>
+          <Space></Space>
+          <div className='intention-view'>
+            <div className="header">
+              <Link to="/intention.html">
+                <h2>翠苑三区(C区1-14/19-28幢)</h2>
+              </Link>
+            </div>
+            <div className='content'>
+              <div className='topic'>
+                <div className='rate'>{((lastDayIntentionC.communityUserNum/951)*100).toFixed(2)} % <Link to="/intention.html"><span className='link'>点击去申报<RightOutline /></span></Link></div>
+                <div className='des'><p>总户数: <span>951</span></p><p>已申请住房户数: <span>{lastDayIntentionC.communityUserNum}</span></p><p>已申报成功用户: <span>{lastDayIntentionC.agreeUserNum}</span></p></div>
+              </div>
+              <div className='chart'>
+                <ChartColumn data={{value: lastDayIntentionC.value, days:lastDayIntentionC.days}}></ChartColumn>
               </div>
             </div>
             <div className='footer-box'>
@@ -130,6 +153,7 @@ class Home extends Component {
 export default connect(
   (state) => ({
     swiperBanner: state.home.swiperBanner,
-    lastDayIntention: state.home.lastDayIntention,
+    lastDayIntentionB: state.home.lastDayIntentionB,
+    lastDayIntentionC: state.home.lastDayIntentionC,
   }),
 )(Home);

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect, Link } from 'umi';
-import { Space, Input, Button, Popup, Cascader, Toast, TextArea, Collapse, Radio } from 'antd-mobile';
+import { Space, Input, Button, Popup, Cascader, Toast, TextArea, Collapse, Radio, ImageViewer, Image } from 'antd-mobile';
 import { CheckCircleOutline, CloseCircleOutline, RightOutline, AddOutline} from 'antd-mobile-icons'
 import Signature from '../components/Signature';
 import cascaderOptions from '@/utils/roomData';
+import rotateBase64 from '@/utils/rotateBase64';
 import WxQRcode from '@/components/WxQRcode';
 import WxShare from '@/utils/wxShare';
 
@@ -34,6 +35,7 @@ class Intention extends Component {
       isShowMobile: false,
       isShowFeedback: false,
       isShowName: false,
+      isImageViewerVisible: false,
       cascaderOptions,
       actionIdx: 0,
       region: 'C',
@@ -47,8 +49,9 @@ class Intention extends Component {
   }
   // 手风琴
   handelCollapseOnChange=(activeKey)=>{
-    this.setState({
-      actionIdx: activeKey
+    this.props.dispatch({
+      type: 'common/update',
+      payload: { communityUserCollapseActionIdx: activeKey }
     });
   }
   handelMaskCertificationPopup = () => {
@@ -72,7 +75,7 @@ class Intention extends Component {
   }
   // 姓名
   handelNameButtonSubmit = () => {
-    const { actionIdx} = this.state;
+    const { communityUserCollapseActionIdx } = this.props;
     const { name } = this.props.userinfo;
     if (name) {
       this.setState({
@@ -80,7 +83,7 @@ class Intention extends Component {
       });
       this.props.dispatch({
         type: 'common/saveName',
-        payload: { name, idx: actionIdx }
+        payload: { name, idx: communityUserCollapseActionIdx }
       });
     } else {
       Toast.show({
@@ -167,16 +170,25 @@ class Intention extends Component {
       isShowSignature: true,
     });
   }
-  handelSignatureButtonSubmit =({dataURL}) => {
-    const { actionIdx} = this.state;
+  handelSignatureButtonSubmit = async ({dataURL}) => {
+    const { communityUserCollapseActionIdx } = this.props;
     if (dataURL) {
       this.setState({
         isShowSignature: false,
       });
-      this.props.dispatch({
-        type: 'common/saveSignature',
-        payload: { signatureFile: dataURL, idx: actionIdx }
-      });
+      // 图片旋转
+      const  signatureFile = await rotateBase64(dataURL);
+      if (signatureFile) {
+        this.props.dispatch({
+          type: 'common/saveSignature',
+          payload: { signatureFile, idx: communityUserCollapseActionIdx }
+        });
+      } else {
+        Toast.show({
+          icon: 'fail',
+          content: '签名失败，请重试',
+        });
+      }
     }
   }
   handelCascaderShowButton = () => {
@@ -211,49 +223,49 @@ class Intention extends Component {
     }
   }
   handelOwnerStatus =({owner})=> {
-    const { actionIdx} = this.state;
+    const { communityUserCollapseActionIdx } = this.props;
     this.props.dispatch({
       type: 'common/saveSuperStatus',
-      payload: { owner, idx: actionIdx }
+      payload: { owner, idx: communityUserCollapseActionIdx }
     });
   }
   handelPropertyTypeStatus=({propertyType})=> {
-    const { actionIdx} = this.state;
+    const { communityUserCollapseActionIdx } = this.props;
     this.props.dispatch({
       type: 'common/saveSuperStatus',
-      payload: {propertyType, idx: actionIdx}
+      payload: {propertyType, idx: communityUserCollapseActionIdx }
     });
   }
 
   handelTextAreaChange=(val)=>{
-    const { actionIdx } = this.state;
+    const { communityUserCollapseActionIdx } = this.props;
     const { communityUser } = this.props;
     const newCommunityUser = communityUser.concat([]);
-    newCommunityUser[actionIdx] = Object.assign({}, communityUser[actionIdx], { feedback: val});
+    newCommunityUser[communityUserCollapseActionIdx] = Object.assign({}, communityUser[communityUserCollapseActionIdx], { feedback: val});
     this.props.dispatch({
       type: 'common/update',
       payload: { communityUser: newCommunityUser }
     });
   }
   handelFeedbackButtonSubmit =() => {
-    const { actionIdx } = this.state;
-    const { feedback } = this.props.communityUser[actionIdx];
+    const { communityUserCollapseActionIdx } = this.props;
+    const { feedback } = this.props.communityUser[communityUserCollapseActionIdx];
     if (feedback) {
       this.setState({
         isShowFeedback: false,
       });
       this.props.dispatch({
         type: 'common/saveFeedback',
-        payload: { feedback, idx: actionIdx }
+        payload: { feedback, idx: communityUserCollapseActionIdx }
       });
     }
   }
   // 同意意愿
   handelSubmitContractAgree =() => {
     const submitConfirmationAgree = 2; // 同意
-    const { actionIdx } = this.state;
+    const { communityUserCollapseActionIdx } = this.props;
     const {name, is_checkMobile } = this.props.userinfo;
-    const { signatureFile, areas, build, unit, room, owner, propertyType, submitConfirmation } = this.props.communityUser[actionIdx];
+    const { signatureFile, areas, build, unit, room, owner, propertyType, submitConfirmation } = this.props.communityUser[communityUserCollapseActionIdx];
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -299,12 +311,9 @@ class Intention extends Component {
     if(!submitConfirmation !== 1) {
       this.props.dispatch({
         type: 'common/submitContractAgree',
-        payload: { idx: actionIdx, submitConfirmation: submitConfirmationAgree}
+        payload: { idx: communityUserCollapseActionIdx, submitConfirmation: submitConfirmationAgree}
       });
-      this.setState({
-        actionIdx: 0
-      });
-      this.scrollToPosition();
+      // this.scrollToPosition();
     } else {
       Toast.show({
         icon: 'fail',
@@ -316,9 +325,9 @@ class Intention extends Component {
   // 不同意愿意
   handelSubmitUnwilling =()=>{
     const submitConfirmationUnwilling = 1; // 不同意
-    const { actionIdx } = this.state;
+    const { communityUserCollapseActionIdx } = this.props;
     const { name, is_checkMobile } = this.props.userinfo;
-    const {  areas, build, unit, room, submitConfirmation, owner, propertyType } = this.props.communityUser[actionIdx];
+    const {  areas, build, unit, room, submitConfirmation, owner, propertyType } = this.props.communityUser[communityUserCollapseActionIdx];
     if (!(areas && build && unit && room)){
       Toast.show({
         icon: 'fail',
@@ -357,12 +366,13 @@ class Intention extends Component {
     if (submitConfirmation !== 2){
       this.props.dispatch({
         type: 'common/submitContractUnwilling',
-        payload: { idx: actionIdx, submitConfirmation:  submitConfirmationUnwilling}
+        payload: { idx: communityUserCollapseActionIdx, submitConfirmation:  submitConfirmationUnwilling}
       });
-      this.setState({
-        actionIdx: 0
+      this.props.dispatch({
+        type: 'common/update',
+        payload: { communityUserCollapseActionIdx: 0 }
       });
-      this.scrollToPosition();
+      // this.scrollToPosition();
     } else {
       Toast.show({
         icon: 'fail',
@@ -381,7 +391,7 @@ class Intention extends Component {
   // html
   renderHtmlTopicAction = ()=>{
     const html = [];
-    const { isShowSignature, isShowMobile, isShowFeedback, isShowName } = this.state;
+    const { isShowSignature, isShowMobile, isShowFeedback, isShowName, isImageViewerVisible } = this.state;
     const { communityUser, userinfo, smsCode } = this.props;
     const { name, mobile, is_checkMobile } = userinfo;
     communityUser && communityUser.length && communityUser.map((item, idx)=>{
@@ -511,8 +521,9 @@ class Intention extends Component {
               <div className='signature box-warp'>
                 <div className="title clearfix"><span className='required'></span>电子签名 {signatureFile? (<CheckCircleOutline color='#76c6b8' style={{ fontSize: 21 }}/>): (<CloseCircleOutline color='#999' style={{ fontSize: 21 }} />)}<div className='operate'>{(<Button color='primary' disabled={submitButtonDisabledStatus} fill='solid' size='small' onClick={this.handelSignatureShowButton}>请电子签名</Button>)}</div></div>
                 <div className="content clearfix">
-                  {signatureFile && (<div className='signature-img'><img src={signatureFile} /></div>)}
-                  <Popup className="popup" visible={isShowSignature} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
+                  {signatureFile && (<div className='signature-img' onClick={this.imageViewerVisibleShow}><Image src={signatureFile} /></div>)}
+                  {signatureFile && (<ImageViewer classNames={{ mask: 'customize-mask', body: 'customize-body',}} image={signatureFile} visible={isImageViewerVisible} onClose={this.imageViewerVisibleClose} />)}
+                  <Popup className="popup signature" visible={isShowSignature} onMaskClick={this.handelMaskCertificationPopup} title="电子签名" onClose={this.handelMaskCertificationPopup} showCloseButton
                                 bodyStyle={{
                                   borderTopLeftRadius: '8px',
                                   borderTopRightRadius: '8px',
@@ -586,6 +597,17 @@ class Intention extends Component {
     });
   }
 
+  // 签名预览
+  imageViewerVisibleShow =() => {
+    this.setState({
+      isImageViewerVisible: true,
+    });
+  }
+  imageViewerVisibleClose =() => {
+    this.setState({
+      isImageViewerVisible: false,
+    });
+  }
   componentDidMount() {
     /** 分享 -- start */
     const initShare = new WxShare();
@@ -611,7 +633,8 @@ class Intention extends Component {
   }
 
   render() {
-    const { isShowCascader, cascaderOptions, actionIdx } = this.state;
+    const { isShowCascader, cascaderOptions } = this.state;
+    const { communityUserCollapseActionIdx } = this.props;
     return (
       <div className="page">
         <div className="intention-page">
@@ -632,7 +655,7 @@ class Intention extends Component {
             <WxQRcode></WxQRcode>
           </div>
           <div className="topic-action" key="topic-action">
-          <Collapse accordion={true} activeKey={actionIdx} onChange={this.handelCollapseOnChange}>
+          <Collapse accordion={true} activeKey={communityUserCollapseActionIdx} onChange={this.handelCollapseOnChange}>
             {this.renderHtmlTopicAction()}
           </Collapse>
             <div className='action-add'>
@@ -713,5 +736,6 @@ export default connect(
     communityUserSubmitLoading: state.common.communityUserSubmitLoading,
     communityUserSubmitUnwillingLoading: state.common.communityUserSubmitUnwillingLoading,
     smsCode: state.common.smsCode,
+    communityUserCollapseActionIdx: state.common.communityUserCollapseActionIdx,
   }),
 )(Intention);

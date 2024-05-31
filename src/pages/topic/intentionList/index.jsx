@@ -32,16 +32,17 @@ class intentionList extends Component {
     const { communityUserFilter } = this.props;
     if (value && value[0]) {
       const areas = value[0];
+      const region = null;
       const build = value[1] || null;
       const unit = value[2] || null;
-      const newCommunityUserFilter = Object.assign({}, communityUserFilter, { areas, build, unit});
+      const newCommunityUserFilter = Object.assign({}, communityUserFilter, { areas, region, build, unit});
       this.props.dispatch({
         type: 'common/update',
         payload: { communityUserFilter: newCommunityUserFilter }
       });
       this.props.dispatch({
         type: 'common/getUserList',
-        payload: { areas, build, unit }
+        payload: { areas, region, build, unit }
       });
     } else {
       Toast.show({
@@ -72,11 +73,14 @@ class intentionList extends Component {
           html.push(
             <li key={`${item.userid}_${item.roomid}`}>
               <div className='title'>{item.areas}-{item.build}幢-{item.unit}单元-{item.room}室 <span className='status'>{label}</span></div>
-              <div className='main'>
-                <div className='item'><span className='label' key="ren">用户ID:</span><span className='value'>{item.userid}</span></div>
-                <div className='item'><span className='label' key="ren">姓名:</span><span className='value'>{nameLabel}</span></div>
-                <div className='item'><span className='label' key="time">时间:</span><span className='value'>{item.createdAt}</span></div>
-              </div>
+                <div className='main'>
+                  <div className='item'><span className='label' key="ren">用户ID:</span><span className='value'>{item.userid}</span></div>
+                  <div className='item'><span className='label' key="ren">姓名:</span><span className='value'>{nameLabel}</span></div>
+                </div>
+                <div className='main'>
+                  <div className='item' style={{width: '80%'}}><span className='label' key="time">时间:</span><span className='value'>{item.createdAt}</span></div>
+                </div>
+
             </li>
           );
         }
@@ -102,13 +106,14 @@ class intentionList extends Component {
     const { cascaderOptionsFilter, isShowCascader } = this.state;
     const { count } = this.props.communityUserList;
     const { areas, build, unit } = this.props.communityUserFilter;
+    const  { intentionListGetUserListLoading } = this.props;
     return (
       <div className="page">
         <div className="intention-list">
           <div className='header'>
             <h2>意愿申报查询列表</h2>
             <div className='filter'>
-              <Button color='primary' fill='outline' size='small' onClick={this.handelCascaderStatus}>筛选</Button>
+              <Button loading={intentionListGetUserListLoading} color='primary' fill='outline' size='small' onClick={this.handelCascaderStatus}>筛选</Button>
               {areas && (<span className='tx'>
                 {areas}
                 {areas && build?(<>-{build}幢</>): ''}
@@ -143,5 +148,6 @@ export default connect(
   (state) => ({
     communityUserFilter: state.common.communityUserFilter,
     communityUserList:  state.common.communityUserList,
+    intentionListGetUserListLoading: state.common.intentionListGetUserListLoading,
   }),
 )(intentionList);

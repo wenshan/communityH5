@@ -102,6 +102,7 @@ export default {
         is_checkSignature: 0,
         submitConfirmation: 0, // [0,1,2][不同意 同意]
         areas: '翠苑三区',
+        region: null,
         build: null,
         unit: null,
         room: null,
@@ -122,7 +123,9 @@ export default {
       rows: []
     },
     communityUserSubmitLoading: false,
-    communityUserSubmitUnwillingLoading: false
+    communityUserSubmitUnwillingLoading: false,
+    communityUserCollapseActionIdx: 0, // 手风琴指针
+    intentionListGetUserListLoading: false
   },
 
   subscriptions: {
@@ -311,6 +314,10 @@ export default {
       if (areas && build && unit && room && region) {
         const result = yield call(createRoom, { areas, build, unit, room, region });
         if (result && result.status == 200 && result.msg) {
+          yield put({
+            type: 'update',
+            payload: { communityUserCollapseActionIdx: 0 }
+          });
           yield put({ type: 'getCommunityUserInfo', payload: {} });
           Toast.show({
             icon: 'success',
@@ -332,11 +339,14 @@ export default {
     // 查询房号
     *getUserList({ payload: data }, { call, put, select }) {
       const { areas, region, build, unit } = data;
-      if (areas && region) {
+      if (areas) {
+        yield put({ type: 'update', payload: { intentionListGetUserListLoading: true } });
         const result = yield call(getUserList, { areas, region, build, unit });
         if (result && result.status == 200 && result.data) {
+          yield put({ type: 'update', payload: { intentionListGetUserListLoading: false } });
           yield put({ type: 'update', payload: { communityUserList: result.data } });
         } else {
+          yield put({ type: 'update', payload: { intentionListGetUserListLoading: false } });
           Toast.show({
             icon: 'fail',
             content: '检测参数'
@@ -511,13 +521,19 @@ export default {
         });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
-          yield put({ type: 'update', payload: { communityUserSubmitLoading: false } });
+          yield put({
+            type: 'update',
+            payload: { communityUserSubmitLoading: false, communityUserCollapseActionIdx: 0 }
+          });
           Toast.show({
             icon: 'success',
             content: '意愿提交成功！'
           });
         } else {
-          yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: false } });
+          yield put({
+            type: 'update',
+            payload: { communityUserSubmitUnwillingLoading: false, communityUserCollapseActionIdx: 0 }
+          });
           Toast.show({
             icon: 'fail',
             content: '提交失败，刷新页面重试'
@@ -552,13 +568,19 @@ export default {
         });
         if (result && result.status == 200) {
           yield put({ type: 'getCommunityUserInfo', payload: {} });
-          yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: false } });
+          yield put({
+            type: 'update',
+            payload: { communityUserSubmitUnwillingLoading: false, communityUserCollapseActionIdx: 0 }
+          });
           Toast.show({
             icon: 'success',
             content: '不同意意愿申请提交成功！'
           });
         } else {
-          yield put({ type: 'update', payload: { communityUserSubmitUnwillingLoading: false } });
+          yield put({
+            type: 'update',
+            payload: { communityUserSubmitUnwillingLoading: false, communityUserCollapseActionIdx: 0 }
+          });
           Toast.show({
             icon: 'fail',
             content: '提交失败，刷新页面重试'

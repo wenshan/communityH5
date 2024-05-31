@@ -1,25 +1,56 @@
-.m-signature-pad {
-  font-size: 10px;
-  width: 100%;
-  border: 1px solid #e8e8e8;
-  border-radius: 4px;
-}
+.signature {
+  .m-signature-pad {
+    font-size: 10px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    .m-signature-pad--body canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+    }
 
-.m-signature-pad--body {
-  height: 400px;
-  border: 1px solid #f4f4f4;
-  background-color: #fff;
+    .m-signature-pad--body {
+      border: 1px solid red;
+      background-color: #fff;
+      float: left;
+    }
+    .operate {
+      width: 68px;
+      overflow: hidden;
+      float: left;
+      margin-left: 20px;
+      .m-signature-pad--footer {
+        height: 221px;
+        width: 68px;
+        overflow: hidden;
+        background-image: url(https://img.dreamstep.top/community/img/button_s2.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin-bottom: 50px;
+      }
+      .m-signature-pad--submit {
+        height: 406px;
+        width: 68px;
+        overflow: hidden;
+        overflow: hidden;
+        background-image: url(https://img.dreamstep.top/community/img/button_s1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    }
+  }
+  .adm-popup-body-position-bottom {
+    .adm-popup-close-icon {
+      left: 8px;
+      top: 8px;
+    }
+  }
+  .adm-popup-body {
+    .from {
+      min-height: 1100px;
+    }
+  }
 }
-
-.m-signature-pad--body canvas {
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-}
-
-.m-signature-pad--footer {
-  height: 80px;
-  padding: 10px;
-}
-
 

@@ -23,5 +23,8 @@ export const queryBanner = (params = {}) =>
 export const lastDayIntention = (params) =>
   request('/api/community/lastDayIntention', {
     method: 'POST',
-    data: params
+    data: params,
+    config: {
+      isAccess: false
+    }
   });

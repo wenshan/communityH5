@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'umi';
+import { connect, history } from 'umi';
 import { Empty, Dialog, Modal } from 'antd-mobile';
 
 import './index.less';
@@ -31,6 +31,12 @@ class WishList extends Component {
           });
         },
       })
+    }
+  }
+
+  viewerPdf =(contractPath) => {
+    if (contractPath) {
+      history.push(`/intentionPdf.html?contractPath=${contractPath}`);
     }
   }
 
@@ -66,7 +72,7 @@ class WishList extends Component {
                   <div className='mobile box'><label>联系手机:</label><span>{mobile}</span></div>
                   {submitConfirmation === 2 ?(<div className='signature box'><label>电子签:</label><span>{is_checkSignature? '已审核 ': '审核中...'} </span></div>):''}
                   <div className='feedback box'><label>宝贵的建议:</label><span>{feedback? (<p>{feedback}</p>) : '无' }</span></div>
-                  {submitConfirmation === 2 ?(<div className='pdf box'><label>意愿申请文件:</label><span>{contractPath ? (<a href={contractPath} target='_blank'>点击查看</a>): '生成申请PDF文件失败，请删除重试'}</span></div>):''}
+                  {submitConfirmation === 2 ?(<div className='pdf box'><label>意愿申请文件:</label><span>{contractPath ? (<span onClick={()=>{this.viewerPdf(contractPath)}}>点击查看</span>): '生成申请PDF文件失败，请删除重试'}</span></div>):''}
                   <div className='date box'><label>日期:</label><span>{createdAt}</span></div>
                   <div className='footer-box'>
                     <span className={`${is_checkSignature ? 'checked': 'default'}`}onClick={()=>{this.delUser({id, is_checkSignature})}}>删除重新意愿申请</span>

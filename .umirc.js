@@ -2,7 +2,6 @@ import { defineConfig } from 'umi';
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
 export default defineConfig({
-  title: '西子翠苑',
   nodeModulesTransform: {
     type: 'none'
   },
@@ -39,6 +38,11 @@ export default defineConfig({
           name: '原拆原建意向列表',
           path: '/intentionList.html',
           component: '@/pages/topic/intentionList/index.jsx'
+        },
+        {
+          name: '查看PDF协议',
+          path: '/intentionPdf.html',
+          component: '@/pages/topic/intentionPdf/index.jsx'
         },
         {
           name: '我的意愿',

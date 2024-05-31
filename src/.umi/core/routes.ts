@@ -35,6 +35,12 @@ export function getRoutes() {
         "exact": true
       },
       {
+        "name": "查看PDF协议",
+        "path": "/intentionPdf.html",
+        "component": require('@/pages/topic/intentionPdf/index.jsx').default,
+        "exact": true
+      },
+      {
         "name": "我的意愿",
         "path": "/wish.html",
         "component": require('@/pages/wish/index.jsx').default,

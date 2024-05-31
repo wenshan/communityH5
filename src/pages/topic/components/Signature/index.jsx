@@ -12,8 +12,8 @@ export default class SignaturePad extends React.Component {
     this.velocityFilterWeight = this.props.velocityFilterWeight || 0.7;
     this.minWidth = this.props.minWidth || 0.5;
     this.maxWidth = this.props.maxWidth || 2.5;
-    this.width = this.props.width || 345;
-    this.height = this.props.height || 200;
+    this.width = this.props.width || 200;
+    this.height = this.props.height || 440;
     this.dotSize =
       this.props.dotSize ||
       function() {
@@ -355,15 +355,17 @@ export default class SignaturePad extends React.Component {
 
   render() {
     return (
-      <div id="signature-pad" className="m-signature-pad" key={this.props.index}>
+      <div id="signature-pad" className="m-signature-pad clearfix" key={this.props.index}>
         <div className="m-signature-pad--body">
           <canvas ref="cv" />
         </div>
-        <div className="m-signature-pad--footer">
-          <Button color='primary' fill='outline' size='small' onClick={this.clear.bind(this)}>擦除重写</Button>
-        </div>
-        <div className="m-signature-pad--submit">
-          <Button block color='primary' size='middle' onClick={this.toDataURL.bind(this)}>确认电子签名</Button>
+        <div className="operate clearfix">
+          <div className="m-signature-pad--footer" onClick={this.clear.bind(this)}>
+            <span color='primary' fill='outline' size='small'>擦除重写</span>
+          </div>
+          <div className="m-signature-pad--submit" onClick={this.toDataURL.bind(this)}>
+            <span block color='primary' size='middle'>确认电子签名</span>
+          </div>
         </div>
       </div>
     );
