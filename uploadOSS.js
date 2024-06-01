@@ -10,7 +10,7 @@ const username = 'root';
 const password = 'Hws2416$';
 const port = 22;
 const localFilePath = `${__dirname}/dist`;
-const remoteFilePath = '/www/dist';
+const remoteFilePath = '/www/html';
 
 const remoteAddress = `${username}:${password}@${host}`;
 console.log('localFilePath:', `${localFilePath}/index.html`);

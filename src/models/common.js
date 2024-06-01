@@ -398,9 +398,11 @@ export default {
     },
     // 验证手机号码
     *mobileCertification({ payload: data }, { call, put, select }) {
-      const { mobile, smsCode } = data;
-      if (mobile && smsCode) {
-        const resultUserInfo = yield call(mobileCertification, { mobile, smsCode });
+      const { mobile, smsCode, idx } = data;
+      if (mobile && smsCode && idx) {
+        const { communityUser } = yield select((state) => state.common);
+        const { id } = communityUser[idx];
+        const resultUserInfo = yield call(mobileCertification, { id, mobile, smsCode });
         if (resultUserInfo && resultUserInfo.status == 200) {
           yield put({ type: 'getUserInfo', payload: {} });
           Toast.show({

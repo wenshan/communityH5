@@ -133,6 +133,7 @@ class Intention extends Component {
     }
   }
   handelMobileButtonSubmit = () => {
+    const { communityUserCollapseActionIdx } = this.props;
     const { smsCode, userinfo } = this.props;
     const { mobile } = userinfo;
     if (!smsCode || smsCode.length !== 5) {
@@ -149,7 +150,7 @@ class Intention extends Component {
         });
         this.props.dispatch({
           type: 'common/mobileCertification',
-          payload: { mobile, smsCode }
+          payload: { mobile, smsCode, idx: communityUserCollapseActionIdx }
         });
       } else {
         Toast.show({
