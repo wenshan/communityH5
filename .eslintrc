@@ -1,7 +1,0 @@
-{
-  "extends": "airbnb",
-  "globals": {
-    "DEV_ENV":false,
-    "BUILD_ENV": false
-  }
-}
