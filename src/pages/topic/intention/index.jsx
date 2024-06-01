@@ -38,7 +38,6 @@ class Intention extends Component {
       isImageViewerVisible: false,
       cascaderOptions,
       actionIdx: 0,
-      region: 'C',
     };
   }
   // 滚动位置
@@ -214,7 +213,7 @@ class Intention extends Component {
       });
       this.props.dispatch({
         type: 'common/createRoom',
-        payload: { areas, build, unit, room, region: this.state.region }
+        payload: { areas, build, unit, room }
       });
     } else {
       Toast.show({

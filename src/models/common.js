@@ -4,6 +4,7 @@ import Store from 'store2';
 import Cookies from 'js-cookie';
 import { Toast, Dialog } from 'antd-mobile';
 import Tool from '@/utils/tool';
+import roomBuild from '@/utils/roomBuild';
 import {
   getWebToken,
   saveSignature,
@@ -310,23 +311,31 @@ export default {
     },
     // 更新房号
     *createRoom({ payload: data }, { call, put, select }) {
-      const { areas, build, unit, room, region } = data;
-      if (areas && build && unit && room && region) {
-        const result = yield call(createRoom, { areas, build, unit, room, region });
-        if (result && result.status == 200 && result.msg) {
-          yield put({
-            type: 'update',
-            payload: { communityUserCollapseActionIdx: 0 }
-          });
-          yield put({ type: 'getCommunityUserInfo', payload: {} });
-          Toast.show({
-            icon: 'success',
-            content: result.msg || '房号提交成功！'
-          });
+      const { areas, build, unit, room } = data;
+      if (areas && build && unit && room) {
+        const { region } = roomBuild[build];
+        if (region) {
+          const result = yield call(createRoom, { areas, build, unit, room, region });
+          if (result && result.status == 200 && result.msg) {
+            yield put({
+              type: 'update',
+              payload: { communityUserCollapseActionIdx: 0 }
+            });
+            yield put({ type: 'getCommunityUserInfo', payload: {} });
+            Toast.show({
+              icon: 'success',
+              content: result.msg || '房号提交成功！'
+            });
+          } else {
+            Toast.show({
+              icon: 'fail',
+              content: result.msg || '服务器问题稍后重试'
+            });
+          }
         } else {
           Toast.show({
             icon: 'fail',
-            content: result.msg || '服务器问题稍后重试'
+            content: '检测参数'
           });
         }
       } else {
