@@ -32,12 +32,7 @@ async function upload() {
 // oss 上传
 async function uploadOss() {
   console.log('目录：', localFilePath);
-  const ClientOss = new OSS({
-    region: 'oss-cn-hongkong',
-    accessKeyId: 'LTAI5tRDFWD6tDB1n67XvQhj',
-    accessKeySecret: 'U6RiRYlt0UpZ8IU8Rbs3nMRzC9gDa6',
-    bucket: 'affiliate-traffic'
-  });
+  const ClientOss = new OSS();
   try {
     const files = fs.readdirSync(localFilePath);
     // 文件列表在files变量中
