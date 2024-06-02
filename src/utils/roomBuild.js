@@ -23,7 +23,7 @@ module.exports = {
   26: { count: 24, region: 'C' },
   27: { count: 24, region: 'C' },
   28: { count: 24, region: 'C' },
-  42: { count: 30, region: 'B' },
+  42: { count: 72, region: 'B' },
   43: { count: 18, region: 'B' },
   44: { count: 108, region: 'B' },
   45: { count: 72, region: 'B' },
@@ -34,13 +34,15 @@ module.exports = {
   50: { count: 36, region: 'B' },
   51: { count: 18, region: 'B' },
   52: { count: 72, region: 'B' },
-  53: { count: 72, region: 'B' },
-  54: { count: 18, region: 'B' },
+  53: { count: 60, region: 'B' },
+  54: { count: 12, region: 'B' },
   55: { count: 36, region: 'B' },
   56: { count: 72, region: 'B' },
   57: { count: 36, region: 'B' },
   58: { count: 72, region: 'B' },
-  59: { count: 36, region: 'B' },
+  59: { count: 54, region: 'B' },
   60: { count: 36, region: 'B' },
   61: { count: 36, region: 'B' }
 };
+
+// 72 + 18 + 108 + 72 +18 + 60 + 60 + 18 + 36 + 18 + 72 + 60 + 12 + 36 + 72 + 36 + 72 + 54 + 36 + 36

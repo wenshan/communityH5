@@ -14,13 +14,24 @@ class intentionList extends Component {
     this.state = {
       isShowCascader: false,
       cascaderOptionsFilter,
-      region: 'C'
     };
   }
 
   handelCascaderStatusClose= ()=>{
+    const _self = this;
+    const initCommunityUserFilter = {
+      areas: '翠苑三区',
+      region: null,
+      build: null,
+      unit: null
+    };
     this.setState({
       isShowCascader: false
+    }, () => {
+      _self.props.dispatch({
+        type: 'common/update',
+        payload: { communityUserFilter: initCommunityUserFilter }
+      });
     });
   }
   handelCascaderStatus = () => {
@@ -29,20 +40,19 @@ class intentionList extends Component {
     });
   }
   handelCascaderStatusOnConfirm=(value)=>{
-    const { communityUserFilter } = this.props;
+    const _self = this;
     if (value && value[0]) {
       const areas = value[0];
-      const region = null;
-      const build = value[1] || null;
-      const unit = value[2] || null;
-      const newCommunityUserFilter = Object.assign({}, communityUserFilter, { areas, region, build, unit});
-      this.props.dispatch({
-        type: 'common/update',
-        payload: { communityUserFilter: newCommunityUserFilter }
-      });
-      this.props.dispatch({
-        type: 'common/getUserList',
-        payload: { areas, region, build, unit }
+      const region = value[1] || null;
+      const build = value[2] || null;
+      const unit = value[3] || null;
+      this.setState({
+        isShowCascader: false
+      }, () => {
+        _self.props.dispatch({
+          type: 'common/getUserList',
+          payload: { areas, region, build, unit }
+        });
       });
     } else {
       Toast.show({
@@ -98,14 +108,14 @@ class intentionList extends Component {
     /** 分享 -- end */
     this.props.dispatch({
       type: 'common/getUserList',
-      payload: { areas: '翠苑三区', region: this.state.region, build: null, unit: null }
+      payload: { areas: '翠苑三区', region: null, build: null, unit: null }
     });
   }
 
   render() {
     const { cascaderOptionsFilter, isShowCascader } = this.state;
     const { count } = this.props.communityUserList;
-    const { areas, build, unit } = this.props.communityUserFilter;
+    const { areas, region, build, unit } = this.props.communityUserFilter;
     const  { intentionListGetUserListLoading } = this.props;
     return (
       <div className="page">
@@ -116,13 +126,14 @@ class intentionList extends Component {
               <Button loading={intentionListGetUserListLoading} color='primary' fill='outline' size='small' onClick={this.handelCascaderStatus}>筛选</Button>
               {areas && (<span className='tx'>
                 {areas}
-                {areas && build?(<>-{build}幢</>): ''}
-                {areas && build && unit? (<>-{unit}单元</>): ''}
+                {areas && region?(<>-{region}片区</>): ''}
+                {areas && region && build?(<>-{build}幢</>): ''}
+                {areas && region && build && unit? (<>-{unit}单元</>): ''}
                 </span>)}
               <Cascader
                 options={cascaderOptionsFilter}
                 visible={isShowCascader}
-                onClose={this.handelCascaderStatusClose}
+                onCancel={this.handelCascaderStatusClose}
                 onConfirm={this.handelCascaderStatusOnConfirm}
               />
             </div>

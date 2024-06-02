@@ -70,7 +70,6 @@ class Intention extends Component {
       type: 'common/update',
       payload: { userinfo: newUserinfo}
     });
-
   }
   // 姓名
   handelNameButtonSubmit = () => {
@@ -203,17 +202,20 @@ class Intention extends Component {
   }
   // 添加房号
   handelCascaderStatusOnConfirm = (value) => {
-    if (value && value[0] && value[1] && value[2] && value[3]) {
+    const _self = this;
+    if (value && value[0] && value[1] && value[2] && value[3] && value[4]) {
       const areas = value[0];
-      const build = value[1];
-      const unit = value[2];
-      const room = value[3];
+      const region = value[1];
+      const build = value[2];
+      const unit = value[3];
+      const room = value[4];
       this.setState({
         isShowCascader: false
-      });
-      this.props.dispatch({
-        type: 'common/createRoom',
-        payload: { areas, build, unit, room }
+      }, () => {
+        _self.props.dispatch({
+          type: 'common/createRoom',
+          payload: { areas, region, build, unit, room }
+        });
       });
     } else {
       Toast.show({
@@ -665,7 +667,7 @@ class Intention extends Component {
                   <Cascader
                     options={cascaderOptions}
                     visible={isShowCascader}
-                    onClose={this.handelMaskCertificationPopup}
+                    onCancel={this.handelMaskCertificationPopup}
                     onConfirm={this.handelCascaderStatusOnConfirm}
                   />
 

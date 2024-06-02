@@ -116,6 +116,7 @@ export default {
     ],
     communityUserFilter: {
       areas: '翠苑三区',
+      region: null,
       build: null,
       unit: null
     },
@@ -311,11 +312,11 @@ export default {
     },
     // 更新房号
     *createRoom({ payload: data }, { call, put, select }) {
-      const { areas, build, unit, room } = data;
+      const { areas, region, build, unit, room } = data;
       if (areas && build && unit && room) {
-        const { region } = roomBuild[build];
+        // const { region } = roomBuild[build];
         if (region) {
-          const result = yield call(createRoom, { areas, build, unit, room, region });
+          const result = yield call(createRoom, { areas, region, build, unit, room });
           if (result && result.status == 200 && result.msg) {
             yield put({
               type: 'update',
@@ -349,7 +350,10 @@ export default {
     *getUserList({ payload: data }, { call, put, select }) {
       const { areas, region, build, unit } = data;
       if (areas) {
-        yield put({ type: 'update', payload: { intentionListGetUserListLoading: true } });
+        yield put({
+          type: 'update',
+          payload: { intentionListGetUserListLoading: true, communityUserFilter: { areas, region, build, unit } }
+        });
         const result = yield call(getUserList, { areas, region, build, unit });
         if (result && result.status == 200 && result.data) {
           yield put({ type: 'update', payload: { intentionListGetUserListLoading: false } });
