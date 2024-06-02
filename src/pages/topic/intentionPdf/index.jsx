@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import QueryString from 'query-string';
-import { Empty } from 'antd-mobile';
-import Pdfh5 from "pdfh5";
+import Pdfh5 from "@/utils/pdfh5/js/pdfh5.js";
 import WxShare from '@/utils/wxShare';
 
-import './pdfh5.css';
+import '@/utils/pdfh5/css/pdfh5.css';
 import './index.less';
 
 class PDF extends Component {
@@ -56,7 +55,7 @@ class PDF extends Component {
         <div className="page">
           <div className="pdf-page">
             <div className='title'>
-              <div><a href='contractPath' target='_blank'>下载当前的PDF意向协议文件</a></div>
+              <div>下载PDF意向协议文件：<a href='contractPath' target='_blank'>点击下载</a></div>
             </div>
             <div className='content'>
               <div className='pdf-warp' id="pdf-warp"></div>
