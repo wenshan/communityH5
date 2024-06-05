@@ -5,6 +5,383 @@ export default [
     key: 'areas',
     children: [
       {
+        label: 'A片区',
+        value: 'A',
+        key: 'region',
+        children: [
+          {
+            label: '64幢',
+            value: '42',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '65幢',
+            value: '65',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '66幢',
+            value: '66',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              },
+              {
+                label: '5单元',
+                value: '5',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '67幢',
+            value: '67',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '68幢',
+            value: '68',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '69幢',
+            value: '69',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '70幢',
+            value: '70',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              },
+              {
+                label: '5单元',
+                value: '5',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '71幢',
+            value: '71',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '72幢',
+            value: '72',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              },
+              {
+                label: '5单元',
+                value: '5',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '73幢',
+            value: '73',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '74幢',
+            value: '74',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '75幢',
+            value: '75',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '76幢',
+            value: '76',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '77幢',
+            value: '77',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '78幢',
+            value: '78',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              }
+            ]
+          }
+        ]
+      },
+      {
         label: 'B片区',
         value: 'B',
         key: 'region',
@@ -900,6 +1277,121 @@ export default [
               {
                 label: '1单元',
                 value: '1',
+                key: 'unit'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        label: 'E片区',
+        value: 'E',
+        key: 'region',
+        children: [
+          {
+            label: '38幢',
+            value: '38',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '39幢',
+            value: '39',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '40幢',
+            value: '40',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              }
+            ]
+          },
+          {
+            label: '41幢',
+            value: '41',
+            key: 'build',
+            children: [
+              {
+                label: '1单元',
+                value: '1',
+                key: 'unit'
+              },
+              {
+                label: '2单元',
+                value: '2',
+                key: 'unit'
+              },
+              {
+                label: '3单元',
+                value: '3',
+                key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
                 key: 'unit'
               }
             ]

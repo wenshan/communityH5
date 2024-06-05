@@ -23,6 +23,13 @@ export default {
       src: 'https://img.dreamstep.top/community/banner/qun_400_220.png',
       value: '/intentionMap.html'
     },
+    lastDayIntentionA: {
+      value: [],
+      days: [],
+      agreeUserNum: 0,
+      unwillingUserNum: 0,
+      communityUserNum: 0
+    },
     lastDayIntentionB: {
       value: [],
       days: [],
@@ -31,6 +38,13 @@ export default {
       communityUserNum: 0
     },
     lastDayIntentionC: {
+      value: [],
+      days: [],
+      agreeUserNum: 0,
+      unwillingUserNum: 0,
+      communityUserNum: 0
+    },
+    lastDayIntentionE: {
       value: [],
       days: [],
       agreeUserNum: 0,
@@ -45,6 +59,16 @@ export default {
         yield put({ type: 'update', payload: { swiperBanner: result.data.rows } });
       } else {
         // Toast.info('获取用户信息失败');
+      }
+    },
+    *lastDayIntentionA({ payload: data }, { call, put, select }) {
+      if (data) {
+        const result = yield call(lastDayIntention, data);
+        if (result && result.status == 200 && result.data) {
+          yield put({ type: 'update', payload: { lastDayIntentionA: result.data } });
+        } else {
+          // Toast.info('获取用户信息失败');
+        }
       }
     },
     *lastDayIntentionB({ payload: data }, { call, put, select }) {
@@ -62,6 +86,16 @@ export default {
         const result = yield call(lastDayIntention, data);
         if (result && result.status == 200 && result.data) {
           yield put({ type: 'update', payload: { lastDayIntentionC: result.data } });
+        } else {
+          // Toast.info('获取用户信息失败');
+        }
+      }
+    },
+    *lastDayIntentionE({ payload: data }, { call, put, select }) {
+      if (data) {
+        const result = yield call(lastDayIntention, data);
+        if (result && result.status == 200 && result.data) {
+          yield put({ type: 'update', payload: { lastDayIntentionE: result.data } });
         } else {
           // Toast.info('获取用户信息失败');
         }
