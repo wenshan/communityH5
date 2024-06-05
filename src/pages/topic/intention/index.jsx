@@ -7,6 +7,7 @@ import cascaderOptions from '@/utils/roomData';
 import rotateBase64 from '@/utils/rotateBase64';
 import WxQRcode from '@/components/WxQRcode';
 import WxShare from '@/utils/wxShare';
+import Countdown from '@/components/Countdown';
 
 import './index.less';
 
@@ -73,20 +74,24 @@ class Intention extends Component {
   }
   // 姓名
   handelNameButtonSubmit = () => {
+    const _self = this;
+    const regex = /^[\u4e00-\u9fa5]{2,4}$/;
     const { communityUserCollapseActionIdx } = this.props;
     const { name } = this.props.userinfo;
-    if (name) {
+    if (name && regex.test(name)) {
       this.setState({
         isShowName: false,
+      }, () => {
+        _self.props.dispatch({
+          type: 'common/saveName',
+          payload: { name, idx: communityUserCollapseActionIdx }
+        });
       });
-      this.props.dispatch({
-        type: 'common/saveName',
-        payload: { name, idx: communityUserCollapseActionIdx }
-      });
+
     } else {
       Toast.show({
         icon: 'fail',
-        content: '请填写姓名和身份证号码',
+        content: '请填写复合逻辑的姓名',
       });
     }
   }
@@ -115,10 +120,13 @@ class Intention extends Component {
       payload: { smsCode: val }
     });
   }
+  /*
   handelMobileSendSmsCode= () => {
     const { userinfo } = this.props;
     const { mobile } = userinfo;
-    if (mobile) {
+    const reg = /^1[0-9]{10}$/; //验证规则
+    const flag = reg.test(mobile); // true
+    if (mobile && flag) {
       this.props.dispatch({
         type: 'common/communitySendSms',
         payload: { mobile }
@@ -130,6 +138,7 @@ class Intention extends Component {
       });
     }
   }
+  */
   handelMobileButtonSubmit = () => {
     const { communityUserCollapseActionIdx } = this.props;
     const { smsCode, userinfo } = this.props;
@@ -394,7 +403,7 @@ class Intention extends Component {
   renderHtmlTopicAction = ()=>{
     const html = [];
     const { isShowSignature, isShowMobile, isShowFeedback, isShowName, isImageViewerVisible } = this.state;
-    const { communityUser, userinfo, smsCode } = this.props;
+    const { communityUser, userinfo, smsCode, smsCodeStatus } = this.props;
     const { name, mobile, is_checkMobile } = userinfo;
     communityUser && communityUser.length && communityUser.map((item, idx)=>{
       const { signatureFile, areas, build, unit, room, submitConfirmation, owner, propertyType, feedback} = item;
@@ -477,7 +486,8 @@ class Intention extends Component {
                           <div className="item">
                             <div className='label'>验证码:</div>
                             <div className='input-sms'>
-                              <Input placeholder='请输入验证码' value={smsCode}  onChange={this.handelMobileSmsCode} clearable />  <Button color='primary' className="sms-send" fill='solid' size='small' onClick={this.handelMobileSendSmsCode}>发送验证码</Button>
+                              <Input placeholder='请输入验证码' value={smsCode}  onChange={this.handelMobileSmsCode} type="number" />
+                              <Countdown ref="countdown" smsCodeStatus />
                             </div>
                           </div>
                           <div className="item button">
@@ -739,5 +749,6 @@ export default connect(
     communityUserSubmitUnwillingLoading: state.common.communityUserSubmitUnwillingLoading,
     smsCode: state.common.smsCode,
     communityUserCollapseActionIdx: state.common.communityUserCollapseActionIdx,
+    smsCodeStatus: state.common.smsCodeStatus
   }),
 )(Intention);

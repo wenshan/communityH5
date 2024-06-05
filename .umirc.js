@@ -102,7 +102,8 @@ export default defineConfig({
     utils: path.resolve(__dirname, 'src/utils'),
     services: path.resolve(__dirname, 'src/services'),
     models: path.resolve(__dirname, 'src/models'),
-    images: path.resolve(__dirname, 'src/assets')
+    images: path.resolve(__dirname, 'src/assets'),
+    constant: path.resolve(__dirname, 'src/constant')
   },
   chunks: [ 'echarts', 'vendors', 'antd', 'umi' ],
   chainWebpack(memo) {

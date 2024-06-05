@@ -113,8 +113,8 @@ class Home extends Component {
             </div>
             <div className='content'>
               <div className='topic'>
-                <div className='rate'>{((lastDayIntentionB.communityUserNum/966)*100).toFixed(2)} % <Link to="/intention.html"><span className='link'>点击去申报<RightOutline /></span></Link></div>
-                <div className='des'><p>总户数: <span>966</span></p> <p>已申请住房户数: <span>{lastDayIntentionB.communityUserNum}</span></p><p> 已申报成功用户: <span>{lastDayIntentionB.agreeUserNum}</span></p></div>
+                <div className='rate'>{((lastDayIntentionB.communityUserNum/978)*100).toFixed(2)} % <Link to="/intention.html"><span className='link'>点击去申报<RightOutline /></span></Link></div>
+                <div className='des'><p>总户数: <span>978</span></p> <p>已申请住房户数: <span>{lastDayIntentionB.communityUserNum}</span></p><p> 已申报成功用户: <span>{lastDayIntentionB.agreeUserNum}</span></p></div>
               </div>
               <div className='chart'>
                 <ChartColumn data={{value: lastDayIntentionB.value, days:lastDayIntentionB.days}}></ChartColumn>

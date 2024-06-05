@@ -89,6 +89,7 @@ export default {
     }, // 微信公共配置
     activeKey: '/',
     smsCode: '', // 短信验证码
+    smsCodeStatus: 'sending', // 倒计时按钮状态(disable:不可发送,able:可发送,sending:倒计时中)
     isAuthorized: false, // 是否已经授权
     communityUser: [
       {
@@ -107,7 +108,6 @@ export default {
         build: null,
         unit: null,
         room: null,
-        smsCode: '',
         mobile: '',
         owner: 0, // [0, 1, 2]
         feedback: '',
@@ -388,15 +388,21 @@ export default {
     },
     // 发送验证码
     *communitySendSms({ payload: data }, { call, put, select }) {
-      const { mobile } = data;
-      if (mobile) {
+      const { userinfo } = yield select((state) => state.common);
+      const { mobile } = userinfo;
+      const reg = /^1[0-9]{10}$/; //验证规则
+      const flag = reg.test(mobile); // true
+      if (mobile && flag) {
+        yield put({ type: 'update', payload: { smsCodeStatus: 'able' } });
         const result = yield call(sendSms, { mobile });
         if (result && result.status == 200) {
+          yield put({ type: 'update', payload: { smsCodeStatus: 'able' } });
           Toast.show({
             icon: 'success',
             content: '验证码发送成功'
           });
         } else {
+          yield put({ type: 'update', payload: { smsCodeStatus: 'sending' } });
           Toast.show({
             icon: 'fail',
             content: result && result.msg
@@ -405,7 +411,7 @@ export default {
       } else {
         Toast.show({
           icon: 'fail',
-          content: '请先输入手机号码'
+          content: '请输入正确的手机号'
         });
       }
     },
@@ -517,9 +523,9 @@ export default {
     *submitContractAgree({ payload: data }, { call, put, select }) {
       const { idx, submitConfirmation } = data;
       const { userinfo, communityUser } = yield select((state) => state.common);
-      const { is_checkMobile, name } = userinfo;
+      const { is_checkMobile, name, mobile } = userinfo;
       const { id, areas, build, unit, room, signatureFile, owner, propertyType, roomid } = communityUser[idx];
-      if (areas && build && unit && room && signatureFile && id && is_checkMobile && propertyType && name && roomid) {
+      if (areas && build && unit && room && signatureFile && id && is_checkMobile && propertyType && name && roomid && mobile) {
         yield put({ type: 'update', payload: { communityUserSubmitLoading: true } });
         const result = yield call(submitContractAgree, {
           id,
@@ -529,6 +535,7 @@ export default {
           room,
           name,
           is_checkMobile,
+          mobile,
           owner,
           propertyType,
           signatureFile,

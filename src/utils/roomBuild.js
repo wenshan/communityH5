@@ -29,7 +29,7 @@ module.exports = {
   45: { count: 72, region: 'B' },
   46: { count: 18, region: 'B' },
   47: { count: 60, region: 'B' },
-  48: { count: 60, region: 'B' },
+  48: { count: 72, region: 'B' },
   49: { count: 18, region: 'B' },
   50: { count: 36, region: 'B' },
   51: { count: 18, region: 'B' },
@@ -44,5 +44,3 @@ module.exports = {
   60: { count: 36, region: 'B' },
   61: { count: 36, region: 'B' }
 };
-
-// 72 + 18 + 108 + 72 +18 + 60 + 60 + 18 + 36 + 18 + 72 + 60 + 12 + 36 + 72 + 36 + 72 + 54 + 36 + 36

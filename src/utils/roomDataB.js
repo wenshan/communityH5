@@ -2073,6 +2073,36 @@ export default [
             label: '403室',
             value: '403',
             key: 'room'
+          },
+          {
+            label: '501室',
+            value: '501',
+            key: 'room'
+          },
+          {
+            label: '502室',
+            value: '502',
+            key: 'room'
+          },
+          {
+            label: '503室',
+            value: '503',
+            key: 'room'
+          },
+          {
+            label: '601室',
+            value: '601',
+            key: 'room'
+          },
+          {
+            label: '602室',
+            value: '602',
+            key: 'room'
+          },
+          {
+            label: '603室',
+            value: '603',
+            key: 'room'
           }
         ]
       },
@@ -2139,6 +2169,36 @@ export default [
           {
             label: '403室',
             value: '403',
+            key: 'room'
+          },
+          {
+            label: '501室',
+            value: '501',
+            key: 'room'
+          },
+          {
+            label: '502室',
+            value: '502',
+            key: 'room'
+          },
+          {
+            label: '503室',
+            value: '503',
+            key: 'room'
+          },
+          {
+            label: '601室',
+            value: '601',
+            key: 'room'
+          },
+          {
+            label: '602室',
+            value: '602',
+            key: 'room'
+          },
+          {
+            label: '603室',
+            value: '603',
             key: 'room'
           }
         ]
