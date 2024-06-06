@@ -406,7 +406,7 @@ class Intention extends Component {
     const { communityUser, userinfo, smsCode, smsCodeStatus } = this.props;
     const { name, mobile, is_checkMobile } = userinfo;
     communityUser && communityUser.length && communityUser.map((item, idx)=>{
-      const { signatureFile, areas, build, unit, room, submitConfirmation, owner, propertyType, feedback} = item;
+      const { signatureFile, areas, region, build, unit, room, submitConfirmation, owner, propertyType, feedback} = item;
       const submitButtonDisabledStatus = !!(submitConfirmation > 0);
       let label = '未申报';
       if (submitConfirmation == 2) {
@@ -419,7 +419,7 @@ class Intention extends Component {
         label = '未申报';
       }
       if (areas && build && unit && room) {
-        const title = `${areas}-${build}幢-${unit}单元-${room}室 - ${label}`
+        const title = `${areas}${region}区-${build}幢-${unit}单元-${room}室 - ${label}`
         html.push(
           <>
           <Collapse.Panel key={idx} title={title}>

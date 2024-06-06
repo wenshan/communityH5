@@ -82,7 +82,7 @@ class intentionList extends Component {
           const nameLabel = item.name ? `${item.name.substring(0,1)}${item.name.length > 2? '** ':'* '}` : '***'
           html.push(
             <li key={`${item.userid}_${item.roomid}`}>
-              <div className='title'>{item.areas}-{item.build}幢-{item.unit}单元-{item.room}室 <span className='status'>{label}</span></div>
+              <div className='title'>{item.areas}{item.region}区-{item.build}幢-{item.unit}单元-{item.room}室 <span className='status'>{label}</span></div>
                 <div className='main'>
                   <div className='item'><span className='label' key="ren">用户ID:</span><span className='value'>{item.userid}</span></div>
                   <div className='item'><span className='label' key="ren">姓名:</span><span className='value'>{nameLabel}</span></div>
@@ -126,7 +126,7 @@ class intentionList extends Component {
               <Button loading={intentionListGetUserListLoading} color='primary' fill='outline' size='small' onClick={this.handelCascaderStatus}>筛选</Button>
               {areas && (<span className='tx'>
                 {areas}
-                {areas && region?(<>-{region}片区</>): ''}
+                {areas && region?(<>-{region}区</>): ''}
                 {areas && region && build?(<>-{build}幢</>): ''}
                 {areas && region && build && unit? (<>-{unit}单元</>): ''}
                 </span>)}
