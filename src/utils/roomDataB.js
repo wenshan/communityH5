@@ -1690,11 +1690,6 @@ export default [
             key: 'room'
           },
           {
-            label: '103室',
-            value: '103',
-            key: 'room'
-          },
-          {
             label: '201室',
             value: '201',
             key: 'room'
@@ -1702,11 +1697,6 @@ export default [
           {
             label: '202室',
             value: '202',
-            key: 'room'
-          },
-          {
-            label: '203室',
-            value: '203',
             key: 'room'
           },
           {
@@ -1720,11 +1710,6 @@ export default [
             key: 'room'
           },
           {
-            label: '303室',
-            value: '303',
-            key: 'room'
-          },
-          {
             label: '401室',
             value: '401',
             key: 'room'
@@ -1735,8 +1720,23 @@ export default [
             key: 'room'
           },
           {
-            label: '403室',
-            value: '403',
+            label: '501室',
+            value: '501',
+            key: 'room'
+          },
+          {
+            label: '502室',
+            value: '502',
+            key: 'room'
+          },
+          {
+            label: '601室',
+            value: '401',
+            key: 'room'
+          },
+          {
+            label: '602室',
+            value: '602',
             key: 'room'
           }
         ]
@@ -1757,11 +1757,6 @@ export default [
             key: 'room'
           },
           {
-            label: '103室',
-            value: '103',
-            key: 'room'
-          },
-          {
             label: '201室',
             value: '201',
             key: 'room'
@@ -1769,11 +1764,6 @@ export default [
           {
             label: '202室',
             value: '202',
-            key: 'room'
-          },
-          {
-            label: '203室',
-            value: '203',
             key: 'room'
           },
           {
@@ -1787,11 +1777,6 @@ export default [
             key: 'room'
           },
           {
-            label: '303室',
-            value: '303',
-            key: 'room'
-          },
-          {
             label: '401室',
             value: '401',
             key: 'room'
@@ -1802,8 +1787,23 @@ export default [
             key: 'room'
           },
           {
-            label: '403室',
-            value: '403',
+            label: '501室',
+            value: '501',
+            key: 'room'
+          },
+          {
+            label: '502室',
+            value: '502',
+            key: 'room'
+          },
+          {
+            label: '601室',
+            value: '401',
+            key: 'room'
+          },
+          {
+            label: '602室',
+            value: '602',
             key: 'room'
           }
         ]

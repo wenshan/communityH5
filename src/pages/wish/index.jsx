@@ -46,7 +46,7 @@ class WishList extends Component {
     const { name, mobile } = userinfo;
     if (communityUser && communityUser.length) {
       communityUser.map((item, idx)=>{
-        const { areas, build, unit, room, submitConfirmation, id, contractPath, createdAt, owner, feedback, is_submitContractUnwilling, propertyType, is_checkSignature } = item;
+        const { areas, region, build, unit, room, submitConfirmation, id, contractPath, createdAt, owner, feedback, is_submitContractUnwilling, propertyType, is_checkSignature } = item;
         let label = '未申报';
         if (submitConfirmation > 0) {
           if (submitConfirmation === 2) {
@@ -58,12 +58,12 @@ class WishList extends Component {
           label = '未申报';
         }
 
-        if (areas && build && unit && room) {
+        if (areas && region && build && unit && room) {
           html.push(
             <>
               <div className='info'>
                 <>
-                  <h3>翠苑三区C区原拆原建意愿申请</h3>
+                  <h3>{`${areas}原拆原建意愿申请`}</h3>
                   <div className='status box'><label>申请状态:</label><span>{label}</span></div>
                   <div className='room box'><label>房号:</label><span>{areas}-{build}幢-{unit}单元-{room}室</span></div>
                   <div className='room box'><label>产权类型:</label><span>{propertyType > 1? '企业房': '个人房'}</span></div>

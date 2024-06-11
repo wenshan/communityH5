@@ -11,7 +11,7 @@ export default [
         children: [
           {
             label: '64幢',
-            value: '42',
+            value: '64',
             key: 'build',
             children: [
               {

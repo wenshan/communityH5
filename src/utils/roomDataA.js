@@ -1066,7 +1066,7 @@ export default [
     label: '67幢',
     value: '67',
     key: 'build',
-    count: 36,
+    count: 42,
     children: [
       {
         label: '1单元',
@@ -1084,6 +1084,11 @@ export default [
             key: 'room'
           },
           {
+            label: '103室',
+            value: '103',
+            key: 'room'
+          },
+          {
             label: '201室',
             value: '201',
             key: 'room'
@@ -1091,6 +1096,11 @@ export default [
           {
             label: '202室',
             value: '202',
+            key: 'room'
+          },
+          {
+            label: '203室',
+            value: '203',
             key: 'room'
           },
           {
@@ -1104,6 +1114,11 @@ export default [
             key: 'room'
           },
           {
+            label: '303室',
+            value: '303',
+            key: 'room'
+          },
+          {
             label: '401室',
             value: '401',
             key: 'room'
@@ -1111,6 +1126,11 @@ export default [
           {
             label: '402室',
             value: '402',
+            key: 'room'
+          },
+          {
+            label: '403室',
+            value: '403',
             key: 'room'
           },
           {
@@ -1124,6 +1144,11 @@ export default [
             key: 'room'
           },
           {
+            label: '503室',
+            value: '503',
+            key: 'room'
+          },
+          {
             label: '601室',
             value: '601',
             key: 'room'
@@ -1131,6 +1156,11 @@ export default [
           {
             label: '602室',
             value: '602',
+            key: 'room'
+          },
+          {
+            label: '603室',
+            value: '603',
             key: 'room'
           }
         ]
@@ -2700,7 +2730,7 @@ export default [
   },
   {
     label: '72幢',
-    value: '10',
+    value: '72',
     key: 'build',
     count: 90,
     children: [

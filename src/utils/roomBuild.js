@@ -218,14 +218,12 @@ module.exports = {
   50: {
     count: 36,
     region: 'B',
-    region: 'C',
     text: '50幢',
     status: '50'
   },
   51: {
     count: 18,
     region: 'B',
-    region: 'C',
     text: '51幢',
     status: '51'
   },
@@ -308,7 +306,7 @@ module.exports = {
     status: '66'
   },
   67: {
-    count: 36,
+    count: 42,
     region: 'A',
     text: '67幢',
     status: '67'
