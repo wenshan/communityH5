@@ -264,7 +264,7 @@ module.exports = {
     status: '57'
   },
   58: {
-    count: 72,
+    count: 108,
     region: 'B',
     text: '58幢',
     status: '58'

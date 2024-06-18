@@ -759,6 +759,16 @@ export default [
                 label: '3单元',
                 value: '3',
                 key: 'unit'
+              },
+              {
+                label: '4单元',
+                value: '4',
+                key: 'unit'
+              },
+              {
+                label: '5单元',
+                value: '5',
+                key: 'unit'
               }
             ]
           },

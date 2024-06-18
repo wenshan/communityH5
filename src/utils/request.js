@@ -57,7 +57,7 @@ instance.interceptors.request.use(
 // 接口返回status错误处理
 const errorCodeState = (res) => {
   if (res.data && res.data.status !== '200' && res.data.msg) {
-    if (res.config.config.isConsole) {
+    if (res.config.config.isToast) {
       message.warning(String(res.data.msg), 3);
     }
   }
