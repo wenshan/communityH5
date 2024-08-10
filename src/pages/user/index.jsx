@@ -128,6 +128,7 @@ class User extends Component {
           <Space size="lg"></Space>
         </div>
         <WxQRcode></WxQRcode>
+        <ICP></ICP>
       </div>
     );
   }
