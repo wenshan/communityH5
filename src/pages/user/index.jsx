@@ -9,6 +9,7 @@ import {
 } from 'antd-mobile-icons';
 import WxQRcode from '@/components/WxQRcode';
 import WxShare from '@/utils/wxShare';
+import ICP from '@/components/Icp';
 
 import './index.less';
 
