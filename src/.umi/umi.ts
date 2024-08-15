@@ -24,7 +24,7 @@ const getClientRender = (args: { hot?: boolean; routes?: any[] } = {}) => plugin
         history: createHistory(args.hot),
         isServer: process.env.__IS_SERVER,
         rootElement: 'root',
-        defaultTitle: `畅游AI智能大世界`,
+        defaultTitle: `西子翠苑社区服务`,
       },
     });
     return renderClient(opts);
@@ -39,7 +39,7 @@ export default clientRender();
     window.g_umi = {
       version: '3.5.41',
     };
-  
+
 
 // hot module replacement
 // @ts-ignore

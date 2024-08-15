@@ -1,7 +1,7 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
-  title: '畅游AI智能大世界',
+  title: '西子翠苑生活服务',
   publicPath: 'https://img.dreamstep.top/community/dist/',
   define: {
     'process.env': {
